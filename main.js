@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import LayoutComponent from './LayoutComponent.jsx';
-
+import Dashboard from './client/views/dashboard.jsx';
+import EventList from './client/views/eventList.jsx';
+import SubtopicView from './client/views/subtopicView.jsx';
 injectTapEventPlugin();
-ReactDom.render(<LayoutComponent/>,document.getElementById("content"));
-	
+
+ReactDom.render(<SubtopicView />,document.getElementById("content"));

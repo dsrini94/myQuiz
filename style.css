@@ -1,0 +1,10 @@
+.logo
+{
+    border-radius: 50%;
+}
+
+#createQuizButton
+{
+  position: fixed;
+  bottom:50%;
+}
