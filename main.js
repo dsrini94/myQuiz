@@ -5,6 +5,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import Dashboard from './client/views/dashboard.jsx';
 import EventList from './client/views/eventList.jsx';
 import SubtopicView from './client/views/subtopicView.jsx';
+import LoginPage from './client/views/loginPage.jsx';
 injectTapEventPlugin();
 
-ReactDom.render(<SubtopicView />,document.getElementById("content"));
+ReactDom.render(<LoginPage />,document.getElementById("content"));

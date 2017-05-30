@@ -8,3 +8,13 @@
   position: fixed;
   bottom:50%;
 }
+
+.brand
+{
+  font-family: 'Lobster Two', cursive;
+}
+
+.loginButton:hover
+{
+  background-color:'#161616';
+}
