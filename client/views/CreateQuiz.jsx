@@ -220,16 +220,15 @@ export default class HorizontalTransition extends React.Component {
      case 3:
        return(
          <div>
-         <Header><span style={{color:'white'}}>Launch</span></Header>
-         <Divider/>
-
-            <DatePicker hintText="Quiz Date" mode="landscape" />
-
-         <TimePicker hintText="Start Time" autoOk={true}/>
-
-         <TimePicker hintText="End Time" autoOk={true}/>
-         <center>{controls}</center>
-        </div>
+           <Header><span style={{color:'white'}}>Launch</span></Header>
+           <Divider/>
+           <center>
+             <DatePicker hintText="Quiz Date" floatingLabelText='Quiz Date' mode="landscape" />
+             <TimePicker hintText="Start Time" floatingLabelText='Start Time' autoOk={true}/>
+             <TimePicker hintText="End Time" floatingLabelText='End Time' autoOk={true}/>
+             {controls}
+           </center>
+          </div>
        )
      default:
        return 'You\'re a long way from home sonny jim!';

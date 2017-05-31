@@ -20,6 +20,7 @@ ReactDom.render(
         <Route exact path='/' component={LoginPage} />
         <Route path='/dashboard' component={Dashboard} />
         <Route path='/eventList' component={EventList} />
+        <Route path='/subTopic' component={SubtopicView} />
         <Route path='/createQuiz' component={CreateQuiz} />
         <Route path='/takeQuiz/confirm' component={confirmTakeQuiz} />
         <Route path='/takeQuiz/quiz' component={TakeQuiz} />
