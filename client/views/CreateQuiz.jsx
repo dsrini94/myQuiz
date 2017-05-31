@@ -33,7 +33,8 @@ export default class HorizontalTransition extends React.Component {
       correctoption : '',
       option2:'',
       option3:'',
-      option4:''
+      option4:'',
+      editQuiz:false
     };
     this.dummyAsync=this.dummyAsync.bind(this);
     this.handleNext=this.handleNext.bind(this);
@@ -43,14 +44,14 @@ export default class HorizontalTransition extends React.Component {
     this.handleTopic=this.handleTopic.bind(this);
     this.handleSubTopic=this.handleSubTopic.bind(this);
     this.handleAddQuestions=this.handleAddQuestions.bind(this);
-    this.handleDeleteChip=this.handleDeleteChip.bind(this);
-    this.handleTouchTapChip=this.handleTouchTapChip.bind(this);
     this.handleQuestion=this.handleQuestion.bind(this);
     this.handleCorrectOption=this.handleCorrectOption.bind(this);
     this.handleOption2=this.handleOption2.bind(this);
     this.handleOption3=this.handleOption3.bind(this);
     this.handleOption4=this.handleOption4.bind(this);
     this.handleSnackClose=this.handleSnackClose.bind(this);
+    this.handleEditQuestion=this.handleEditQuestion.bind(this);
+    this.handleDeleteQuestion=this.handleDeleteQuestion.bind(this);
   }
 
   dummyAsync(cb){
@@ -115,7 +116,7 @@ export default class HorizontalTransition extends React.Component {
     this.setState({option4:opt});
   }
 
-  handleAddQuestions(){
+  handleAddQuestions(e){
     var questions = this.state.questions;
     var optArr = [];
     optArr.push(this.state.correctoption);
@@ -131,13 +132,15 @@ export default class HorizontalTransition extends React.Component {
     this.setState({questions:questions, que:'',correctoption:'',option2:'',option3:'',option4:'',snack:true});
   }
 
-  handleDeleteChip(t, i){
-    console.log('deleted',i);
+  handleEditQuestion(i){
+    // this.setState({editQuiz:true, });
+    console.log('edit',i);
   }
 
-  handleTouchTapChip(t, i){
-    console.log('touched',i);
+  handleDeleteQuestion(i){
+    console.log('delete', i);
   }
+
 
   handleSnackClose(){
     this.setState({snack:false});
@@ -175,7 +178,7 @@ export default class HorizontalTransition extends React.Component {
        return (
          <div>
            <Menu widths={2} style={{backgroundColor:'#37474F'}}>
-             <Menu.Item><span style={{color:'White'}}>{this.state.topic}</span></Menu.Item>
+             <Menu.Item><span style={{color:'White'}}>Topic : {this.state.topic}</span></Menu.Item>
              <Menu.Item></Menu.Item>
            </Menu>
          <Divider/>
@@ -191,8 +194,8 @@ export default class HorizontalTransition extends React.Component {
        return (
          <div>
            <Menu widths={2} style={{backgroundColor:'#37474F'}}>
-             <Menu.Item><span style={{color:'White'}}>{this.state.topic}</span></Menu.Item>
-             <Menu.Item><span style={{color:'White'}}>{this.state.subtopic}</span></Menu.Item>
+             <Menu.Item><span style={{color:'White'}}>Topic : {this.state.topic}</span></Menu.Item>
+             <Menu.Item><span style={{color:'White'}}>Sub Topic : {this.state.subtopic}</span></Menu.Item>
            </Menu>
          <Divider/>
          <Form style={{padding:"10px"}} >
@@ -204,7 +207,7 @@ export default class HorizontalTransition extends React.Component {
         <Input style={{padding:"10px"}} value={this.state.option2} placeholder='Option' onChange={this.handleOption2}/>
         <Input style={{padding:"10px"}} value={this.state.option3} placeholder='Option' onChange={this.handleOption3}/>
         <Input style={{padding:"10px"}} value={this.state.option4} placeholder='Option' onChange={this.handleOption4}/>
-        <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={this.handleAddQuestions} />
+        <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={(e)=>this.handleAddQuestions(e)}/>
            <center>{controls}</center>
         <Snackbar
            open={this.state.snack}
@@ -240,24 +243,28 @@ export default class HorizontalTransition extends React.Component {
   }
 
   render() {
-    console.log('obj que : ',this.state.que, this.state.correctoption);
-    console.log('l : ', this.state.questions);
     var QuePreview = '';
+    var that = this;
     var preview = this.state.questions.map(function(item, i){
       return(
-        <Segment.Group horizontal>
+        <Segment.Group horizontal key={i}>
           <Segment style={{backgroundColor:'#37474F', color:'white', width:'40%'}}>{item.question}</Segment>
           <Segment style={{backgroundColor:'#C5E1A5', width:'15%'}}>{item.options[0]}</Segment>
-          <Segment style={{width:'15%'}}>{item.options[1]}</Segment>
-          <Segment style={{width:'15%'}}>{item.options[2]}</Segment>
-          <Segment style={{width:'15%'}}>{item.options[3]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[1]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[2]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[3]}</Segment>
+          <Segment style={{backgroundColor:'#37474F',width:'12%'}}>
+            <Button icon floated='left' onClick={()=>{that.handleEditQuestion(i)}}><Icon name='write'/></Button>
+            <Button icon floated='right' onClick={()=>{that.handleDeleteQuestion(i)}}
+              ><Icon name='delete'/></Button>
+          </Segment>
         </Segment.Group>
       );
     });
     if (this.state.questions.length>0) {
       QuePreview =  <div>
                       <Divider horizontal>Question Preview</Divider>
-                      <Segment style={{backgroundColor:'#0097A7'}}>
+                      <Segment style={{backgroundColor:'#0097A7',margin:'20px'}}>
                         {preview}
                       </Segment>
                     </div>
