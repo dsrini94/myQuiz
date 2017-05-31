@@ -1,5 +1,7 @@
 import React from 'react';
 import { Divider,Label,Button,Menu} from 'semantic-ui-react';
+import {Link} from 'react-router-dom';
+
 
 export default class ProfileStats extends React.Component
 {
@@ -33,7 +35,7 @@ export default class ProfileStats extends React.Component
         </Menu>
         <br/>
         <Divider />
-          <center><Button color='red'>Create your Quiz</Button></center>
+          <Link to={'/createQuiz'}><center><Button color='red'>Create your Quiz</Button></center></Link>
       </div>
     );
   }
