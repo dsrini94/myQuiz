@@ -27,7 +27,7 @@ export default class LoginPage extends React.Component
                   <Segment style={{backgroundColor:'#48506d'}}>
                     <br/>
                       <Header>
-                      <center> <span className='brand' style={{color:'white',fontSize:'50px'}}> Login </span> </center>
+                      <center> <span className='brand' style={{color:'white',fontSize:'50px'}}> sign in to myQuiz </span> </center>
                        </Header>
                      <br/>
                      <br/>
@@ -36,7 +36,7 @@ export default class LoginPage extends React.Component
                      <center><Input icon='unlock' iconPosition='left' placeholder='password' style={{width:'400px'}}/></center>
                      <br/>
                      <br/>
-                    <center><Button basic size='massive' ><span className='loginButton' >login</span></Button></center>
+                    <center><Button basic size='massive' className='loginButton' ><span className='loginText'  style={{color:'white'}}>login</span></Button></center>
               </Segment>
                 </Grid.Column>
                 <Grid.Column width={3}>

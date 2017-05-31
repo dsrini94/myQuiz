@@ -14,7 +14,7 @@
   font-family: 'Lobster Two', cursive;
 }
 
-.loginButton:hover
+.loginButton:hover .loginText
 {
-  background-color:'#161616';
+  color:#48506d !important;
 }
