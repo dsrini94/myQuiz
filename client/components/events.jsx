@@ -1,18 +1,14 @@
 import React from 'react';
 import { Divider,Icon,Card,Header,Button,Image } from 'semantic-ui-react';
-
+import {Link} from 'react-router-dom';
 export default class Events extends React.Component
 {
   constructor(props)
   {
     super(props);
-    this.handleKnowMore = this.handleKnowMore.bind(this);
   }
 
-  handleKnowMore()
-  {
-    alert('know more');
-  }
+
   render()
   {
     return(
@@ -174,18 +170,17 @@ export default class Events extends React.Component
         </Card.Group>
 
         <br/>
-        <Button
+        <Link to={'/eventList'}><Button
           animated='fade'
           floated='right'
-          color='red'
-          onClick={this.handleKnowMore}>
+          color='red'>
           <Button.Content visible>
             know more events
           </Button.Content>
           <Button.Content hidden>
             <Icon name='angle double right' />
           </Button.Content>
-        </Button>
+        </Button></Link>
         <br/>
         <br/>
         <Divider />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Segment, Input, Button, Header, Image, Form, Message } from 'semantic-ui-react';
-
+import { Link } from 'react-router-dom';
 export default class LoginPage extends React.Component
 {
   render()
@@ -36,7 +36,10 @@ export default class LoginPage extends React.Component
                      <center><Input icon='unlock' iconPosition='left' placeholder='password' style={{width:'400px'}}/></center>
                      <br/>
                      <br/>
-                    <center><Button basic size='massive' className='loginButton' ><span className='loginText'  style={{color:'white'}}>login</span></Button></center>
+                    <Link to={'/dashboard'}>
+                      <center><Button basic size='massive' className='loginButton' >
+                      <span className='loginText'  style={{color:'white'}}>login</span></Button></center>
+                    </Link>
               </Segment>
                 </Grid.Column>
                 <Grid.Column width={3}>
