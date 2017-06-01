@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import { Form, TextArea, Input, Segment, Accordion, Label, Message,
   Menu, Modal, Header, Icon, Button, Divider } from 'semantic-ui-react';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
@@ -14,10 +15,11 @@ import { Grid, Row, Col } from 'react-flexbox-grid/lib';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Snackbar from 'material-ui/Snackbar';
+//Components ---->
+import StepperHeader from './../components/StepperHeader.jsx';
+import QuestionPreview from './../components/QuestionPreview.jsx';
 
-/**
- * A contrived example using a transition between steps
- */
+
 export default class HorizontalTransition extends React.Component {
   constructor(props){
     super(props);
@@ -180,6 +182,7 @@ export default class HorizontalTransition extends React.Component {
      case 0:
        return (
          <div>
+
          <center style={{marginTop:"10px"}}>
          <Form.Field>
          <Input placeholder='Topic' onChange={this.handleTopic} />
@@ -198,12 +201,12 @@ export default class HorizontalTransition extends React.Component {
              </Menu.Item>
              <Menu.Item></Menu.Item>
            </Menu>
-         <Divider/>
-         <center style={{marginTop:"10px"}}>
-         <Form.Field>
-         <Input placeholder='Sub Topic' onChange={this.handleSubTopic} />
-         </Form.Field>
-           {controls}
+           <Divider/>
+           <center style={{marginTop:"10px"}}>
+             <Form.Field>
+               <Input placeholder='Sub Topic' onChange={this.handleSubTopic} />
+             </Form.Field>
+             {controls}
            </center>
          </div>
        );
@@ -217,27 +220,27 @@ export default class HorizontalTransition extends React.Component {
              </Menu.Item>
              <Menu.Item>
                <span style={{color:'#0097A7'}}>Sub Topic : </span>
-               <span style={{color:'white'}}>{this.state.topic}</span>
+               <span style={{color:'white'}}>{this.state.subtopic}</span>
              </Menu.Item>
            </Menu>
-         <Divider/>
-         <Form style={{padding:"10px"}} >
-            <TextArea placeholder='Question' value={this.state.que} autoHeight onChange={this.handleQuestion} />
-          </Form>
-        <IconButton style={{float:"right"}}><AttachFile/></IconButton>
-        <Header>Options</Header>
-        <Input style={{padding:"10px"}} value={this.state.correctoption} placeholder='Correct Option' onChange={this.handleCorrectOption} />
-        <Input style={{padding:"10px"}} value={this.state.option2} placeholder='Option' onChange={this.handleOption2}/>
-        <Input style={{padding:"10px"}} value={this.state.option3} placeholder='Option' onChange={this.handleOption3}/>
-        <Input style={{padding:"10px"}} value={this.state.option4} placeholder='Option' onChange={this.handleOption4}/>
-        <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={(e)=>this.handleAddQuestions(e)}/>
+           <Divider/>
+           <Form style={{padding:"10px"}} >
+             <TextArea placeholder='Question' value={this.state.que} autoHeight onChange={this.handleQuestion} />
+           </Form>
+           <IconButton style={{float:"right"}}><AttachFile/></IconButton>
+           <Header>Options</Header>
+           <Input style={{padding:"10px"}} value={this.state.correctoption} placeholder='Correct Option' onChange={this.handleCorrectOption} />
+           <Input style={{padding:"10px"}} value={this.state.option2} placeholder='Option' onChange={this.handleOption2}/>
+           <Input style={{padding:"10px"}} value={this.state.option3} placeholder='Option' onChange={this.handleOption3}/>
+           <Input style={{padding:"10px"}} value={this.state.option4} placeholder='Option' onChange={this.handleOption4}/>
+           <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={(e)=>this.handleAddQuestions(e)}/>
            <center>{controls}</center>
-        <Snackbar
-           open={this.state.snack}
-           message="Question has been added!"
-           autoHideDuration={2000}
-           onRequestClose={this.handleSnackClose}
-         />
+           <Snackbar
+             open={this.state.snack}
+             message="Question has been added!"
+             autoHideDuration={2000}
+             onRequestClose={this.handleSnackClose}
+           />
          </div>
        );
      case 3:
@@ -254,7 +257,7 @@ export default class HorizontalTransition extends React.Component {
           </div>
        )
      default:
-       return 'You\'re a long way from home sonny jim!';
+       return 'Create Your Question';
     }
   }
 
@@ -265,6 +268,7 @@ export default class HorizontalTransition extends React.Component {
   }
 
   render() {
+
 
     var that = this;
     console.log('obj que : ',this.state.que, this.state.correctoption);
@@ -326,9 +330,24 @@ export default class HorizontalTransition extends React.Component {
                     </Segment>
                     {QuePreview}
                   </div>
+
+
     return(
       <div>
-        {display}
+        <StepperHeader stepIndex={this.state.stepIndex} />
+        <Segment raised style={{margin:"20px",backgroundColor:'#e57373'}}>
+          <Link to={'/dashboard'}>
+            <Button icon floated='right' circular={true} compact={true} >
+              <Icon name='window close' corner={true} size='small' />
+            </Button>
+          </Link>
+          <ExpandTransition loading={this.state.loading} open={true}>
+            {this.getStepContent(this.state.stepIndex)}
+          </ExpandTransition>
+        </Segment>
+        <QuestionPreview questions={this.state.questions}
+          handleEditQuestion={this.handleEditQuestion}
+          handleDeleteQuestion={this.handleDeleteQuestion} />
       </div>
     );
   }
