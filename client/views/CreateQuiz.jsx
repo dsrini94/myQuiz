@@ -14,7 +14,6 @@ import { Grid, Row, Col } from 'react-flexbox-grid/lib';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Snackbar from 'material-ui/Snackbar';
-import _ from 'lodash'
 
 /**
  * A contrived example using a transition between steps
@@ -132,13 +131,22 @@ export default class HorizontalTransition extends React.Component {
     this.setState({questions:questions, que:'',correctoption:'',option2:'',option3:'',option4:'',snack:true});
   }
 
-  handleEditQuestion(i){
-    // this.setState({editQuiz:true, });
-    console.log('edit',i);
+  handleEditQuestion(item, i){
+    var arr = this.state.questions;
+    arr.splice(i,1);
+    this.setState({questions:arr,
+      que:item.question,
+      correctoption:item.options[0],
+      option2:item.options[1],
+      option3:item.options[2],
+      option4:item.options[3]
+    });
   }
 
   handleDeleteQuestion(i){
-    console.log('delete', i);
+    var arr = this.state.questions;
+    arr.splice(i, 1);
+    this.setState({questions:arr});
   }
 
 
@@ -178,7 +186,10 @@ export default class HorizontalTransition extends React.Component {
        return (
          <div>
            <Menu widths={2} style={{backgroundColor:'#37474F'}}>
-             <Menu.Item><span style={{color:'White'}}>Topic : {this.state.topic}</span></Menu.Item>
+             <Menu.Item>
+               <span style={{color:'#0097A7'}}>Topic : </span>
+               <span style={{color:'white'}}>{this.state.topic}</span>
+             </Menu.Item>
              <Menu.Item></Menu.Item>
            </Menu>
          <Divider/>
@@ -194,8 +205,14 @@ export default class HorizontalTransition extends React.Component {
        return (
          <div>
            <Menu widths={2} style={{backgroundColor:'#37474F'}}>
-             <Menu.Item><span style={{color:'White'}}>Topic : {this.state.topic}</span></Menu.Item>
-             <Menu.Item><span style={{color:'White'}}>Sub Topic : {this.state.subtopic}</span></Menu.Item>
+             <Menu.Item>
+               <span style={{color:'#0097A7'}}>Topic : </span>
+               <span style={{color:'white'}}>{this.state.topic}</span>
+             </Menu.Item>
+             <Menu.Item>
+               <span style={{color:'#0097A7'}}>Sub Topic : </span>
+               <span style={{color:'white'}}>{this.state.topic}</span>
+             </Menu.Item>
            </Menu>
          <Divider/>
          <Form style={{padding:"10px"}} >
@@ -253,7 +270,7 @@ export default class HorizontalTransition extends React.Component {
           <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[2]}</Segment>
           <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[3]}</Segment>
           <Segment style={{backgroundColor:'#37474F',width:'12%'}}>
-            <Button icon floated='left' onClick={()=>{that.handleEditQuestion(i)}}><Icon name='write'/></Button>
+            <Button icon floated='left' onClick={()=>{that.handleEditQuestion(item, i)}}><Icon name='write'/></Button>
             <Button icon floated='right' onClick={()=>{that.handleDeleteQuestion(i)}}
               ><Icon name='delete'/></Button>
           </Segment>
