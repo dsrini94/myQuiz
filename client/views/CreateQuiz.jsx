@@ -43,14 +43,13 @@ export default class HorizontalTransition extends React.Component {
     this.handleTopic=this.handleTopic.bind(this);
     this.handleSubTopic=this.handleSubTopic.bind(this);
     this.handleAddQuestions=this.handleAddQuestions.bind(this);
-    this.handleDeleteChip=this.handleDeleteChip.bind(this);
-    this.handleTouchTapChip=this.handleTouchTapChip.bind(this);
     this.handleQuestion=this.handleQuestion.bind(this);
     this.handleCorrectOption=this.handleCorrectOption.bind(this);
     this.handleOption2=this.handleOption2.bind(this);
     this.handleOption3=this.handleOption3.bind(this);
     this.handleOption4=this.handleOption4.bind(this);
     this.handleSnackClose=this.handleSnackClose.bind(this);
+    this.handleEditQuestion=this.handleEditQuestion.bind(this);
   }
 
   dummyAsync(cb){
@@ -131,13 +130,12 @@ export default class HorizontalTransition extends React.Component {
     this.setState({questions:questions, que:'',correctoption:'',option2:'',option3:'',option4:'',snack:true});
   }
 
-  handleDeleteChip(t, i){
-    console.log('deleted',i);
+
+  handleEditQuestion()
+  {
+    alert('clicked');
   }
 
-  handleTouchTapChip(t, i){
-    console.log('touched',i);
-  }
 
   handleSnackClose(){
     this.setState({snack:false});
@@ -158,11 +156,6 @@ export default class HorizontalTransition extends React.Component {
      case 0:
        return (
          <div>
-         {/* <Menu widths={3} style={{backgroundColor:'#37474F'}}>
-           <Menu.Item>Topic</Menu.Item>
-           <Menu.Item></Menu.Item>
-           <Menu.Item></Menu.Item>
-         </Menu> */}
          <center style={{marginTop:"10px"}}>
          <Form.Field>
          <Input placeholder='Topic' onChange={this.handleTopic} />
@@ -240,12 +233,13 @@ export default class HorizontalTransition extends React.Component {
   }
 
   render() {
+    var that = this;
     console.log('obj que : ',this.state.que, this.state.correctoption);
     console.log('l : ', this.state.questions);
     var QuePreview = '';
     var preview = this.state.questions.map(function(item, i){
       return(
-        <Segment.Group horizontal>
+        <Segment.Group horizontal onClick={that.handleEditQuestion}>
           <Segment style={{backgroundColor:'#37474F', color:'white', width:'40%'}}>{item.question}</Segment>
           <Segment style={{backgroundColor:'#C5E1A5', width:'15%'}}>{item.options[0]}</Segment>
           <Segment style={{width:'15%'}}>{item.options[1]}</Segment>
