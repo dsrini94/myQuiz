@@ -14,10 +14,11 @@ import { Grid, Row, Col } from 'react-flexbox-grid/lib';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Snackbar from 'material-ui/Snackbar';
+//Components ---->
+import StepperHeader from './../components/StepperHeader.jsx';
+import QuestionPreview from './../components/QuestionPreview.jsx';
 
-/**
- * A contrived example using a transition between steps
- */
+
 export default class HorizontalTransition extends React.Component {
   constructor(props){
     super(props);
@@ -169,16 +170,11 @@ export default class HorizontalTransition extends React.Component {
      case 0:
        return (
          <div>
-         {/* <Menu widths={3} style={{backgroundColor:'#37474F'}}>
-           <Menu.Item>Topic</Menu.Item>
-           <Menu.Item></Menu.Item>
-           <Menu.Item></Menu.Item>
-         </Menu> */}
-         <center style={{marginTop:"10px"}}>
-         <Form.Field>
-         <Input placeholder='Topic' onChange={this.handleTopic} />
-         </Form.Field>
-           {controls}
+           <center style={{marginTop:"10px"}}>
+             <Form.Field>
+             <Input placeholder='Topic' onChange={this.handleTopic} />
+             </Form.Field>
+             {controls}
            </center>
          </div>
        );
@@ -192,12 +188,12 @@ export default class HorizontalTransition extends React.Component {
              </Menu.Item>
              <Menu.Item></Menu.Item>
            </Menu>
-         <Divider/>
-         <center style={{marginTop:"10px"}}>
-         <Form.Field>
-         <Input placeholder='Sub Topic' onChange={this.handleSubTopic} />
-         </Form.Field>
-           {controls}
+           <Divider/>
+           <center style={{marginTop:"10px"}}>
+             <Form.Field>
+               <Input placeholder='Sub Topic' onChange={this.handleSubTopic} />
+             </Form.Field>
+             {controls}
            </center>
          </div>
        );
@@ -214,24 +210,24 @@ export default class HorizontalTransition extends React.Component {
                <span style={{color:'white'}}>{this.state.topic}</span>
              </Menu.Item>
            </Menu>
-         <Divider/>
-         <Form style={{padding:"10px"}} >
-            <TextArea placeholder='Question' value={this.state.que} autoHeight onChange={this.handleQuestion} />
-          </Form>
-        <IconButton style={{float:"right"}}><AttachFile/></IconButton>
-        <Header>Options</Header>
-        <Input style={{padding:"10px"}} value={this.state.correctoption} placeholder='Correct Option' onChange={this.handleCorrectOption} />
-        <Input style={{padding:"10px"}} value={this.state.option2} placeholder='Option' onChange={this.handleOption2}/>
-        <Input style={{padding:"10px"}} value={this.state.option3} placeholder='Option' onChange={this.handleOption3}/>
-        <Input style={{padding:"10px"}} value={this.state.option4} placeholder='Option' onChange={this.handleOption4}/>
-        <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={(e)=>this.handleAddQuestions(e)}/>
+           <Divider/>
+           <Form style={{padding:"10px"}} >
+             <TextArea placeholder='Question' value={this.state.que} autoHeight onChange={this.handleQuestion} />
+           </Form>
+           <IconButton style={{float:"right"}}><AttachFile/></IconButton>
+           <Header>Options</Header>
+           <Input style={{padding:"10px"}} value={this.state.correctoption} placeholder='Correct Option' onChange={this.handleCorrectOption} />
+           <Input style={{padding:"10px"}} value={this.state.option2} placeholder='Option' onChange={this.handleOption2}/>
+           <Input style={{padding:"10px"}} value={this.state.option3} placeholder='Option' onChange={this.handleOption3}/>
+           <Input style={{padding:"10px"}} value={this.state.option4} placeholder='Option' onChange={this.handleOption4}/>
+           <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={(e)=>this.handleAddQuestions(e)}/>
            <center>{controls}</center>
-        <Snackbar
-           open={this.state.snack}
-           message="Question has been added!"
-           autoHideDuration={2000}
-           onRequestClose={this.handleSnackClose}
-         />
+           <Snackbar
+             open={this.state.snack}
+             message="Question has been added!"
+             autoHideDuration={2000}
+             onRequestClose={this.handleSnackClose}
+           />
          </div>
        );
      case 3:
@@ -248,7 +244,7 @@ export default class HorizontalTransition extends React.Component {
           </div>
        )
      default:
-       return 'You\'re a long way from home sonny jim!';
+       return 'Create Your Question';
     }
   }
 
@@ -259,61 +255,17 @@ export default class HorizontalTransition extends React.Component {
   }
 
   render() {
-    var QuePreview = '';
-    var that = this;
-    var preview = this.state.questions.map(function(item, i){
-      return(
-        <Segment.Group horizontal key={i}>
-          <Segment style={{backgroundColor:'#37474F', color:'white', width:'40%'}}>{item.question}</Segment>
-          <Segment style={{backgroundColor:'#C5E1A5', width:'15%'}}>{item.options[0]}</Segment>
-          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[1]}</Segment>
-          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[2]}</Segment>
-          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[3]}</Segment>
-          <Segment style={{backgroundColor:'#37474F',width:'12%'}}>
-            <Button icon floated='left' onClick={()=>{that.handleEditQuestion(item, i)}}><Icon name='write'/></Button>
-            <Button icon floated='right' onClick={()=>{that.handleDeleteQuestion(i)}}
-              ><Icon name='delete'/></Button>
-          </Segment>
-        </Segment.Group>
-      );
-    });
-    if (this.state.questions.length>0) {
-      QuePreview =  <div>
-                      <Divider horizontal>Question Preview</Divider>
-                      <Segment style={{backgroundColor:'#0097A7',margin:'20px'}}>
-                        {preview}
-                      </Segment>
-                    </div>
-    }
-    var display = <div>
-                    <Segment style={{backgroundColor:'#37474F'}} >
-                      <Stepper activeStep={this.state.stepIndex}>
-                       <Step>
-                           <StepLabel style={{color:'white'}}>Choose / Create your Topic</StepLabel>
-                       </Step>
-                       <Step>
-                           <StepLabel style={{color:'white'}}>Choose / Create your Sub Topic</StepLabel>
-
-                       </Step>
-                       <Step>
-                           <StepLabel style={{color:'white'}}>Add Questions</StepLabel>
-
-                       </Step>
-                       <Step>
-                       <StepLabel style={{color:'white'}}>Launch Quiz</StepLabel>
-                       </Step>
-                      </Stepper>
-                    </Segment>
-                    <Segment raised style={{margin:"20px",backgroundColor:'#e57373'}}>
-                      <ExpandTransition loading={this.state.loading} open={true}>
-                        {this.getStepContent(this.state.stepIndex)}
-                      </ExpandTransition>
-                    </Segment>
-                    {QuePreview}
-                  </div>
     return(
       <div>
-        {display}
+        <StepperHeader stepIndex={this.state.stepIndex} />
+        <Segment raised style={{margin:"20px",backgroundColor:'#e57373'}}>
+          <ExpandTransition loading={this.state.loading} open={true}>
+            {this.getStepContent(this.state.stepIndex)}
+          </ExpandTransition>
+        </Segment>
+        <QuestionPreview questions={this.state.questions}
+          handleEditQuestion={this.handleEditQuestion}
+          handleDeleteQuestion={this.handleDeleteQuestion} />
       </div>
     );
   }
