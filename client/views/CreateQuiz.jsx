@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import { Form, TextArea, Input, Segment, Accordion, Label, Message,
   Menu, Modal, Header, Icon, Button, Divider } from 'semantic-ui-react';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
@@ -259,6 +260,11 @@ export default class HorizontalTransition extends React.Component {
       <div>
         <StepperHeader stepIndex={this.state.stepIndex} />
         <Segment raised style={{margin:"20px",backgroundColor:'#e57373'}}>
+          <Link to={'/dashboard'}>
+            <Button icon floated='right' circular={true} compact={true} >
+              <Icon name='window close' corner={true} size='small' />
+            </Button>
+          </Link>
           <ExpandTransition loading={this.state.loading} open={true}>
             {this.getStepContent(this.state.stepIndex)}
           </ExpandTransition>
