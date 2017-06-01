@@ -208,7 +208,7 @@ export default class HorizontalTransition extends React.Component {
              </Menu.Item>
              <Menu.Item>
                <span style={{color:'#0097A7'}}>Sub Topic : </span>
-               <span style={{color:'white'}}>{this.state.topic}</span>
+               <span style={{color:'white'}}>{this.state.subtopic}</span>
              </Menu.Item>
            </Menu>
            <Divider/>
