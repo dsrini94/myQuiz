@@ -1,6 +1,6 @@
 import React from 'react'
 import { Divider,Card,Icon,Grid, Menu, Segment,Header,Reveal,Image,Statistic,Button} from 'semantic-ui-react'
-
+import { Link } from 'react-router-dom';
 export default class EventMenu extends React.Component {
 
   constructor()
@@ -55,7 +55,7 @@ export default class EventMenu extends React.Component {
                     React
                   </Card.Header>
                 </Card.Content>
-<Button attached='bottom' color='olive'>Explore</Button>
+<Link to={'/subTopic'}><Button attached='bottom' color='olive'>Explore</Button></Link>
               </Card>
               <Divider />
             </Grid.Column>

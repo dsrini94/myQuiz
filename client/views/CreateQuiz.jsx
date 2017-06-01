@@ -14,7 +14,6 @@ import { Grid, Row, Col } from 'react-flexbox-grid/lib';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Snackbar from 'material-ui/Snackbar';
-import _ from 'lodash'
 
 /**
  * A contrived example using a transition between steps
@@ -33,7 +32,8 @@ export default class HorizontalTransition extends React.Component {
       correctoption : '',
       option2:'',
       option3:'',
-      option4:''
+      option4:'',
+      editQuiz:false
     };
     this.dummyAsync=this.dummyAsync.bind(this);
     this.handleNext=this.handleNext.bind(this);
@@ -50,6 +50,10 @@ export default class HorizontalTransition extends React.Component {
     this.handleOption4=this.handleOption4.bind(this);
     this.handleSnackClose=this.handleSnackClose.bind(this);
     this.handleEditQuestion=this.handleEditQuestion.bind(this);
+
+
+    this.handleDeleteQuestion=this.handleDeleteQuestion.bind(this);
+
   }
 
   dummyAsync(cb){
@@ -114,7 +118,7 @@ export default class HorizontalTransition extends React.Component {
     this.setState({option4:opt});
   }
 
-  handleAddQuestions(){
+  handleAddQuestions(e){
     var questions = this.state.questions;
     var optArr = [];
     optArr.push(this.state.correctoption);
@@ -131,9 +135,29 @@ export default class HorizontalTransition extends React.Component {
   }
 
 
+
   handleEditQuestion()
   {
     alert('clicked');
+  }
+
+  handleEditQuestion(item, i){
+    var arr = this.state.questions;
+    arr.splice(i,1);
+    this.setState({questions:arr,
+      que:item.question,
+      correctoption:item.options[0],
+      option2:item.options[1],
+      option3:item.options[2],
+      option4:item.options[3]
+    });
+  }
+
+  handleDeleteQuestion(i){
+    var arr = this.state.questions;
+    arr.splice(i, 1);
+    this.setState({questions:arr});
+
   }
 
 
@@ -168,7 +192,10 @@ export default class HorizontalTransition extends React.Component {
        return (
          <div>
            <Menu widths={2} style={{backgroundColor:'#37474F'}}>
-             <Menu.Item><span style={{color:'White'}}>{this.state.topic}</span></Menu.Item>
+             <Menu.Item>
+               <span style={{color:'#0097A7'}}>Topic : </span>
+               <span style={{color:'white'}}>{this.state.topic}</span>
+             </Menu.Item>
              <Menu.Item></Menu.Item>
            </Menu>
          <Divider/>
@@ -184,8 +211,14 @@ export default class HorizontalTransition extends React.Component {
        return (
          <div>
            <Menu widths={2} style={{backgroundColor:'#37474F'}}>
-             <Menu.Item><span style={{color:'White'}}>{this.state.topic}</span></Menu.Item>
-             <Menu.Item><span style={{color:'White'}}>{this.state.subtopic}</span></Menu.Item>
+             <Menu.Item>
+               <span style={{color:'#0097A7'}}>Topic : </span>
+               <span style={{color:'white'}}>{this.state.topic}</span>
+             </Menu.Item>
+             <Menu.Item>
+               <span style={{color:'#0097A7'}}>Sub Topic : </span>
+               <span style={{color:'white'}}>{this.state.topic}</span>
+             </Menu.Item>
            </Menu>
          <Divider/>
          <Form style={{padding:"10px"}} >
@@ -197,7 +230,7 @@ export default class HorizontalTransition extends React.Component {
         <Input style={{padding:"10px"}} value={this.state.option2} placeholder='Option' onChange={this.handleOption2}/>
         <Input style={{padding:"10px"}} value={this.state.option3} placeholder='Option' onChange={this.handleOption3}/>
         <Input style={{padding:"10px"}} value={this.state.option4} placeholder='Option' onChange={this.handleOption4}/>
-        <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={this.handleAddQuestions} />
+        <RaisedButton style={{marginLeft:"10px"}} label="Add" primary={true} onTouchTap={(e)=>this.handleAddQuestions(e)}/>
            <center>{controls}</center>
         <Snackbar
            open={this.state.snack}
@@ -210,16 +243,15 @@ export default class HorizontalTransition extends React.Component {
      case 3:
        return(
          <div>
-         <Header><span style={{color:'white'}}>Launch</span></Header>
-         <Divider/>
-
-            <DatePicker hintText="Quiz Date" mode="landscape" />
-
-         <TimePicker hintText="Start Time" autoOk={true}/>
-
-         <TimePicker hintText="End Time" autoOk={true}/>
-         <center>{controls}</center>
-        </div>
+           <Header><span style={{color:'white'}}>Launch</span></Header>
+           <Divider/>
+           <center>
+             <DatePicker hintText="Quiz Date" floatingLabelText='Quiz Date' mode="landscape" />
+             <TimePicker hintText="Start Time" floatingLabelText='Start Time' autoOk={true}/>
+             <TimePicker hintText="End Time" floatingLabelText='End Time' autoOk={true}/>
+             {controls}
+           </center>
+          </div>
        )
      default:
        return 'You\'re a long way from home sonny jim!';
@@ -233,25 +265,37 @@ export default class HorizontalTransition extends React.Component {
   }
 
   render() {
+
     var that = this;
     console.log('obj que : ',this.state.que, this.state.correctoption);
     console.log('l : ', this.state.questions);
+
+
     var QuePreview = '';
+    var that = this;
     var preview = this.state.questions.map(function(item, i){
       return(
-        <Segment.Group horizontal onClick={that.handleEditQuestion}>
+
+
+        <Segment.Group horizontal key={i}>
+
           <Segment style={{backgroundColor:'#37474F', color:'white', width:'40%'}}>{item.question}</Segment>
           <Segment style={{backgroundColor:'#C5E1A5', width:'15%'}}>{item.options[0]}</Segment>
-          <Segment style={{width:'15%'}}>{item.options[1]}</Segment>
-          <Segment style={{width:'15%'}}>{item.options[2]}</Segment>
-          <Segment style={{width:'15%'}}>{item.options[3]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[1]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[2]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[3]}</Segment>
+          <Segment style={{backgroundColor:'#37474F',width:'12%'}}>
+            <Button icon floated='left' onClick={()=>{that.handleEditQuestion(item, i)}}><Icon name='write'/></Button>
+            <Button icon floated='right' onClick={()=>{that.handleDeleteQuestion(i)}}
+              ><Icon name='delete'/></Button>
+          </Segment>
         </Segment.Group>
       );
     });
     if (this.state.questions.length>0) {
       QuePreview =  <div>
                       <Divider horizontal>Question Preview</Divider>
-                      <Segment style={{backgroundColor:'#0097A7'}}>
+                      <Segment style={{backgroundColor:'#0097A7',margin:'20px'}}>
                         {preview}
                       </Segment>
                     </div>

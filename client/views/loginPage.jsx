@@ -1,8 +1,40 @@
 import React from 'react';
 import { Grid, Segment, Input, Button, Header, Image, Form, Message } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import request from 'superagent';
 export default class LoginPage extends React.Component
 {
+
+  constructor()
+  {
+    super();
+    this.state={warningMsg:'',userName:'',password:'',userPlaceHolder:'ADID',passPlaceHolder:'password'}
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleUserName = this.handleUserName.bind(this);
+    this.handlePassword = this.handlePassword.bind(this);
+  }
+
+  handleUserName(e)
+  {
+    console.log(e.target.value);
+    this.setState({userName:e.target.value});
+  }
+  handlePassword(e)
+  {
+    console.log(e.target.value);
+    this.setState({password:e.target.value});
+  }
+  handleLogin()
+  {
+    if(this.state.password || this.state.userName == '')
+    {
+      this.setState({warningMsg: <Message negative>
+                                  <Message.Header>username / password should not be left blank</Message.Header>
+                                </Message>});
+    }
+    else {
+      alert('all is fine');
+    }
+  }
   render()
   {
 
@@ -24,6 +56,8 @@ export default class LoginPage extends React.Component
                 <Grid.Column width={3}>
                 </Grid.Column>
                 <Grid.Column width={10}>
+                  <center>{this.state.warningMsg}</center>
+                  <br />
                   <Segment style={{backgroundColor:'#48506d'}}>
                     <br/>
                       <Header>
@@ -31,15 +65,13 @@ export default class LoginPage extends React.Component
                        </Header>
                      <br/>
                      <br/>
-                     <center><Input icon='user' iconPosition='left' placeholder='ADID' style={{width:'400px'}}/></center>
+                     <center><Input onChange={this.handleUserName} icon='user' iconPosition='left' placeholder={this.state.userPlaceHolder} style={{width:'400px'}}/></center>
                      <br/>
-                     <center><Input icon='unlock' iconPosition='left' placeholder='password' style={{width:'400px'}}/></center>
+                     <center><Input onChange={this.handlePassword} icon='unlock' iconPosition='left' placeholder={this.state.passPlaceHolder} style={{width:'400px'}}/></center>
                      <br/>
                      <br/>
-                    <Link to={'/dashboard'}>
-                      <center><Button basic size='massive' className='loginButton' >
+                      <center><Button basic size='massive' className='loginButton' onClick={this.handleLogin}>
                       <span className='loginText'  style={{color:'white'}}>login</span></Button></center>
-                    </Link>
               </Segment>
                 </Grid.Column>
                 <Grid.Column width={3}>
