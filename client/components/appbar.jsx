@@ -30,11 +30,13 @@ export default class Appbar extends React.Component
             <Menu.Item  name='myQuiz' />
           </Link>
           <Menu.Menu size='massive' position='right'>
-            <Menu.Item
-              name='logout'
-              onClick={this.handleLogout}>
-              <Icon name='power' />
-            </Menu.Item>
+            <Link to={'/'}>
+              <Menu.Item
+                name='logout'
+                onClick={this.handleLogout}>
+                <Icon name='power' />
+              </Menu.Item>
+            </Link>
           </Menu.Menu>
         </Menu>
         <br />
