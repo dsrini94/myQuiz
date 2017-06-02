@@ -52,7 +52,10 @@ export default class HorizontalTransition extends React.Component {
     this.handleOption4=this.handleOption4.bind(this);
     this.handleSnackClose=this.handleSnackClose.bind(this);
     this.handleEditQuestion=this.handleEditQuestion.bind(this);
+
+
     this.handleDeleteQuestion=this.handleDeleteQuestion.bind(this);
+
   }
 
   dummyAsync(cb){
@@ -133,6 +136,13 @@ export default class HorizontalTransition extends React.Component {
     this.setState({questions:questions, que:'',correctoption:'',option2:'',option3:'',option4:'',snack:true});
   }
 
+
+
+  handleEditQuestion()
+  {
+    alert('clicked');
+  }
+
   handleEditQuestion(item, i){
     var arr = this.state.questions;
     arr.splice(i,1);
@@ -149,6 +159,7 @@ export default class HorizontalTransition extends React.Component {
     var arr = this.state.questions;
     arr.splice(i, 1);
     this.setState({questions:arr});
+
   }
 
 
@@ -171,11 +182,12 @@ export default class HorizontalTransition extends React.Component {
      case 0:
        return (
          <div>
-           <center style={{marginTop:"10px"}}>
-             <Form.Field>
-             <Input placeholder='Topic' onChange={this.handleTopic} />
-             </Form.Field>
-             {controls}
+
+         <center style={{marginTop:"10px"}}>
+         <Form.Field>
+         <Input placeholder='Topic' onChange={this.handleTopic} />
+         </Form.Field>
+           {controls}
            </center>
          </div>
        );
@@ -256,6 +268,70 @@ export default class HorizontalTransition extends React.Component {
   }
 
   render() {
+
+
+    var that = this;
+    console.log('obj que : ',this.state.que, this.state.correctoption);
+    console.log('l : ', this.state.questions);
+
+
+    var QuePreview = '';
+    var that = this;
+    var preview = this.state.questions.map(function(item, i){
+      return(
+
+
+        <Segment.Group horizontal key={i}>
+
+          <Segment style={{backgroundColor:'#37474F', color:'white', width:'40%'}}>{item.question}</Segment>
+          <Segment style={{backgroundColor:'#C5E1A5', width:'15%'}}>{item.options[0]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[1]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[2]}</Segment>
+          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[3]}</Segment>
+          <Segment style={{backgroundColor:'#37474F',width:'12%'}}>
+            <Button icon floated='left' onClick={()=>{that.handleEditQuestion(item, i)}}><Icon name='write'/></Button>
+            <Button icon floated='right' onClick={()=>{that.handleDeleteQuestion(i)}}
+              ><Icon name='delete'/></Button>
+          </Segment>
+        </Segment.Group>
+      );
+    });
+    if (this.state.questions.length>0) {
+      QuePreview =  <div>
+                      <Divider horizontal>Question Preview</Divider>
+                      <Segment style={{backgroundColor:'#0097A7',margin:'20px'}}>
+                        {preview}
+                      </Segment>
+                    </div>
+    }
+    var display = <div>
+                    <Segment style={{backgroundColor:'#37474F'}} >
+                      <Stepper activeStep={this.state.stepIndex}>
+                       <Step>
+                           <StepLabel style={{color:'white'}}>Choose / Create your Topic</StepLabel>
+                       </Step>
+                       <Step>
+                           <StepLabel style={{color:'white'}}>Choose / Create your Sub Topic</StepLabel>
+
+                       </Step>
+                       <Step>
+                           <StepLabel style={{color:'white'}}>Add Questions</StepLabel>
+
+                       </Step>
+                       <Step>
+                       <StepLabel style={{color:'white'}}>Launch Quiz</StepLabel>
+                       </Step>
+                      </Stepper>
+                    </Segment>
+                    <Segment raised style={{margin:"20px",backgroundColor:'#e57373'}}>
+                      <ExpandTransition loading={this.state.loading} open={true}>
+                        {this.getStepContent(this.state.stepIndex)}
+                      </ExpandTransition>
+                    </Segment>
+                    {QuePreview}
+                  </div>
+
+
     return(
       <div>
         <StepperHeader stepIndex={this.state.stepIndex} />
