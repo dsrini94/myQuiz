@@ -8,8 +8,9 @@ export default class TakeQuiz extends React.Component {
     super();
     this.state={
       submit : false,
-      percent : 0,
-      timer : 20
+      percent : 100,
+      timer : 30,
+      reduction : 3.3333333
     }
     this.handleOpenConfirmSubmit=this.handleOpenConfirmSubmit.bind(this);
     this.handleCloseConfirmSubmit=this.handleCloseConfirmSubmit.bind(this);
@@ -19,11 +20,10 @@ export default class TakeQuiz extends React.Component {
     setInterval(() => this.timer(),1000);
   }
   timer(){
-    if (this.state.timer===0) {
-
-    }
     var currentTime=this.state.timer;
-    this.setState({timer:currentTime-1});
+    var per = this.state.percent;
+    var red = this.state.reduction;
+    this.setState({percent:per-red,timer:currentTime-1});
   }
   handleOpenConfirmSubmit(){
     this.setState({submit:true});
@@ -36,6 +36,17 @@ export default class TakeQuiz extends React.Component {
   }
   render(){
     var remTime = this.state.timer+'s';
+    var colorStyle={};
+    if (this.state.timer<=10) {
+      colorStyle = {
+        backgroundColor: '#e57373'
+      }
+    }
+    else {
+      colorStyle={
+        backgroundColor: '#42A4F4'
+      }
+    }
     var modal=<Modal basic size='small' open={this.state.submit} >
                 <Header icon='warning' content='Confirm Submit' />
                 <Modal.Content>
@@ -58,25 +69,32 @@ export default class TakeQuiz extends React.Component {
     else {
       return(
         <div>
-        <Menu fixed='top'>
-          <Menu.Menu>
-            <center><h1 style={{color : "#42A4F4"}}>ReactJS</h1></center>
-          </Menu.Menu>
-          <Menu.Menu width='20' position='right'>
-            <Menu.Item><Icon name='hourglass half' size='large'/><b>{remTime}</b></Menu.Item>
-          </Menu.Menu>
+          <Menu fixed='true'>
+          <Grid className='takeQuizMenu'>
+            <Grid.Row>
+              <Grid.Column width={2}>
+                <center><h1 style={{color : "#757575"}}>ReactJS</h1></center>
+              </Grid.Column>
+              <Grid.Column width={12}>
+                  <Progress percent={this.state.percent} indicating />
+              </Grid.Column>
+              <Grid.Column width={2} className='timer' >
+                <Icon name='hourglass half' size='large'/><b>{remTime}</b>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </Menu>
         <br />
         <br />
         <br />
         <br />
-        <Grid>
+        <Grid className= 'takeQuizQue'>
           <Grid.Row>
             <Grid.Column width={1}></Grid.Column>
             <Grid.Column width={14}>
-              <Segment.Group>
+              <Segment.Group style={{backgroundColor:'#757575'}}>
                 <Segment.Group>
-                  <Segment raised style={{backgroundColor : "#42A4F4"}}>
+                  <Segment raised style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
@@ -84,7 +102,7 @@ export default class TakeQuiz extends React.Component {
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
@@ -92,7 +110,7 @@ export default class TakeQuiz extends React.Component {
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
@@ -100,7 +118,7 @@ export default class TakeQuiz extends React.Component {
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
@@ -108,7 +126,7 @@ export default class TakeQuiz extends React.Component {
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
@@ -116,7 +134,7 @@ export default class TakeQuiz extends React.Component {
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
@@ -124,59 +142,59 @@ export default class TakeQuiz extends React.Component {
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
-                    <Radio label='framework'  />
+                    <Radio label='framework' />
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
-                    <Radio label='framework'  />
+                    <Radio label='framework' />
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
-                    <Radio label='framework'  />
+                    <Radio label='framework' />
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
-                    <Radio label='framework'  />
+                    <Radio label='framework' />
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
-                    <Radio label='framework'  />
+                    <Radio label='framework' />
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
-                    <Radio label='framework'  />
+                    <Radio label='framework' />
                   </Segment>
                 </Segment.Group>
                 <Segment.Group>
-                  <Segment style={{backgroundColor : "#42A4F4"}}>
+                  <Segment style={colorStyle}>
                     <h4>What is ReactJS</h4>
                   </Segment>
                   <Segment>
-                    <Radio label='framework'  />
+                    <Radio label='framework' />
                   </Segment>
                 </Segment.Group>
               </Segment.Group>

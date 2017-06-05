@@ -18,3 +18,9 @@
 {
   color:#48506d !important;
 }
+
+.takeQuizMenu {
+  padding-top: 80px;
+  backgroundColor:'#FAFAFA';
+  width: 100%;
+}
