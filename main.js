@@ -18,7 +18,7 @@ ReactDom.render(
     <HashRouter>
       <div>
         <Route exact path='/' component={LoginPage} />
-        <Route path='/dashboard' component={Dashboard} />
+        <Route path='/dashboard/:aQuiz/:tScore/:rank/:hQuiz/:image/:userId' component={Dashboard} />
         <Route path='/eventList' component={EventList} />
         <Route path='/subTopic' component={SubtopicView} />
         <Route path='/createQuiz' component={CreateQuiz} />
