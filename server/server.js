@@ -1,10 +1,23 @@
 //import Statements
 const expressInstance = require('express');
 const myQuizServer = expressInstance();
+const authenticate = require('./routes/authentication.js');
+const bodyParser = require('body-parser');
 
+//request parsers
+myQuizServer.use(bodyParser.json());
+myQuizServer.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 //loading the static file
 myQuizServer.use(expressInstance.static('./../'));
+
+//routes
+myQuizServer.use('/',(req,res,next)=>{
+  console.log('in the routes');
+  next();
+},authenticate)
 
 //Server will be live on port 3000
 myQuizServer.listen(3000,()=>{

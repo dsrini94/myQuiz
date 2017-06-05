@@ -16,16 +16,23 @@ export default class Dashboard extends React.Component
     super();
   }
 
+  componentDidMount()
+  {
+    console.log(this.props.match.params);
+  }
+
   render()
   {
     return(
       <div>
         <Grid >
-            <Grid.Row only='mobile' columns='equal'>
+            <Grid.Row only='mobile' >
               <Grid.Column>
-                <MobileAppbar />
-                <Grid.Row only='mobile'>
-                  <Grid.Column >
+                <MobileAppbar image={this.props.match.params.image} aQuiz={this.props.match.params.aQuiz} tScore={this.props.match.params.tScore} rank={this.props.match.params.rank} uid={this.props.match.params.userId} hQuiz={this.props.match.params.hQuiz}/>
+              </Grid.Column>
+            </Grid.Row>
+              <Grid.Row only='mobile' >
+                  <Grid.Column width={16}>
                     <MobileEvents />
                   </Grid.Column>
                 </Grid.Row>
@@ -35,25 +42,24 @@ export default class Dashboard extends React.Component
                     <MobileLeaders />
                   </Grid.Column>
                 </Grid.Row>
-              </Grid.Column>
-            </Grid.Row>
 
-            
+
+
           <Grid.Row only='tablet computer'>
-            <Grid.Column>
+            <Grid.Column >
             <Appbar />
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row only='tablet computer'>
-            <Grid.Column mobile={16} tablet={5} computer={3}>
-              <Avatar />
+          <Grid.Row only='tablet computer'  streched>
+            <Grid.Column tablet={5} computer={3} >
+              <Avatar image={this.props.match.params.image} uid={this.props.match.params.userId}/>
               <center>
-                <ProfileStats />
+                <ProfileStats aQuiz={this.props.match.params.aQuiz}  tScore={this.props.match.params.tScore} rank={this.props.match.params.rank} hQuiz={this.props.match.params.hQuiz}/>
               </center>
             </Grid.Column>
-            <Grid.Column  mobile={16} tablet={11} computer={13}>
+            <Grid.Column  tablet={11} computer={13} >
                 <Events />
-            <Leaders />
+                <Leaders />
             </Grid.Column>
             </Grid.Row>
           </Grid>

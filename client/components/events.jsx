@@ -16,9 +16,9 @@ export default class Events extends React.Component
         <Header as='h3' block textAlign='center' inverted>
           Events
         </Header>
-        <Card.Group>
+        <Card.Group >
 
-          <Card>
+          <Card >
             <Card.Content>
               <Image
                 floated='right'

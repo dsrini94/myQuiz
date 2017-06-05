@@ -32,7 +32,16 @@ export default class LoginPage extends React.Component
                                 </Message>});
     }
     else {
-      alert('all is fine');
+      request
+      .post('/authenticate')
+      .send({ adid: this.state.userName })
+      .end(function(err, res){
+        if (err || !res.ok) {
+          alert('Oh no! error');
+        } else {
+          window.location = res.text;
+        }
+      });
     }
   }
   render()
