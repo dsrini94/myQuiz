@@ -8,6 +8,10 @@ export default class Events extends React.Component
     super(props);
   }
 
+  componentDidMount()
+  {
+    console.log(this.props);
+  }
 
   render()
   {
@@ -170,7 +174,7 @@ export default class Events extends React.Component
         </Card.Group>
 
         <br/>
-        <Link to={'/eventList'}><Button
+        <Link to={'/eventList/:{this.props.image}' } ><Button
           animated='fade'
           floated='right'
           color='red'>

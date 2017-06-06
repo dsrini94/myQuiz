@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, Button, Segment, Header, Icon, Modal, Radio, Progress, Grid } from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
 import Feedback from './../components/Feedback.jsx';
+import request from 'superagent';
 
 export default class TakeQuiz extends React.Component {
   constructor(props) {
@@ -33,6 +34,7 @@ export default class TakeQuiz extends React.Component {
   }
   handleFinalSubmit(){
     this.setState({submit:false, timer:0});
+
   }
   render(){
     var remTime = this.state.timer+'s';
@@ -62,6 +64,7 @@ export default class TakeQuiz extends React.Component {
                 </Modal.Actions>
               </Modal>
     if (this.state.timer<=0) {
+
       return(
         <Feedback />
       );

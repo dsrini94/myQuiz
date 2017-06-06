@@ -145,6 +145,7 @@ export default class HorizontalTransition extends React.Component {
     };
     questions.push(obj);
     this.setState({questions:questions, que:'',correctoption:'',option2:'',option3:'',option4:'',snack:true});
+
   }
   handleEditQuestion(item, i){
     var arr = this.state.questions;

@@ -43,6 +43,8 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
 });
 
 
+
+
 // function to shuffle the option order ---------->
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -62,5 +64,6 @@ function shuffle(array) {
 
   return array;
 }
+
 
 module.exports = launchQuiz;
