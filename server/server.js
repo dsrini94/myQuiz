@@ -2,7 +2,7 @@
 const expressInstance = require('express');
 const myQuizServer = expressInstance();
 const bodyParser = require('body-parser');
-const MonDB = require('./../connections/db.mongo.js');
+const MonDB = require('./connections/db.mongo.js');
 
 //routers --->
 const authenticate = require('./routes/authentication.js');

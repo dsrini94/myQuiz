@@ -9,7 +9,7 @@ var quizSchema=new Schema({
     date:Date,
     startTime:Date,
     endTime:Date,
-    questions:[{question:String,options:[String],correctAnswer:String}]
+    questions:[{question:String,options:[String],correctoption:String}]
 });
 
 
