@@ -267,7 +267,7 @@ export default class HorizontalTransition extends React.Component {
              <TimePicker onChange={this.handleStartTime} hintText="Start Time" floatingLabelText='Start Time' autoOk={true}/>
              <TimePicker onChange={this.handleEndTime} hintText="End Time" floatingLabelText='End Time' autoOk={true}/>
              <RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Prev" onClick={this.handlePrev}/>
-             <RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Launch" onClick={this.handleLaunch}/>
+             <Link to={'/quizAdded/:'+this.state.startDate+'/:'+this.state.startTime}><RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Launch" onClick={this.handleLaunch}/></Link>
            </center>
           </div>
        )
@@ -281,11 +281,6 @@ export default class HorizontalTransition extends React.Component {
       <div>
         <StepperHeader stepIndex={this.state.stepIndex} />
         <Segment raised style={{margin:"20px",backgroundColor:'#e57373'}}>
-          <Link to={'/dashboard'}>
-            <Button icon floated='right' circular={true} compact={true} >
-              <Icon name='window close' corner={true} size='small' />
-            </Button>
-          </Link>
           <ExpandTransition loading={this.state.loading} open={true}>
             {this.getStepContent(this.state.stepIndex)}
           </ExpandTransition>
