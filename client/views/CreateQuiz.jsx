@@ -18,6 +18,7 @@ import Snackbar from 'material-ui/Snackbar';
 //Components ---->
 import StepperHeader from './../components/StepperHeader.jsx';
 import QuestionPreview from './../components/QuestionPreview.jsx';
+import Request from 'superagent';
 
 
 export default class HorizontalTransition extends React.Component {
@@ -35,13 +36,15 @@ export default class HorizontalTransition extends React.Component {
       option2:'',
       option3:'',
       option4:'',
-      editQuiz:false
+      startDate:'',
+      startTime:'',
+      endTime:''
     };
     this.dummyAsync=this.dummyAsync.bind(this);
     this.handleNext=this.handleNext.bind(this);
     this.handlePrev=this.handlePrev.bind(this);
+    this.handleLaunch=this.handleLaunch.bind(this);
     this.getStepContent=this.getStepContent.bind(this);
-    this.handleDateChange=this.handleDateChange.bind(this);
     this.handleTopic=this.handleTopic.bind(this);
     this.handleSubTopic=this.handleSubTopic.bind(this);
     this.handleAddQuestions=this.handleAddQuestions.bind(this);
@@ -52,10 +55,10 @@ export default class HorizontalTransition extends React.Component {
     this.handleOption4=this.handleOption4.bind(this);
     this.handleSnackClose=this.handleSnackClose.bind(this);
     this.handleEditQuestion=this.handleEditQuestion.bind(this);
-
-
     this.handleDeleteQuestion=this.handleDeleteQuestion.bind(this);
-
+    this.handleDateChange=this.handleDateChange.bind(this);
+    this.handleStartTime=this.handleStartTime.bind(this);
+    this.handleEndTime=this.handleEndTime.bind(this);
   }
 
   dummyAsync(cb){
@@ -84,6 +87,14 @@ export default class HorizontalTransition extends React.Component {
       }));
     }
   };
+
+  handleLaunch(){
+    Request.post('/saveLaunchQuiz')
+            .send({topic:this.state.topic,subtopic:this.state.subtopic,questions:this.state.questions,startDate:this.state.startDate,startTime:this.state.startTime,endTime:this.state.endTime})
+            .end(function(err, res){
+              console.log(res.text);
+            })
+  }
 
   handleTopic(e){
     var topic = e.target.value;
@@ -135,14 +146,6 @@ export default class HorizontalTransition extends React.Component {
     questions.push(obj);
     this.setState({questions:questions, que:'',correctoption:'',option2:'',option3:'',option4:'',snack:true});
   }
-
-
-
-  handleEditQuestion()
-  {
-    alert('clicked');
-  }
-
   handleEditQuestion(item, i){
     var arr = this.state.questions;
     arr.splice(i,1);
@@ -154,7 +157,6 @@ export default class HorizontalTransition extends React.Component {
       option4:item.options[3]
     });
   }
-
   handleDeleteQuestion(i){
     var arr = this.state.questions;
     arr.splice(i, 1);
@@ -167,6 +169,18 @@ export default class HorizontalTransition extends React.Component {
     this.setState({snack:false});
   }
 
+  handleDateChange(e, date){
+    this.setState({startDate: date});
+  }
+
+  handleStartTime(e, time){
+    this.setState({startTime:time});
+  }
+
+  handleEndTime(e, time){
+    this.setState({endTime:time});
+  }
+
   getStepContent(stepIndex) {
     var prev=null;
     if(stepIndex>0){
@@ -175,7 +189,7 @@ export default class HorizontalTransition extends React.Component {
 
     var controls=<div>
                   {prev}
-                  <RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label={this.state.stepIndex==3?"Launch":"Next"} onClick={this.handleNext}/>
+                  <RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Next" onClick={this.handleNext}/>
                 </div>
 
    switch (stepIndex) {
@@ -249,10 +263,11 @@ export default class HorizontalTransition extends React.Component {
            <Header><span style={{color:'white'}}>Launch</span></Header>
            <Divider/>
            <center>
-             <DatePicker hintText="Quiz Date" floatingLabelText='Quiz Date' mode="landscape" />
-             <TimePicker hintText="Start Time" floatingLabelText='Start Time' autoOk={true}/>
-             <TimePicker hintText="End Time" floatingLabelText='End Time' autoOk={true}/>
-             {controls}
+             <DatePicker onChange={this.handleDateChange} hintText="Quiz Date" floatingLabelText='Quiz Date' mode="landscape" />
+             <TimePicker onChange={this.handleStartTime} hintText="Start Time" floatingLabelText='Start Time' autoOk={true}/>
+             <TimePicker onChange={this.handleEndTime} hintText="End Time" floatingLabelText='End Time' autoOk={true}/>
+             <RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Prev" onClick={this.handlePrev}/>
+             <RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Launch" onClick={this.handleLaunch}/>
            </center>
           </div>
        )
@@ -261,77 +276,7 @@ export default class HorizontalTransition extends React.Component {
     }
   }
 
-  handleDateChange(date){
-    this.setState({
-       startDate: date
-     });
-  }
-
   render() {
-
-
-    var that = this;
-    console.log('obj que : ',this.state.que, this.state.correctoption);
-    console.log('l : ', this.state.questions);
-
-
-    var QuePreview = '';
-    var that = this;
-    var preview = this.state.questions.map(function(item, i){
-      return(
-
-
-        <Segment.Group horizontal key={i}>
-
-          <Segment style={{backgroundColor:'#37474F', color:'white', width:'40%'}}>{item.question}</Segment>
-          <Segment style={{backgroundColor:'#C5E1A5', width:'15%'}}>{item.options[0]}</Segment>
-          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[1]}</Segment>
-          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[2]}</Segment>
-          <Segment style={{backgroundColor:'#ffcdd2',width:'12%'}}>{item.options[3]}</Segment>
-          <Segment style={{backgroundColor:'#37474F',width:'12%'}}>
-            <Button icon floated='left' onClick={()=>{that.handleEditQuestion(item, i)}}><Icon name='write'/></Button>
-            <Button icon floated='right' onClick={()=>{that.handleDeleteQuestion(i)}}
-              ><Icon name='delete'/></Button>
-          </Segment>
-        </Segment.Group>
-      );
-    });
-    if (this.state.questions.length>0) {
-      QuePreview =  <div>
-                      <Divider horizontal>Question Preview</Divider>
-                      <Segment style={{backgroundColor:'#0097A7',margin:'20px'}}>
-                        {preview}
-                      </Segment>
-                    </div>
-    }
-    var display = <div>
-                    <Segment style={{backgroundColor:'#37474F'}} >
-                      <Stepper activeStep={this.state.stepIndex}>
-                       <Step>
-                           <StepLabel style={{color:'white'}}>Choose / Create your Topic</StepLabel>
-                       </Step>
-                       <Step>
-                           <StepLabel style={{color:'white'}}>Choose / Create your Sub Topic</StepLabel>
-
-                       </Step>
-                       <Step>
-                           <StepLabel style={{color:'white'}}>Add Questions</StepLabel>
-
-                       </Step>
-                       <Step>
-                       <StepLabel style={{color:'white'}}>Launch Quiz</StepLabel>
-                       </Step>
-                      </Stepper>
-                    </Segment>
-                    <Segment raised style={{margin:"20px",backgroundColor:'#e57373'}}>
-                      <ExpandTransition loading={this.state.loading} open={true}>
-                        {this.getStepContent(this.state.stepIndex)}
-                      </ExpandTransition>
-                    </Segment>
-                    {QuePreview}
-                  </div>
-
-
     return(
       <div>
         <StepperHeader stepIndex={this.state.stepIndex} />
