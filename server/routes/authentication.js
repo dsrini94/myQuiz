@@ -1,9 +1,8 @@
 const authenticate = require('express').Router();
 const redirectPage = 'http://localhost:3000/#/dashboard';
-var neo4j = require('neo4j');
-var db = new neo4j.GraphDatabase('http://neo4j:password@localhost:7474');
 
-
+//neo4j connection
+const neodb = require('./../connections/db.neo4j.js');
 //avatars
 const imageNames = ['photo_aancfg.png','images_u6emeq.jpg','avatars-000280483895-1lyy0b-t500x500_vwhjgl.jpg','photo_jricth.jpg','billy_heat_face-512_afxl1e.png','WU7DsCBC_rzk4vp.png','pickaface_char4_hlcmru.png','doc_vmag2m.png','3_vrabfq.png','n_oopmfe.jpg','pic_ksj3dp.png','specs_a5rnsi.jpg','cap_xfmnh2.png','slide2_awn3ag.png','avatar_mhrd00.png','andrew_n5u1si.png','hepdiyorumki_hr33uz.png','photo_sag2in.png','t4_ag6adv.jpg','6580243_itbkzr.png'];
 
@@ -11,7 +10,7 @@ const imageNames = ['photo_aancfg.png','images_u6emeq.jpg','avatars-000280483895
 authenticate.post('/authenticate',(req,res)=>{
   console.log('in the authentication');
   console.log(req.body.adid);
-  db.cypher({
+  neodb.cypher({
     query:"match (id:users {userId:{adid}}) return *",
     params:{
       adid:req.body.adid,
@@ -19,7 +18,7 @@ authenticate.post('/authenticate',(req,res)=>{
   },function(err,result){
     if(result=='')
     {
-      db.cypher({
+      neodb.cypher({
           query:"create (id:users {userId:{adid},image:{imageName},rank:{Prank},totalScore:{score},hostedQuiz:{hQuiz},attendedQuiz:{aQuiz}}) return *",
           params:{
             imageName:imageNames[Math.floor(Math.random() * (19 - 0)) + 0],
