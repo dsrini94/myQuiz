@@ -134,6 +134,7 @@ export default class HorizontalTransition extends React.Component {
     };
     questions.push(obj);
     this.setState({questions:questions, que:'',correctoption:'',option2:'',option3:'',option4:'',snack:true});
+
   }
 
 
@@ -268,13 +269,7 @@ export default class HorizontalTransition extends React.Component {
   }
 
   render() {
-
-
     var that = this;
-    console.log('obj que : ',this.state.que, this.state.correctoption);
-    console.log('l : ', this.state.questions);
-
-
     var QuePreview = '';
     var that = this;
     var preview = this.state.questions.map(function(item, i){
