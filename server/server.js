@@ -1,12 +1,14 @@
 //import Statements
-const expressInstance = require('express');
-const myQuizServer = expressInstance();
-const bodyParser = require('body-parser');
-const MonDB = require('./connections/db.mongo.js');
+const expressInstance = require('express')
+    , myQuizServer = expressInstance()
+    , bodyParser = require('body-parser')
+    , MonDB = require('./connections/db.mongo.js');
 
 //routers --->
-const authenticate = require('./routes/authentication.js');
-const launchQuiz = require('./routes/launchQuiz.routes.js');
+const authenticate = require('./routes/authentication.js')
+    , launchQuiz = require('./routes/launchQuiz.route.js')
+    , events = require('./routes/events.route.js');
+
 
 //MongoDB Connection ---------->
 MonDB.on('error', console.error.bind(console, 'connection error:'));
@@ -27,7 +29,7 @@ myQuizServer.use(expressInstance.static('./../'));
 myQuizServer.use('/',(req,res,next)=>{
   console.log('in the routes');
   next();
-},authenticate, launchQuiz);
+},authenticate, launchQuiz, events);
 
 //Server will be live on port 3000
 myQuizServer.listen(3000,()=>{

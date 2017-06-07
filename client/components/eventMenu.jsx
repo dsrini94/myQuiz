@@ -3,15 +3,13 @@ import { Divider,Card,Icon,Grid, Menu, Segment,Header,Reveal,Image,Statistic,But
 import { Link } from 'react-router-dom';
 export default class EventMenu extends React.Component {
 
-  constructor()
-  {
+  constructor(){
     super();
     this.state = { activeItem: 'bio' ,displayArea:''}
     this.handleItemClick = this.handleItemClick.bind(this);
   }
 
-  handleItemClick(e, { name })
-  {
+  handleItemClick(e, { name }){
     this.setState({ activeItem: name })
   }
   render() {
