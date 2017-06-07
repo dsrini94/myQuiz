@@ -11,6 +11,7 @@ import confirmTakeQuiz from './client/views/confirmTakeQuiz.jsx';
 import TakeQuiz from './client/views/TakeQuiz.jsx';
 import Feedback from './client/components/Feedback.jsx';
 import CreateQuiz from './client/views/CreateQuiz.jsx';
+import QuizAdded from './client/components/QuizAdded.jsx';
 import Leaderboard from './client/views/leaderBoard.jsx';
 injectTapEventPlugin();
 
@@ -23,6 +24,7 @@ ReactDom.render(
         <Route path='/eventList/:tScore' component={EventList} />
         <Route path='/subTopic' component={SubtopicView} />
         <Route path='/createQuiz' component={CreateQuiz} />
+        <Route path='/quizAdded/:date/:time' component={QuizAdded} />
         <Route path='/takeQuiz/confirm' component={confirmTakeQuiz} />
         <Route path='/takeQuiz/quiz' component={TakeQuiz} />
         <Route path='/leaderboard' component={Leaderboard} />
