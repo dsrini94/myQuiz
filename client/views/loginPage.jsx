@@ -15,12 +15,10 @@ export default class LoginPage extends React.Component
 
   handleUserName(e)
   {
-    console.log(e.target.value);
     this.setState({userName:e.target.value});
   }
   handlePassword(e)
   {
-    console.log(e.target.value);
     this.setState({password:e.target.value});
   }
   handleLogin()
@@ -31,6 +29,13 @@ export default class LoginPage extends React.Component
                                   <Message.Header>username / password should not be left blank</Message.Header>
                                 </Message>});
     }
+    else
+      if(this.state.userName.length<8)
+      {
+        this.setState({warningMsg: <Message negative>
+                                    <Message.Header>Invalid username</Message.Header>
+                                  </Message>});
+      }
     else {
       request
       .post('/authenticate')

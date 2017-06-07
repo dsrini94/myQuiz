@@ -10,7 +10,7 @@ export default class Events extends React.Component{
       eventsArr : []
     };
   }
-
+  
   componentDidMount(){
     console.log(this.props);
     var that = this;
@@ -51,6 +51,7 @@ export default class Events extends React.Component{
         </Card>
       );
     });
+  render(){
     return(
       <div>
         <Header as='h3' block textAlign='center' inverted>

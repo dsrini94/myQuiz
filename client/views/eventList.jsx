@@ -4,10 +4,7 @@ import { Grid,Button,Icon,Popup} from 'semantic-ui-react';
 import Appbar from './../components/appbar.jsx';
 export default class EventList extends React.Component
 {
-  componentDidMount()
-  {
-    console.log(this.props.match.params);
-  }
+  
   render()
   {
     return(

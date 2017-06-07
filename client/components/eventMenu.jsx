@@ -1,6 +1,7 @@
 import React from 'react'
 import { Divider,Card,Icon,Grid, Menu, Segment,Header,Reveal,Image,Statistic,Button} from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
+import request from 'superagent';
 export default class EventMenu extends React.Component {
 
   constructor(){
@@ -8,7 +9,16 @@ export default class EventMenu extends React.Component {
     this.state = { activeItem: 'bio' ,displayArea:''}
     this.handleItemClick = this.handleItemClick.bind(this);
   }
-
+  componentDidMount(){
+    console.log('inside componentDIdMount');
+    request.post('/loadTopics')
+           .end((err,res)=>{
+             if(err || res.status!=200)
+                console.log(err);
+              else
+                console.log(res.text);
+           })
+  }
   handleItemClick(e, { name }){
     this.setState({ activeItem: name })
   }

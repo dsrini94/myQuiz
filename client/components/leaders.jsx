@@ -11,6 +11,7 @@ export default class Leaders extends React.Component
         <Header as='h3' block textAlign='center' inverted>
           Toppers
         </Header>
+
         <Card.Group >
           <Card>
             <Image  src='https://www.kanyaanimation.com/image/avatar.png' />

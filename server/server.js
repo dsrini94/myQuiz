@@ -7,8 +7,8 @@ const expressInstance = require('express')
 //routers --->
 const authenticate = require('./routes/authentication.js')
     , launchQuiz = require('./routes/launchQuiz.route.js')
-    , events = require('./routes/events.route.js');
-
+    , events = require('./routes/events.route.js')
+    , loadTopics = require('./routes/loadTopics.js');
 
 //MongoDB Connection ---------->
 MonDB.on('error', console.error.bind(console, 'connection error:'));
@@ -29,7 +29,7 @@ myQuizServer.use(expressInstance.static('./../'));
 myQuizServer.use('/',(req,res,next)=>{
   console.log('in the routes');
   next();
-},authenticate, launchQuiz, events);
+},authenticate, launchQuiz, events, loadTopics);
 
 //Server will be live on port 3000
 myQuizServer.listen(3000,()=>{
