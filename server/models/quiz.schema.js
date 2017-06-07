@@ -6,6 +6,7 @@ var quizSchema=new Schema({
     topic:String,
     subtopic:String,
     hostedBy:String,
+		topicImgURL:String,
     date:Date,
     startTime:Date,
     endTime:Date,
