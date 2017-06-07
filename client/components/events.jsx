@@ -8,11 +8,6 @@ export default class Events extends React.Component
     super(props);
   }
 
-  componentDidMount()
-  {
-    console.log(this.props);
-  }
-
   render()
   {
     return(
