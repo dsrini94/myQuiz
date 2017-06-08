@@ -13,7 +13,7 @@ export default class TakeQuiz extends React.Component {
       timer : 30,
       reduction : 3.3333333,
       ajax : true,
-      quizData : []
+      quizData : [],
     }
     this.handleOpenConfirmSubmit=this.handleOpenConfirmSubmit.bind(this);
     this.handleCloseConfirmSubmit=this.handleCloseConfirmSubmit.bind(this);
@@ -46,6 +46,7 @@ export default class TakeQuiz extends React.Component {
 
   }
   render(){
+    var topic;
     var remTime = this.state.timer+'s';
     var colorStyle={};
     if (this.state.timer<=10) {
@@ -59,6 +60,7 @@ export default class TakeQuiz extends React.Component {
       }
     }
     var question = this.state.quizData.map((item,i)=>{
+      topic=item.topic;
       return(
         item.questions.map((item,i)=>{
           return(
@@ -67,9 +69,9 @@ export default class TakeQuiz extends React.Component {
                 <h4>{item.question}</h4>
               </Segment>
               <Segment>
-                <Radio label={item.options[0]}  />
-                <Radio label={item.options[1]}  />
-                <Radio label={item.options[2]}  />
+                <Radio label={item.options[0]}  style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[1]}  style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[2]}  style={{paddingRight:'20px'}}/>
                 <Radio label={item.options[3]}  />
               </Segment>
             </Segment.Group>
@@ -103,17 +105,18 @@ export default class TakeQuiz extends React.Component {
           <Grid className='takeQuizMenu'>
             <Grid.Row>
               <Grid.Column width={2}>
-                <center><h1 style={{color : "#757575"}}>ReactJS</h1></center>
+                <center><h1 style={{color : "#757575",marginTop:'12px'}}>{topic}</h1></center>
               </Grid.Column>
               <Grid.Column width={12}>
-                  <Progress percent={this.state.percent} indicating />
+                  <Progress percent={this.state.percent} indicating style={{marginTop:'17px'}}/>
               </Grid.Column>
               <Grid.Column width={2} className='timer' >
-                <Icon name='hourglass half' size='large'/><b>{remTime}</b>
+                <Icon name='hourglass half' size='large'  style={{marginTop:'17px'}}/><b>{remTime}</b>
               </Grid.Column>
             </Grid.Row>
           </Grid>
         </Menu>
+        <br />
         <br />
         <br />
         <br />

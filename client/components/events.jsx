@@ -44,9 +44,11 @@ export default class Events extends React.Component{
           </Card.Content>
           <Card.Content extra>
             <div className='ui two buttons'>
-              <Button basic color='green'>
-                Take Quiz
-              </Button>
+              <Link to={'/takeQuiz/confirm/'+item.topic+'/'+item.subtopic+'/'+item.date}>
+                <Button basic color='green'>
+                  Take Quiz
+                </Button>
+              </Link>
             </div>
           </Card.Content>
         </Card>
