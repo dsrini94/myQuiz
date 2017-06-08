@@ -22,9 +22,10 @@ export default class Events extends React.Component{
   render(){
     var cardContent = this.state.eventsArr.map(function(item, i){
       var d = new Date(item.date);
-      var date = d.getDate()+'/'+d.getMonth()+'/'+d.getFullYear();
+      var month = d.getMonth()+1;
+      var date = d.getDate()+'/'+month+'/'+d.getFullYear();
       return(
-        <Card>
+        <Card key={i}>
           <Card.Content>
             <Image
               floated='right'

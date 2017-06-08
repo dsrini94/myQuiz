@@ -1,8 +1,8 @@
 import React from 'react';
 import { Menu, Button, Segment, Header, Icon, Modal, Radio, Progress, Grid } from 'semantic-ui-react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Feedback from './../components/Feedback.jsx';
-import request from 'superagent';
+import Request from 'superagent';
 
 export default class TakeQuiz extends React.Component {
   constructor(props) {
@@ -11,7 +11,9 @@ export default class TakeQuiz extends React.Component {
       submit : false,
       percent : 100,
       timer : 30,
-      reduction : 3.3333333
+      reduction : 3.3333333,
+      ajax : true,
+      quizData : []
     }
     this.handleOpenConfirmSubmit=this.handleOpenConfirmSubmit.bind(this);
     this.handleCloseConfirmSubmit=this.handleCloseConfirmSubmit.bind(this);
@@ -19,6 +21,13 @@ export default class TakeQuiz extends React.Component {
   }
   componentDidMount() {
     setInterval(() => this.timer(),1000);
+    if (this.state.ajax) {
+      Request.post('/quiz')
+            .send({topic:this.props.match.params.topic, subtopic:this.props.match.params.subtopic, date : this.props.match.params.date})
+            .end((err, res)=>{
+              this.setState({ajax:false, quizData: JSON.parse(res.text).que});
+      });
+    }
   }
   timer(){
     var currentTime=this.state.timer;
@@ -49,6 +58,25 @@ export default class TakeQuiz extends React.Component {
         backgroundColor: '#42A4F4'
       }
     }
+    var question = this.state.quizData.map((item,i)=>{
+      return(
+        item.questions.map((item,i)=>{
+          return(
+            <Segment.Group key={i}>
+              <Segment raised style={colorStyle}>
+                <h4>{item.question}</h4>
+              </Segment>
+              <Segment>
+                <Radio label={item.options[0]}  />
+                <Radio label={item.options[1]}  />
+                <Radio label={item.options[2]}  />
+                <Radio label={item.options[3]}  />
+              </Segment>
+            </Segment.Group>
+          );
+        })
+      );
+    });
     var modal=<Modal basic size='small' open={this.state.submit} >
                 <Header icon='warning' content='Confirm Submit' />
                 <Modal.Content>
@@ -64,7 +92,6 @@ export default class TakeQuiz extends React.Component {
                 </Modal.Actions>
               </Modal>
     if (this.state.timer<=0) {
-
       return(
         <Feedback />
       );
@@ -96,110 +123,7 @@ export default class TakeQuiz extends React.Component {
             <Grid.Column width={1}></Grid.Column>
             <Grid.Column width={14}>
               <Segment.Group style={{backgroundColor:'#757575'}}>
-                <Segment.Group>
-                  <Segment raised style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework'  />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework'  />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework'  />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework'  />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework'  />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework'  />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework' />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework' />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework' />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework' />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework' />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework' />
-                  </Segment>
-                </Segment.Group>
-                <Segment.Group>
-                  <Segment style={colorStyle}>
-                    <h4>What is ReactJS</h4>
-                  </Segment>
-                  <Segment>
-                    <Radio label='framework' />
-                  </Segment>
-                </Segment.Group>
+                {question}
               </Segment.Group>
               <br/>
               <center>

@@ -15,7 +15,7 @@ export default class SubtopicView extends React.Component
             </Grid.Row>
             <Grid.Row >
               <Grid.Column width={16}>
-                <SubtopicList />
+                <SubtopicList topic={this.props.match.params.topicName}/>
               </Grid.Column>
             </Grid.Row>
           </Grid>

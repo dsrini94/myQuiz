@@ -6,7 +6,7 @@ const launchQuiz = require('express').Router()
 //Post the quiz into MongoDB ---------->
 launchQuiz.post('/saveLaunchQuiz', function(req, res){
   //Image Search in Google ---------->
-  client.search(req.body.topic)
+  client.search(req.body.topic+' image',{size:'large'})
     .then(function(images){
      var link=images[0].url;
      console.log('search ',link);

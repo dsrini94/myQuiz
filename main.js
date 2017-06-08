@@ -22,11 +22,11 @@ ReactDom.render(
         <Route exact path='/' component={LoginPage} />
         <Route path='/dashboard/:aQuiz/:tScore/:rank/:hQuiz/:image/:userId' component={Dashboard} />
         <Route path='/eventList/:tScore' component={EventList} />
-        <Route path='/subTopic' component={SubtopicView} />
+        <Route path='/subTopic/:topicName' component={SubtopicView} />
         <Route path='/createQuiz' component={CreateQuiz} />
         <Route path='/quizAdded/:date/:time' component={QuizAdded} />
-        <Route path='/takeQuiz/confirm' component={confirmTakeQuiz} />
-        <Route path='/takeQuiz/quiz' component={TakeQuiz} />
+        <Route path='/takeQuiz/confirm/:topic/:subtopic/:date' component={confirmTakeQuiz} />
+        <Route path='/takeQuiz/quiz/:topic/:subtopic/:date' component={TakeQuiz} />
         <Route path='/leaderboard' component={Leaderboard} />
       </div>
     </HashRouter>
