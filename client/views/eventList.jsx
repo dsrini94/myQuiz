@@ -19,7 +19,7 @@ export default class EventList extends React.Component{
         </Grid.Row>
         <Grid.Row>
           <Grid.Column width={16}>
-          <EventMenu />
+          <EventMenu uid={this.props.match.params.uid} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

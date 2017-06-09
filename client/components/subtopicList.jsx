@@ -4,8 +4,8 @@ import Request from 'superagent';
 import {Link} from 'react-router-dom';
 
 export default class SubtopicList extends React.Component{
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       sbtList : []
     };
@@ -18,7 +18,8 @@ export default class SubtopicList extends React.Component{
   }
 
   render(){
-    var sbt = this.state.sbtList.map(function(item,i){
+    console.log(this.state.sbtList.length);
+    var sbt = this.state.sbtList.map((item,i)=>{
       var d = new Date(item.date);
       var month = d.getMonth()+1;
       var date = d.getDate()+'/'+month+'/'+d.getFullYear();
@@ -42,7 +43,7 @@ export default class SubtopicList extends React.Component{
               </Card.Description>
             </Card.Content>
             <Card.Content extra>
-              <Link to={'/takeQuiz/confirm/'+item.topic+'/'+item.subtopic+'/'+item.date}><Button color='google plus'>
+              <Link to={'/takeQuiz/confirm/'+item.topic+'/'+item.subtopic+'/'+item.date+'/'+this.props.uid}><Button color='google plus'>
                 Take Quiz
               </Button>
             </Link>

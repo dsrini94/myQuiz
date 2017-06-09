@@ -22,9 +22,9 @@ ReactDom.render(
       <div>
         <Route exact path='/' component={LoginPage} />
         <Route path='/dashboard/:aQuiz/:tScore/:rank/:hQuiz/:image/:userId' component={Dashboard} />
-        <Route path='/eventList/:tScore' component={EventList} />
-        <Route path='/subTopic/:topicName' component={SubtopicView} />
-        <Route path='/createQuiz' component={CreateQuiz} />
+        <Route path='/eventList/:tScore/:uid' component={EventList} />
+        <Route path='/subTopic/:topicName/:uid' component={SubtopicView} />
+        <Route path='/createQuiz/:uid' component={CreateQuiz} />
         <Route path='/quizAdded/:date/:time' component={QuizAdded} />
         <Route path='/takeQuiz/confirm/:topic/:subtopic/:date/:uid' component={confirmTakeQuiz} />
         <Route path='/takeQuiz/quiz/:topic/:subtopic/:date/:uid' component={TakeQuiz} />

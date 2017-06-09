@@ -33,7 +33,7 @@ export default class EventMenu extends React.Component {
 
   render() {
     const { activeItem } = this.state
-    var events = this.state.topics.map(function(item,i){
+    var events = this.state.topics.map((item,i)=>{
       return(
         <Grid.Column key={i}>
           <Card >
@@ -45,7 +45,7 @@ export default class EventMenu extends React.Component {
                 {item.topic}
               </Card.Header>
             </Card.Content>
-            <Link to={'/subTopic/Docker'}>
+            <Link to={'/subTopic/'+item.topic+'/'+this.props.uid}>
               <Button attached='bottom' color='olive'>Explore</Button>
             </Link>
           </Card>

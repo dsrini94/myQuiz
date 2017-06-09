@@ -123,9 +123,9 @@
 	      null,
 	      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _loginPage2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/dashboard/:aQuiz/:tScore/:rank/:hQuiz/:image/:userId', component: _dashboard2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/eventList/:tScore', component: _eventList2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/subTopic/:topicName', component: _subtopicView2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/createQuiz', component: _CreateQuiz2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/eventList/:tScore/:uid', component: _eventList2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/subTopic/:topicName/:uid', component: _subtopicView2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/createQuiz/:uid', component: _CreateQuiz2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/quizAdded/:date/:time', component: _QuizAdded2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/confirm/:topic/:subtopic/:date/:uid', component: _confirmTakeQuiz2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/quiz/:topic/:subtopic/:date/:uid', component: _TakeQuiz2.default }),
@@ -73820,7 +73820,7 @@
 	              _react2.default.createElement(
 	                'center',
 	                null,
-	                _react2.default.createElement(_profile_stats2.default, { aQuiz: this.props.match.params.aQuiz, tScore: this.props.match.params.tScore, rank: this.props.match.params.rank, hQuiz: this.props.match.params.hQuiz })
+	                _react2.default.createElement(_profile_stats2.default, { aQuiz: this.props.match.params.aQuiz, tScore: this.props.match.params.tScore, rank: this.props.match.params.rank, hQuiz: this.props.match.params.hQuiz, uid: this.props.match.params.userId })
 	              )
 	            ),
 	            _react2.default.createElement(
@@ -74111,7 +74111,7 @@
 	        _react2.default.createElement(_semanticUiReact.Divider, null),
 	        _react2.default.createElement(
 	          _reactRouterDom.Link,
-	          { to: '/createQuiz' },
+	          { to: '/createQuiz/' + this.props.uid },
 	          _react2.default.createElement(
 	            'center',
 	            null,
@@ -74260,7 +74260,7 @@
 	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(
 	          _reactRouterDom.Link,
-	          { to: '/eventList/:{this.props.image}' },
+	          { to: '/eventList/' + this.props.image + '/' + this.props.uid },
 	          _react2.default.createElement(
 	            _semanticUiReact.Button,
 	            {
@@ -75048,7 +75048,7 @@
 	          _react2.default.createElement(
 	            _semanticUiReact.Grid.Column,
 	            { width: 16 },
-	            _react2.default.createElement(_eventMenu2.default, null)
+	            _react2.default.createElement(_eventMenu2.default, { uid: this.props.match.params.uid })
 	          )
 	        )
 	      );
@@ -75133,6 +75133,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
 	      var activeItem = this.state.activeItem;
 
 	      var events = this.state.topics.map(function (item, i) {
@@ -75156,7 +75158,7 @@
 	            ),
 	            _react2.default.createElement(
 	              _reactRouterDom.Link,
-	              { to: '/subTopic/Docker' },
+	              { to: '/subTopic/' + item.topic + '/' + _this3.props.uid },
 	              _react2.default.createElement(
 	                _semanticUiReact.Button,
 	                { attached: 'bottom', color: 'olive' },
@@ -75262,7 +75264,7 @@
 	          _react2.default.createElement(
 	            _semanticUiReact.Grid.Column,
 	            { width: 16 },
-	            _react2.default.createElement(_subtopicList2.default, { topic: this.props.match.params.topicName })
+	            _react2.default.createElement(_subtopicList2.default, { topic: this.props.match.params.topicName, uid: this.props.match.params.uid })
 	          )
 	        )
 	      );
@@ -75309,10 +75311,10 @@
 	var SubtopicList = function (_React$Component) {
 	  _inherits(SubtopicList, _React$Component);
 
-	  function SubtopicList() {
+	  function SubtopicList(props) {
 	    _classCallCheck(this, SubtopicList);
 
-	    var _this = _possibleConstructorReturn(this, (SubtopicList.__proto__ || Object.getPrototypeOf(SubtopicList)).call(this));
+	    var _this = _possibleConstructorReturn(this, (SubtopicList.__proto__ || Object.getPrototypeOf(SubtopicList)).call(this, props));
 
 	    _this.state = {
 	      sbtList: []
@@ -75332,6 +75334,9 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
+	      console.log(this.state.sbtList.length);
 	      var sbt = this.state.sbtList.map(function (item, i) {
 	        var d = new Date(item.date);
 	        var month = d.getMonth() + 1;
@@ -75375,7 +75380,7 @@
 	              { extra: true },
 	              _react2.default.createElement(
 	                _reactRouterDom.Link,
-	                { to: '/takeQuiz/confirm/' + item.topic + '/' + item.subtopic + '/' + item.date },
+	                { to: '/takeQuiz/confirm/' + item.topic + '/' + item.subtopic + '/' + item.date + '/' + _this3.props.uid },
 	                _react2.default.createElement(
 	                  _semanticUiReact.Button,
 	                  { color: 'google plus' },
@@ -76164,7 +76169,7 @@
 	  }, {
 	    key: 'handleLaunch',
 	    value: function handleLaunch() {
-	      _superagent2.default.post('/saveLaunchQuiz').send({ topic: this.state.topic, subtopic: this.state.subtopic, questions: this.state.questions, startDate: this.state.startDate, startTime: this.state.startTime, endTime: this.state.endTime }).end(function (err, res) {
+	      _superagent2.default.post('/saveLaunchQuiz').send({ topic: this.state.topic, subtopic: this.state.subtopic, hostedBy: this.props.match.params.uid, questions: this.state.questions, startDate: this.state.startDate, startTime: this.state.startTime, endTime: this.state.endTime }).end(function (err, res) {
 	        console.log(res.text);
 	      });
 	    }

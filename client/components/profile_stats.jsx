@@ -5,12 +5,10 @@ import {Link} from 'react-router-dom';
 
 export default class ProfileStats extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props){
     super(props);
   }
-  render()
-  {
+  render(){
     return(
       <div>
         <center> <Label size='huge' color='teal'>Profile Stats</Label></center>
@@ -35,7 +33,7 @@ export default class ProfileStats extends React.Component
         </Menu>
         <br/>
         <Divider />
-          <Link to={'/createQuiz'}><center><Button color='red'>Create your Quiz</Button></center></Link>
+          <Link to={'/createQuiz/'+this.props.uid}><center><Button color='red'>Create your Quiz</Button></center></Link>
       </div>
     );
   }

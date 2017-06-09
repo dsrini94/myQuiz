@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component
             <Grid.Column tablet={5} computer={3} >
               <Avatar image={this.props.match.params.image} uid={this.props.match.params.userId}/>
               <center>
-                <ProfileStats aQuiz={this.props.match.params.aQuiz}  tScore={this.props.match.params.tScore} rank={this.props.match.params.rank} hQuiz={this.props.match.params.hQuiz}/>
+                <ProfileStats aQuiz={this.props.match.params.aQuiz}  tScore={this.props.match.params.tScore} rank={this.props.match.params.rank} hQuiz={this.props.match.params.hQuiz} uid={this.props.match.params.userId}/>
               </center>
             </Grid.Column>
             <Grid.Column  tablet={11} computer={13} >

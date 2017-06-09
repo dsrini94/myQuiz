@@ -26,7 +26,8 @@ function eventSegregation(val){
     if(item.date>=current){
       obj = {
         topic : item.topic,
-        topicImgURL : item.topicImgURL
+        topicImgURL : item.topicImgURL,
+        subtopic : item.subtopic
       };
       eArr.push(obj);
     }

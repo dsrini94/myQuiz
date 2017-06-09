@@ -12,7 +12,7 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
      console.log('search ',link);
      var topic = req.body.topic
        , subtopic = req.body.subtopic
-       , hostedBy = 'ru353746'
+       , hostedBy = req.body.hostedBy
        , startDate = req.body.startDate
        , startTime = req.body.startTime
        , endTime = req.body.endTime
@@ -21,9 +21,7 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
        , d = ''
        , m = ''
        , y = '';
-
-     console.log('img url -> ',topicImgURL);
-
+       
      //Shuffling the options array ---------->
      questions.map(function(item,i){
        item.options = shuffle(item.options);

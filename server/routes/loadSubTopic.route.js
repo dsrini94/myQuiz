@@ -7,9 +7,11 @@ loadSubTopic.post('/loadSubTopic', function(req, res){
     subTopicDees : []
   };
   QuizSchema.find({topic:req.body.topic}, function(err, reply){
+    console.log('rep', reply);
     a = {
       subTopicDees : eventSegregation(reply)
     };
+    console.log('aaa ',a);
     res.send(a);
   });
 });
