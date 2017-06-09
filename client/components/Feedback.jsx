@@ -4,10 +4,14 @@ import {Link} from 'react-router-dom';
 
 export default class Feedback extends React.Component{
   constructor(props){
-    super();
+    super(props);
     this.state={
       value:''
     }
+  }
+  componentDidMount()
+  {
+    console.log('inside feedback' , this.props);
   }
   render(){
     return(
@@ -73,7 +77,11 @@ export default class Feedback extends React.Component{
             </center>
           </Segment.Group>
         </Segment.Group>
-        <center><Link to={'/takeQuiz/result'}><Button inverted color='green'>Submit and View Scores</Button></Link></center>
+        <center>
+          <Link to={'/takeQuiz/result/'+this.props.obj.topic+'/'+this.props.obj.subtopic+'/'+this.props.obj.date+'/'+JSON.stringify(this.props.selected)+'/'+this.props.uid}>
+          <Button inverted color='green'>Submit and View Scores</Button>
+        </Link>
+      </center>
       </div>
     );
   }

@@ -12,7 +12,7 @@ export default class Events extends React.Component{
   }
 
   componentDidMount(){
-    console.log(this.props);
+    console.log('inside events',this.props);
     var that = this;
     Request.get('/events').end(function(err, res){
       that.setState({eventsArr : JSON.parse(res.text).eventsArr});
@@ -20,6 +20,7 @@ export default class Events extends React.Component{
   }
 
   render(){
+    var that = this;
     var cardContent = this.state.eventsArr.map(function(item, i){
       var d = new Date(item.date);
       var month = d.getMonth()+1;
@@ -44,7 +45,7 @@ export default class Events extends React.Component{
           </Card.Content>
           <Card.Content extra>
             <div className='ui two buttons'>
-              <Link to={'/takeQuiz/confirm/'+item.topic+'/'+item.subtopic+'/'+item.date}>
+              <Link to={'/takeQuiz/confirm/'+item.topic+'/'+item.subtopic+'/'+item.date+'/'+that.props.uid}>
                 <Button basic color='green'>
                   Take Quiz
                 </Button>

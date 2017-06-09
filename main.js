@@ -13,6 +13,7 @@ import Feedback from './client/components/Feedback.jsx';
 import CreateQuiz from './client/views/CreateQuiz.jsx';
 import QuizAdded from './client/components/QuizAdded.jsx';
 import Leaderboard from './client/views/leaderBoard.jsx';
+import QuizResult from './client/components/QuizResult.jsx';
 injectTapEventPlugin();
 
 ReactDom.render(
@@ -25,8 +26,9 @@ ReactDom.render(
         <Route path='/subTopic/:topicName' component={SubtopicView} />
         <Route path='/createQuiz' component={CreateQuiz} />
         <Route path='/quizAdded/:date/:time' component={QuizAdded} />
-        <Route path='/takeQuiz/confirm/:topic/:subtopic/:date' component={confirmTakeQuiz} />
-        <Route path='/takeQuiz/quiz/:topic/:subtopic/:date' component={TakeQuiz} />
+        <Route path='/takeQuiz/confirm/:topic/:subtopic/:date/:uid' component={confirmTakeQuiz} />
+        <Route path='/takeQuiz/quiz/:topic/:subtopic/:date/:uid' component={TakeQuiz} />
+        <Route path='/takeQuiz/result/:topic/:subtopic/:date/:selected/:uid' component={QuizResult} />
         <Route path='/leaderboard' component={Leaderboard} />
       </div>
     </HashRouter>

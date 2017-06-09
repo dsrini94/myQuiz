@@ -14,18 +14,29 @@ export default class TakeQuiz extends React.Component {
       reduction : 3.3333333,
       ajax : true,
       quizData : [],
+      selectedAnswer : {},
+      value : '',
+      obj : {},
+      uid:''
     }
     this.handleOpenConfirmSubmit=this.handleOpenConfirmSubmit.bind(this);
     this.handleCloseConfirmSubmit=this.handleCloseConfirmSubmit.bind(this);
     this.handleFinalSubmit=this.handleFinalSubmit.bind(this);
   }
   componentDidMount() {
+    console.log('inside takeQuiz',this.props.match.params.uid);
     setInterval(() => this.timer(),1000);
+    var obj = {
+      topic:this.props.match.params.topic,
+      subtopic:this.props.match.params.subtopic,
+      date : this.props.match.params.date
+    }
+    this.setState({obj:obj,uid:this.props.match.params.uid});
     if (this.state.ajax) {
       Request.post('/quiz')
             .send({topic:this.props.match.params.topic, subtopic:this.props.match.params.subtopic, date : this.props.match.params.date})
             .end((err, res)=>{
-              this.setState({ajax:false, quizData: JSON.parse(res.text).que});
+              this.setState({ajax:false, quizData: JSON.parse(res.text).que, });
       });
     }
   }
@@ -44,6 +55,13 @@ export default class TakeQuiz extends React.Component {
   handleFinalSubmit(){
     this.setState({submit:false, timer:0});
 
+  }
+  handleSelectAnswer(index,option){
+    this.setState({value:option});
+    var a=this.state.selectedAnswer;
+    a[index]=option;
+    this.setState({selectedAnswer:a});
+    console.log('selected answer : ',this.state.selectedAnswer);
   }
   render(){
     var topic;
@@ -69,10 +87,10 @@ export default class TakeQuiz extends React.Component {
                 <h4>{item.question}</h4>
               </Segment>
               <Segment>
-                <Radio label={item.options[0]}  style={{paddingRight:'20px'}}/>
-                <Radio label={item.options[1]}  style={{paddingRight:'20px'}}/>
-                <Radio label={item.options[2]}  style={{paddingRight:'20px'}}/>
-                <Radio label={item.options[3]}  />
+                <Radio label={item.options[0]} value={item.options[0]} checked={this.state.value === item.options[0]} onClick={this.handleSelectAnswer.bind(this,i,item.options[0])} style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[1]} value={item.options[1]} checked={this.state.value === item.options[1]} onClick={this.handleSelectAnswer.bind(this,i,item.options[1])} style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[2]} value={item.options[2]} checked={this.state.value === item.options[2]} onClick={this.handleSelectAnswer.bind(this,i,item.options[2])} style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[3]} value={item.options[3]} checked={this.state.value === item.options[3]} onClick={this.handleSelectAnswer.bind(this,i,item.options[3])} />
               </Segment>
             </Segment.Group>
           );
@@ -95,7 +113,7 @@ export default class TakeQuiz extends React.Component {
               </Modal>
     if (this.state.timer<=0) {
       return(
-        <Feedback />
+        <Feedback obj={this.state.obj} selected={this.state.selectedAnswer} uid={this.state.uid}/>
       );
     }
     else {

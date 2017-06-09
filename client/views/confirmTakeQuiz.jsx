@@ -3,6 +3,10 @@ import {Button, Message, Segment} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
 
 export default class confirmTakeQuiz extends React.Component{
+  componentDidMount()
+  {
+    console.log('inside confirmTakeQuiz',this.props);
+  }
   render(){
     return(
       <div>
@@ -23,7 +27,7 @@ Teams selected for the final rounds  will be allowed to give themselves an appro
           <Button.Group>
             <Button>Cancel</Button>
             <Button.Or />
-            <Link to={'/takeQuiz/quiz/'+this.props.match.params.topic+'/'+this.props.match.params.subtopic+'/'+this.props.match.params.date}><Button positive>Start</Button></Link>
+            <Link to={'/takeQuiz/quiz/'+this.props.match.params.topic+'/'+this.props.match.params.subtopic+'/'+this.props.match.params.date+'/'+this.props.match.params.uid}><Button positive>Start</Button></Link>
           </Button.Group>
         </center>
       </div>
