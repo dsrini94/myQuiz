@@ -23,7 +23,7 @@ export default class Dashboard extends React.Component
         <Grid >
             <Grid.Row only='mobile' >
               <Grid.Column>
-                <MobileAppbar image={this.props.match.params.image} aQuiz={this.props.match.params.aQuiz} tScore={this.props.match.params.tScore} rank={this.props.match.params.rank} uid={this.props.match.params.userId} hQuiz={this.props.match.params.hQuiz}/>
+                <MobileAppbar  uid={this.props.match.params.uid} />
               </Grid.Column>
             </Grid.Row>
               <Grid.Row only='mobile' >
@@ -42,18 +42,18 @@ export default class Dashboard extends React.Component
 
           <Grid.Row only='tablet computer'>
             <Grid.Column >
-            <Appbar />
+            <Appbar uid={this.props.match.params.uid}/>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row only='tablet computer'  streched>
             <Grid.Column tablet={5} computer={3} >
-              <Avatar image={this.props.match.params.image} uid={this.props.match.params.userId}/>
+              <Avatar uid={this.props.match.params.uid}/>
               <center>
-                <ProfileStats aQuiz={this.props.match.params.aQuiz}  tScore={this.props.match.params.tScore} rank={this.props.match.params.rank} hQuiz={this.props.match.params.hQuiz} uid={this.props.match.params.userId}/>
+                <ProfileStats uid={this.props.match.params.uid}/>
               </center>
             </Grid.Column>
             <Grid.Column  tablet={11} computer={13} >
-                <Events image={this.props.match.params.image} aQuiz={this.props.match.params.aQuiz} tScore={this.props.match.params.tScore} rank={this.props.match.params.rank} uid={this.props.match.params.userId} hQuiz={this.props.match.params.hQuiz}/>
+                <Events uid={this.props.match.params.uid}/>
                 <Leaders />
             </Grid.Column>
             </Grid.Row>

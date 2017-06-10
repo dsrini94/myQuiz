@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Message, Segment} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
-
+import Appbar from './../components/appbar.jsx';
 export default class confirmTakeQuiz extends React.Component{
   componentDidMount()
   {
@@ -10,6 +10,8 @@ export default class confirmTakeQuiz extends React.Component{
   render(){
     return(
       <div>
+        <Appbar uid={this.props.match.params.uid}/>
+        <br/>
         <center>
           <Message visible  header='Confirm Start!'
             content='Click the start button below to start the quiz.

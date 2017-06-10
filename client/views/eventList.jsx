@@ -14,7 +14,7 @@ export default class EventList extends React.Component{
       <Grid celled='internally'>
         <Grid.Row>
           <Grid.Column width={16}>
-            <Appbar/>
+            <Appbar uid={this.props.match.params.uid}/>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>

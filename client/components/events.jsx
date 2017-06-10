@@ -79,7 +79,7 @@ export default class Events extends React.Component{
         </Card.Group>
 
         <br/>
-        <Link to={'/eventList/'+this.props.image+'/'+this.props.uid} ><Button
+        <Link to={'/eventList'+'/'+this.props.uid} ><Button
           animated='fade'
           floated='right'
           color='red'>

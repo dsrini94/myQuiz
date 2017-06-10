@@ -268,7 +268,7 @@ export default class HorizontalTransition extends React.Component {
              <TimePicker onChange={this.handleStartTime} hintText="Start Time" floatingLabelText='Start Time' autoOk={true}/>
              <TimePicker onChange={this.handleEndTime} hintText="End Time" floatingLabelText='End Time' autoOk={true}/>
              <RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Prev" onClick={this.handlePrev}/>
-             <Link to={'/quizAdded/:'+this.state.startDate+'/:'+this.state.startTime}><RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Launch" onClick={this.handleLaunch}/></Link>
+             <Link to={'/quizAdded/'+this.state.startDate+'/'+this.state.startTime+'/'+this.props.match.params.uid}><RaisedButton style={{margin:"20px",marginTop:"40px"}} primary={true} label="Launch" onClick={this.handleLaunch}/></Link>
            </center>
           </div>
        )

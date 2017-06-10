@@ -1,24 +1,36 @@
 import React from 'react';
 import {Menu,Icon,Image,Dropdown,Label,Segment} from 'semantic-ui-react';
+import request from 'superagent';
 
 export default class MobileAppbar extends React.Component
 {
   constructor(props)
   {
     super(props);
-    this.state={url:'http://res.cloudinary.com/myquiz/image/upload/v1496406230/'+this.props.image}
+    this.state={aQuiz:'',tScore:'',rank:'',hQuiz:'',userId:'',url:'',userId:''}
     this.handleLogout = this.handleLogout.bind(this);
-    this.handleProfile = this.handleProfile.bind(this);
   }
-
+  componentDidMount()
+  {
+    var url = 'http://res.cloudinary.com/myquiz/image/upload/v1496406230/',resobj;
+    request.post('/profileStats').send({uid:this.props.uid}).end((err,res)=>{
+        if(err)
+          console.log(err);
+        else
+        {
+          resobj = JSON.parse(res.text);
+          url+=resobj.id.properties.image
+          resobj=JSON.parse(res.text);
+          this.setState({url:url,userId:resobj.id.properties.userId,aQuiz:resobj.id.properties.attendedQuiz,tScore:resobj.id.properties.totalScore
+          ,rank:resobj.id.properties.rank,hQuiz:resobj.id.properties.hostedQuiz,userId:resobj.id.properties.userId});
+        }
+    })
+  }
   handleLogout()
   {
     alert('logout');
   }
-  handleProfile()
-  {
 
-  }
   render()
   {
 
@@ -31,12 +43,12 @@ export default class MobileAppbar extends React.Component
         </Menu.Item>
         <Menu.Item  name='myQuiz' />
         <Menu.Menu size='massive' position='right'>
-          <Menu.Item onClick={this.handleProfile}>
+          <Menu.Item>
             <Image size='mini' src={this.state.url}/>
             <Dropdown size='large' color='red'>
             <Dropdown.Menu >
               <Dropdown.Item inverted color='red'>
-              <center>  <Label color='brown'>{this.props.uid} </Label> </center>
+              <center>  <Label color='brown'>{this.state.userId} </Label> </center>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item>
@@ -45,18 +57,18 @@ export default class MobileAppbar extends React.Component
 
             <center>  <Dropdown.Item name='total score'>
                 <Label color='brown'>Total Score </Label>
-                <Label color='teal'> {this.props.tScore} </Label>
+                <Label color='teal'> {this.state.tScore} </Label>
               </Dropdown.Item>
             </center>
             <center>  <Dropdown.Item>
                 <Label color='brown'>Your Rank</Label>s
-                <Label color='teal'>{this.props.rank}</Label>
+                <Label color='teal'>{this.state.rank}</Label>
               </Dropdown.Item>
             </center>
               <center>
                 <Dropdown.Item>
                 <Label color='brown'>Hosted Quiz</Label>
-                <Label color='teal'>{this.props.hQuiz}</Label>
+                <Label color='teal'>{this.state.hQuiz}</Label>
               </Dropdown.Item>
             </center>
             </Dropdown.Menu>

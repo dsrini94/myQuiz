@@ -1,5 +1,7 @@
 import React from 'react';
 import {Message, Button, Icon} from 'semantic-ui-react';
+import Appbar from './appbar.jsx';
+import {Link} from 'react-router-dom';
 
 export default class QuizAdded extends React.Component{
   constructor(props){
@@ -24,6 +26,9 @@ export default class QuizAdded extends React.Component{
 
     return(
       <div>
+        <Appbar uid={this.props.match.params.uid}/>
+        <br />
+        <br />
         <center>
           <img src='http://www.freeiconspng.com/uploads/success-icon-19.png'
               alt='successfully launched'
@@ -39,7 +44,9 @@ export default class QuizAdded extends React.Component{
           </p>
         </Message>
         <center>
-          <Button style={{color:'#00796B'}}>Take me back to dashboard</Button>
+          <Link to={'/dashboard/'+this.props.match.params.uid}>
+            <Button style={{color:'#00796B'}}>Take me back to dashboard</Button>
+          </Link>
         </center>
       </div>
     );

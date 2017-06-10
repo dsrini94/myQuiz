@@ -28,12 +28,13 @@ validate.post("/validate",function(req,res){
         if (err) {
           console.log('error from fetching mark - > ',err);
         }
-        var score = result[0].id.properties.totalScore
+        var score = parseInt(result[0].id.properties.totalScore);
         //update the totalScore for the user id in neo4j db
-        neodb.cypher({query:"match (id:users {userId:{adid}}) set id.totalScore={score} return id",
+        neodb.cypher({query:"match (id:users {userId:{adid}}) set id.totalScore={score},id.attendedQuiz={attended} return id",
         params:{
           adid:req.body.uid,
           score:marks + score,
+          attended:parseInt(result[0].id.properties.attendedQuiz) + 1
         }},function(err,result){
           if (err) {
             console.log('error in update score neo4j - > ',err);
@@ -44,7 +45,6 @@ validate.post("/validate",function(req,res){
             totalRightQues : totalRightQues,
             img : result[0].id.properties.image
           };
-          console.log('result- > ',resultObj);
           res.send(JSON.stringify(resultObj));
         });
     }); //neo4j query ends

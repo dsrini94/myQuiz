@@ -122,11 +122,11 @@
 	      'div',
 	      null,
 	      _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _loginPage2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/dashboard/:aQuiz/:tScore/:rank/:hQuiz/:image/:userId', component: _dashboard2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/eventList/:tScore/:uid', component: _eventList2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/dashboard/:uid', component: _dashboard2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/eventList/:uid', component: _eventList2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/subTopic/:topicName/:uid', component: _subtopicView2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/createQuiz/:uid', component: _CreateQuiz2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/quizAdded/:date/:time', component: _QuizAdded2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/quizAdded/:date/:time/:uid', component: _QuizAdded2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/confirm/:topic/:subtopic/:date/:uid', component: _confirmTakeQuiz2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/quiz/:topic/:subtopic/:date/:uid', component: _TakeQuiz2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/result/:topic/:subtopic/:date/:selected/:uid', component: _QuizResult2.default }),
@@ -42539,11 +42539,11 @@
 	  // ----------------------------------------
 
 	  // Use key, childKey, or generate key
-	  if (!props.key) {
+	  if ((0, _isNil3.default)(props.key)) {
 	    var childKey = props.childKey;
 
 
-	    if (childKey) {
+	    if (!(0, _isNil3.default)(childKey)) {
 	      // apply and consume the childKey
 	      props.key = typeof childKey === 'function' ? childKey(props) : childKey;
 	      delete props.childKey;
@@ -53641,10 +53641,6 @@
 
 	var _map3 = _interopRequireDefault(_map2);
 
-	var _isNil2 = __webpack_require__(570);
-
-	var _isNil3 = _interopRequireDefault(_isNil2);
-
 	var _every2 = __webpack_require__(758);
 
 	var _every3 = _interopRequireDefault(_every2);
@@ -53713,6 +53709,10 @@
 
 	var _isEqual3 = _interopRequireDefault(_isEqual2);
 
+	var _isNil2 = __webpack_require__(570);
+
+	var _isNil3 = _interopRequireDefault(_isNil2);
+
 	var _classnames = __webpack_require__(571);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -53754,6 +53754,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var debug = (0, _lib.makeDebugger)('dropdown');
+
+	var getKeyOrValue = function getKeyOrValue(key, value) {
+	  return (0, _isNil3.default)(key) ? value : key;
+	};
 
 	/**
 	 * A dropdown allows a user to select a value from a series of options.
@@ -54038,14 +54042,15 @@
 
 	      // insert the "add" item
 	      if (allowAdditions && search && searchQuery && !(0, _some3.default)(filteredOptions, { text: searchQuery })) {
-	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'label' }) : additionLabel || '';
+	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'addition-label' }) : additionLabel || '';
 
 	        var addItem = {
+	          key: 'addition',
 	          // by using an array, we can pass multiple elements, but when doing so
 	          // we must specify a `key` for React to know which one is which
 	          text: [additionLabelElement, _react2.default.createElement(
 	            'b',
-	            { key: 'addition' },
+	            { key: 'addition-query' },
 	            searchQuery
 	          )],
 	          value: searchQuery,
@@ -54322,7 +54327,7 @@
 	        (0, _map3.default)(options, function (option, i) {
 	          return _react2.default.createElement(
 	            'option',
-	            { key: option.key || option.value, value: option.value },
+	            { key: getKeyOrValue(option.key, option.value), value: option.value },
 	            option.text
 	          );
 	        })
@@ -54392,7 +54397,7 @@
 	        var defaultProps = {
 	          active: item.value === selectedLabel,
 	          as: 'a',
-	          key: item.key || item.value,
+	          key: getKeyOrValue(item.key, item.value),
 	          onClick: _this.handleLabelClick,
 	          onRemove: _this.handleLabelRemove,
 	          value: item.value
@@ -54431,6 +54436,7 @@
 	          onClick: _this.handleItemClick,
 	          selected: selectedIndex === i
 	        }, opt, {
+	          key: getKeyOrValue(opt.key, opt.value),
 	          // Needed for handling click events on disabled items
 	          style: (0, _extends3.default)({}, opt.style, { pointerEvents: 'all' })
 	        }));
@@ -73779,7 +73785,7 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Grid.Column,
 	              null,
-	              _react2.default.createElement(_mobileAppbar2.default, { image: this.props.match.params.image, aQuiz: this.props.match.params.aQuiz, tScore: this.props.match.params.tScore, rank: this.props.match.params.rank, uid: this.props.match.params.userId, hQuiz: this.props.match.params.hQuiz })
+	              _react2.default.createElement(_mobileAppbar2.default, { uid: this.props.match.params.uid })
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -73807,7 +73813,7 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Grid.Column,
 	              null,
-	              _react2.default.createElement(_appbar2.default, null)
+	              _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid })
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -73816,17 +73822,17 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Grid.Column,
 	              { tablet: 5, computer: 3 },
-	              _react2.default.createElement(_avatar2.default, { image: this.props.match.params.image, uid: this.props.match.params.userId }),
+	              _react2.default.createElement(_avatar2.default, { uid: this.props.match.params.uid }),
 	              _react2.default.createElement(
 	                'center',
 	                null,
-	                _react2.default.createElement(_profile_stats2.default, { aQuiz: this.props.match.params.aQuiz, tScore: this.props.match.params.tScore, rank: this.props.match.params.rank, hQuiz: this.props.match.params.hQuiz, uid: this.props.match.params.userId })
+	                _react2.default.createElement(_profile_stats2.default, { uid: this.props.match.params.uid })
 	              )
 	            ),
 	            _react2.default.createElement(
 	              _semanticUiReact.Grid.Column,
 	              { tablet: 11, computer: 13 },
-	              _react2.default.createElement(_events2.default, { image: this.props.match.params.image, aQuiz: this.props.match.params.aQuiz, tScore: this.props.match.params.tScore, rank: this.props.match.params.rank, uid: this.props.match.params.userId, hQuiz: this.props.match.params.hQuiz }),
+	              _react2.default.createElement(_events2.default, { uid: this.props.match.params.uid }),
 	              _react2.default.createElement(_leaders2.default, null)
 	            )
 	          )
@@ -73896,7 +73902,7 @@
 	          { fixed: 'top', size: 'massive', inverted: true, position: 'center' },
 	          _react2.default.createElement(
 	            _reactRouterDom.Link,
-	            { to: '/dashboard' },
+	            { to: '/dashboard' + '/' + this.props.uid },
 	            _react2.default.createElement(
 	              _semanticUiReact.Menu.Item,
 	              { size: 'massive', name: 'home' },
@@ -73907,7 +73913,7 @@
 	          ),
 	          _react2.default.createElement(
 	            _reactRouterDom.Link,
-	            { to: '/dashboard' },
+	            { to: '/dashboard' + '/' + this.props.uid },
 	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'myQuiz' })
 	          ),
 	          _react2.default.createElement(
@@ -73956,6 +73962,10 @@
 
 	var _semanticUiReact = __webpack_require__(377);
 
+	var _superagent = __webpack_require__(944);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -73972,11 +73982,26 @@
 
 	    var _this = _possibleConstructorReturn(this, (Avatar.__proto__ || Object.getPrototypeOf(Avatar)).call(this, props));
 
-	    _this.state = { url: 'http://res.cloudinary.com/myquiz/image/upload/v1496406230/' + _this.props.image, avatars: ['https://www.kanyaanimation.com/image/avatar.png', 'https://cdn0.iconfinder.com/data/icons/iconshock_guys/512/andrew.png', 'https://static.tumblr.com/utoqmk2/4E5n1nrj0/hepdiyorumki.png', 'http://lh5.googleusercontent.com/-nPAtyK9qCcc/AAAAAAAAAAI/AAAAAAAACho/1-7uhVRQh2E/s512-c/photo.jpg', 'http://swimmingxsa.com/wp-content/uploads/2015/02/t4.jpg', 'https://avatars1.githubusercontent.com/u/6580243?v=3&s=460'] };
+	    _this.state = { url: '', userId: '' };
 	    return _this;
 	  }
 
 	  _createClass(Avatar, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      var url = 'http://res.cloudinary.com/myquiz/image/upload/v1496406230/',
+	          resobj;
+	      _superagent2.default.post('/profileStats').send({ uid: this.props.uid }).end(function (err, res) {
+	        if (err) console.log(err);else {
+	          resobj = JSON.parse(res.text);
+	          url += resobj.id.properties.image;
+	          _this2.setState({ url: url, userId: resobj.id.properties.userId });
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -73995,7 +74020,7 @@
 	          _react2.default.createElement(
 	            _semanticUiReact.Label,
 	            { style: { marginLeft: '10%' }, size: 'huge', color: 'brown' },
-	            this.props.uid
+	            this.state.userId
 	          )
 	        ),
 	        _react2.default.createElement('br', null),
@@ -74029,6 +74054,10 @@
 
 	var _reactRouterDom = __webpack_require__(182);
 
+	var _superagent = __webpack_require__(944);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -74043,10 +74072,28 @@
 	  function ProfileStats(props) {
 	    _classCallCheck(this, ProfileStats);
 
-	    return _possibleConstructorReturn(this, (ProfileStats.__proto__ || Object.getPrototypeOf(ProfileStats)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (ProfileStats.__proto__ || Object.getPrototypeOf(ProfileStats)).call(this, props));
+
+	    _this.state = { aQuiz: '', tScore: '', rank: '', hQuiz: '', userId: '' };
+	    return _this;
 	  }
 
 	  _createClass(ProfileStats, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      var resobj;
+	      _superagent2.default.post('/profileStats').send({ uid: this.props.uid }).end(function (err, res) {
+	        if (err) console.log(err);else {
+	          console.log(JSON.parse(res.text).id.properties.totalScore);
+	          resobj = JSON.parse(res.text);
+	          _this2.setState({ aQuiz: resobj.id.properties.attendedQuiz, tScore: resobj.id.properties.totalScore,
+	            rank: resobj.id.properties.rank, hQuiz: resobj.id.properties.hostedQuiz, userId: resobj.id.properties.userId });
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -74072,7 +74119,7 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Label,
 	              { color: 'teal' },
-	              this.props.aQuiz
+	              this.state.aQuiz
 	            ),
 	            'Quiz Attended'
 	          ),
@@ -74082,7 +74129,7 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Label,
 	              { color: 'teal' },
-	              this.props.tScore
+	              this.state.tScore
 	            ),
 	            'Total Score'
 	          ),
@@ -74092,7 +74139,7 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Label,
 	              { color: 'teal' },
-	              this.props.rank
+	              this.state.rank
 	            ),
 	            'Your Rank'
 	          ),
@@ -74102,7 +74149,7 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Label,
 	              { color: 'teal' },
-	              this.props.hQuiz
+	              this.state.hQuiz
 	            ),
 	            'Hosted Quiz'
 	          )
@@ -74111,7 +74158,7 @@
 	        _react2.default.createElement(_semanticUiReact.Divider, null),
 	        _react2.default.createElement(
 	          _reactRouterDom.Link,
-	          { to: '/createQuiz/' + this.props.uid },
+	          { to: '/createQuiz/' + this.state.userId },
 	          _react2.default.createElement(
 	            'center',
 	            null,
@@ -74260,7 +74307,7 @@
 	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(
 	          _reactRouterDom.Link,
-	          { to: '/eventList/' + this.props.image + '/' + this.props.uid },
+	          { to: '/eventList' + '/' + this.props.uid },
 	          _react2.default.createElement(
 	            _semanticUiReact.Button,
 	            {
@@ -74437,7 +74484,13 @@
 
 	var _semanticUiReact = __webpack_require__(377);
 
+	var _superagent = __webpack_require__(944);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -74453,20 +74506,33 @@
 
 	    var _this = _possibleConstructorReturn(this, (MobileAppbar.__proto__ || Object.getPrototypeOf(MobileAppbar)).call(this, props));
 
-	    _this.state = { url: 'http://res.cloudinary.com/myquiz/image/upload/v1496406230/' + _this.props.image };
+	    _this.state = _defineProperty({ aQuiz: '', tScore: '', rank: '', hQuiz: '', userId: '', url: '' }, 'userId', '');
 	    _this.handleLogout = _this.handleLogout.bind(_this);
-	    _this.handleProfile = _this.handleProfile.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(MobileAppbar, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      var url = 'http://res.cloudinary.com/myquiz/image/upload/v1496406230/',
+	          resobj;
+	      _superagent2.default.post('/profileStats').send({ uid: this.props.uid }).end(function (err, res) {
+	        if (err) console.log(err);else {
+	          resobj = JSON.parse(res.text);
+	          url += resobj.id.properties.image;
+	          resobj = JSON.parse(res.text);
+	          _this2.setState(_defineProperty({ url: url, userId: resobj.id.properties.userId, aQuiz: resobj.id.properties.attendedQuiz, tScore: resobj.id.properties.totalScore,
+	            rank: resobj.id.properties.rank, hQuiz: resobj.id.properties.hostedQuiz }, 'userId', resobj.id.properties.userId));
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'handleLogout',
 	    value: function handleLogout() {
 	      alert('logout');
 	    }
-	  }, {
-	    key: 'handleProfile',
-	    value: function handleProfile() {}
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -74487,7 +74553,7 @@
 	          { size: 'massive', position: 'right' },
 	          _react2.default.createElement(
 	            _semanticUiReact.Menu.Item,
-	            { onClick: this.handleProfile },
+	            null,
 	            _react2.default.createElement(_semanticUiReact.Image, { size: 'mini', src: this.state.url }),
 	            _react2.default.createElement(
 	              _semanticUiReact.Dropdown,
@@ -74505,7 +74571,7 @@
 	                    _react2.default.createElement(
 	                      _semanticUiReact.Label,
 	                      { color: 'brown' },
-	                      this.props.uid,
+	                      this.state.userId,
 	                      ' '
 	                    ),
 	                    ' '
@@ -74543,7 +74609,7 @@
 	                      _semanticUiReact.Label,
 	                      { color: 'teal' },
 	                      ' ',
-	                      this.props.tScore,
+	                      this.state.tScore,
 	                      ' '
 	                    )
 	                  )
@@ -74564,7 +74630,7 @@
 	                    _react2.default.createElement(
 	                      _semanticUiReact.Label,
 	                      { color: 'teal' },
-	                      this.props.rank
+	                      this.state.rank
 	                    )
 	                  )
 	                ),
@@ -74582,7 +74648,7 @@
 	                    _react2.default.createElement(
 	                      _semanticUiReact.Label,
 	                      { color: 'teal' },
-	                      this.props.hQuiz
+	                      this.state.hQuiz
 	                    )
 	                  )
 	                )
@@ -74624,6 +74690,12 @@
 
 	var _semanticUiReact = __webpack_require__(377);
 
+	var _superagent = __webpack_require__(944);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
+	var _reactRouterDom = __webpack_require__(182);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -74640,18 +74712,67 @@
 
 	    var _this = _possibleConstructorReturn(this, (MbileEvents.__proto__ || Object.getPrototypeOf(MbileEvents)).call(this, props));
 
-	    _this.handleKnowMore = _this.handleKnowMore.bind(_this);
+	    _this.state = {
+	      eventsArr: []
+	    };
 	    return _this;
 	  }
 
 	  _createClass(MbileEvents, [{
-	    key: 'handleKnowMore',
-	    value: function handleKnowMore() {
-	      alert('know more');
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      console.log('inside events', this.props);
+	      var that = this;
+	      _superagent2.default.get('/events').end(function (err, res) {
+	        that.setState({ eventsArr: JSON.parse(res.text).eventsArr });
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var that = this;
+	      var eventList = this.state.eventsArr.map(function (item, i) {
+	        var d = new Date(item.date);
+	        var month = d.getMonth() + 1;
+	        var date = d.getDate() + '/' + month + '/' + d.getFullYear();
+	        return _react2.default.createElement(
+	          _semanticUiReact.List.Item,
+	          { key: i },
+	          _react2.default.createElement(
+	            _semanticUiReact.List.Content,
+	            { floated: 'right' },
+	            _react2.default.createElement(
+	              _reactRouterDom.Link,
+	              { to: '/takeQuiz/confirm/' + item.topic + '/' + item.subtopic + '/' + item.date + '/' + that.props.uid },
+	              _react2.default.createElement(
+	                _semanticUiReact.Button,
+	                { basic: true, color: 'green' },
+	                'Take Quiz'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(_semanticUiReact.Image, {
+	            avatar: true,
+	            src: item.topicImgURL }),
+	          _react2.default.createElement(
+	            _semanticUiReact.List.Content,
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.List.Header,
+	              { as: 'a' },
+	              item.topic + ' , ' + item.subtopic
+	            ),
+	            _react2.default.createElement(
+	              _semanticUiReact.List.Header,
+	              { size: 'small' },
+	              '  ',
+	              date,
+	              ' '
+	            )
+	          ),
+	          _react2.default.createElement('br', null)
+	        );
+	      });
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -74666,142 +74787,7 @@
 	          _react2.default.createElement(
 	            _semanticUiReact.List,
 	            { divided: true, verticalAlign: 'middle' },
-	            _react2.default.createElement(
-	              _semanticUiReact.List.Item,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                { floated: 'right' },
-	                _react2.default.createElement(
-	                  _semanticUiReact.Button,
-	                  { color: 'linkedin' },
-	                  'Take Quiz'
-	                )
-	              ),
-	              _react2.default.createElement(_semanticUiReact.Image, {
-	                avatar: true,
-	                src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE29MrgLlc6QlCUaH2y1TYqBBPvv2oRAw3-SN_YFtGH700SPIe' }),
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  { as: 'a' },
-	                  'React,States and Props'
-	                ),
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  null,
-	                  '  5/22/2017 '
-	                )
-	              )
-	            ),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement(
-	              _semanticUiReact.List.Item,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                { floated: 'right' },
-	                _react2.default.createElement(
-	                  _semanticUiReact.Button,
-	                  { color: 'linkedin' },
-	                  'Take Quiz'
-	                )
-	              ),
-	              _react2.default.createElement(_semanticUiReact.Image, {
-	                avatar: true,
-	                src: 'https://nodejs.org/static/images/logos/nodejs-2560x1440.png' }),
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  { as: 'a' },
-	                  'NodeJs,Callback'
-	                ),
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  null,
-	                  '  5/22/2017 '
-	                )
-	              )
-	            ),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement(
-	              _semanticUiReact.List.Item,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                { floated: 'right' },
-	                _react2.default.createElement(
-	                  _semanticUiReact.Button,
-	                  { color: 'linkedin' },
-	                  'Take Quiz'
-	                )
-	              ),
-	              _react2.default.createElement(_semanticUiReact.Image, {
-	                avatar: true,
-	                src: 'https://www.docker.com/sites/default/files/social/docker-facebook-share.png' }),
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  { as: 'a' },
-	                  'Docker,Containers'
-	                ),
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  null,
-	                  '  5/22/2017 '
-	                )
-	              )
-	            ),
-	            _react2.default.createElement('br', null),
-	            _react2.default.createElement(
-	              _semanticUiReact.List.Item,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                { floated: 'right' },
-	                _react2.default.createElement(
-	                  _semanticUiReact.Button,
-	                  { color: 'linkedin' },
-	                  'Take Quiz'
-	                )
-	              ),
-	              _react2.default.createElement(_semanticUiReact.Image, {
-	                avatar: true,
-	                src: 'http://4.bp.blogspot.com/-Tug31rWl-Ag/Ut-LPbsWhNI/AAAAAAAABgg/N69RN1whKG8/s1600/java_tech.jpg' }),
-	              _react2.default.createElement(
-	                _semanticUiReact.List.Content,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  { as: 'a' },
-	                  'Java,Threads'
-	                ),
-	                _react2.default.createElement(
-	                  _semanticUiReact.List.Header,
-	                  null,
-	                  '  5/22/2017 '
-	                )
-	              )
-	            ),
-	            _react2.default.createElement(
-	              _semanticUiReact.List.Item,
-	              null,
-	              _react2.default.createElement(
-	                'center',
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.Button,
-	                  { color: 'instagram' },
-	                  'Know more events'
-	                )
-	              )
-	            )
+	            eventList
 	          )
 	        )
 	      );
@@ -75039,7 +75025,7 @@
 	          _react2.default.createElement(
 	            _semanticUiReact.Grid.Column,
 	            { width: 16 },
-	            _react2.default.createElement(_appbar2.default, null)
+	            _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid })
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -75255,7 +75241,7 @@
 	          _react2.default.createElement(
 	            _semanticUiReact.Grid.Column,
 	            { width: 16 },
-	            _react2.default.createElement(_appbar2.default, null)
+	            _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid })
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -75438,6 +75424,10 @@
 
 	var _reactRouterDom = __webpack_require__(182);
 
+	var _appbar = __webpack_require__(953);
+
+	var _appbar2 = _interopRequireDefault(_appbar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -75466,6 +75456,8 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid }),
+	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(
 	          'center',
 	          null,
@@ -76434,7 +76426,7 @@
 	              _react2.default.createElement(_RaisedButton2.default, { style: { margin: "20px", marginTop: "40px" }, primary: true, label: 'Prev', onClick: this.handlePrev }),
 	              _react2.default.createElement(
 	                _reactRouterDom.Link,
-	                { to: '/quizAdded/:' + this.state.startDate + '/:' + this.state.startTime },
+	                { to: '/quizAdded/' + this.state.startDate + '/' + this.state.startTime + '/' + this.props.match.params.uid },
 	                _react2.default.createElement(_RaisedButton2.default, { style: { margin: "20px", marginTop: "40px" }, primary: true, label: 'Launch', onClick: this.handleLaunch })
 	              )
 	            )
@@ -93292,6 +93284,12 @@
 
 	var _semanticUiReact = __webpack_require__(377);
 
+	var _appbar = __webpack_require__(953);
+
+	var _appbar2 = _interopRequireDefault(_appbar);
+
+	var _reactRouterDom = __webpack_require__(182);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -93335,6 +93333,9 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid }),
+	        _react2.default.createElement('br', null),
+	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(
 	          'center',
 	          null,
@@ -93366,9 +93367,13 @@
 	          'center',
 	          null,
 	          _react2.default.createElement(
-	            _semanticUiReact.Button,
-	            { style: { color: '#00796B' } },
-	            'Take me back to dashboard'
+	            _reactRouterDom.Link,
+	            { to: '/dashboard/' + this.props.match.params.uid },
+	            _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { style: { color: '#00796B' } },
+	              'Take me back to dashboard'
+	            )
 	          )
 	        )
 	      );
@@ -94012,7 +94017,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_appbar2.default, null),
+	        _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid }),
 	        ' ',
 	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(
@@ -94100,12 +94105,26 @@
 	                ),
 	                _react2.default.createElement(_semanticUiReact.Divider, null),
 	                _react2.default.createElement(
-	                  _reactRouterDom.Link,
-	                  { to: '/leaderboard' },
+	                  _semanticUiReact.Button.Group,
+	                  null,
 	                  _react2.default.createElement(
-	                    _semanticUiReact.Button,
-	                    { style: { color: '#00796B' } },
-	                    'Take me back to leaderboard'
+	                    _reactRouterDom.Link,
+	                    { to: '/leaderboard' },
+	                    _react2.default.createElement(
+	                      _semanticUiReact.Button,
+	                      { color: 'teal' },
+	                      'Take me leaderboard'
+	                    )
+	                  ),
+	                  _react2.default.createElement(_semanticUiReact.Button.Or, null),
+	                  _react2.default.createElement(
+	                    _reactRouterDom.Link,
+	                    { to: '/leaderboard' },
+	                    _react2.default.createElement(
+	                      _semanticUiReact.Button,
+	                      { color: 'blue' },
+	                      'Take me dashboard'
+	                    )
 	                  )
 	                )
 	              )
