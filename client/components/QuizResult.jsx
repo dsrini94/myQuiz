@@ -32,7 +32,7 @@ export default class QuizResult extends React.Component{
   render(){
     return(
       <div>
-          <Appbar /> <br />
+          <Appbar uid={this.props.match.params.uid}/> <br />
           <Grid>
             <Grid.Row>
               <Grid.Column width={4}>
@@ -64,7 +64,15 @@ export default class QuizResult extends React.Component{
                       </Menu.Item>
                     </Menu>
                     <Divider />
-                    <Link to={'/leaderboard'}><Button style={{color:'#00796B'}}>Take me back to leaderboard</Button></Link>
+                      <Button.Group>
+                        <Link to={'/leaderboard'}>
+                        <Button color='teal'>Take me leaderboard</Button>
+                        </Link>
+                        <Button.Or />
+                          <Link to={'/leaderboard'}>
+                        <Button color='blue'>Take me dashboard</Button>
+                        </Link>
+                      </Button.Group>
                   </center>
               </Grid.Column>
               <Grid.Column width={4}>

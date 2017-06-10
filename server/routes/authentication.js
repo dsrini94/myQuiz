@@ -29,11 +29,11 @@ authenticate.post('/authenticate',(req,res)=>{
             aQuiz:"0"
           }
       },function(err,result){
-          res.send(redirectPage+'/'+result[0].id.properties.attendedQuiz+'/'+result[0].id.properties.totalScore+'/'+result[0].id.properties.rank+'/'+result[0].id.properties.hostedQuiz+'/'+result[0].id.properties.image+'/'+result[0].id.properties.userId)
+          res.send(redirectPage+'/'+result[0].id.properties.userId);
       })
     }
     else {
-      res.send(redirectPage+'/'+result[0].id.properties.attendedQuiz+'/'+result[0].id.properties.totalScore+'/'+result[0].id.properties.rank+'/'+result[0].id.properties.hostedQuiz+'/'+result[0].id.properties.image+'/'+result[0].id.properties.userId)
+      res.send(redirectPage+'/'+result[0].id.properties.userId);
     }
   })
 

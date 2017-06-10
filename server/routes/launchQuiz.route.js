@@ -6,7 +6,7 @@ const launchQuiz = require('express').Router()
 //Post the quiz into MongoDB ---------->
 launchQuiz.post('/saveLaunchQuiz', function(req, res){
   //Image Search in Google ---------->
-  client.search(req.body.topic+' image',{size:'large'})
+  client.search(req.body.topic+' logo')
     .then(function(images){
      var link=images[0].url;
      console.log('search ',link);
@@ -21,7 +21,7 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
        , d = ''
        , m = ''
        , y = '';
-       
+
      //Shuffling the options array ---------->
      questions.map(function(item,i){
        item.options = shuffle(item.options);
