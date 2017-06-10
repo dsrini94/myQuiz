@@ -1,7 +1,7 @@
 import React from 'react';
-import { Menu, Button, Segment, Header, Icon, Modal, Radio, Progress, Grid } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import Feedback from './../components/Feedback.jsx';
+import { Form,Menu, Button, Segment, Header, Icon, Modal, Radio, Progress, Grid } from 'semantic-ui-react';
+import { Link,Redirect } from 'react-router-dom';
+// import Feedback from './../components/Feedback.jsx';
 import Request from 'superagent';
 
 export default class TakeQuiz extends React.Component {
@@ -15,7 +15,6 @@ export default class TakeQuiz extends React.Component {
       ajax : true,
       quizData : [],
       selectedAnswer : {},
-      value : '',
       obj : {},
       uid:''
     }
@@ -24,7 +23,6 @@ export default class TakeQuiz extends React.Component {
     this.handleFinalSubmit=this.handleFinalSubmit.bind(this);
   }
   componentDidMount() {
-    console.log('inside takeQuiz',this.props.match.params.uid);
     setInterval(() => this.timer(),1000);
     var obj = {
       topic:this.props.match.params.topic,
@@ -54,14 +52,13 @@ export default class TakeQuiz extends React.Component {
   }
   handleFinalSubmit(){
     this.setState({submit:false, timer:0});
-
+    window.location.assign('http://localhost:3000/#/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid);
   }
   handleSelectAnswer(index,option){
     this.setState({value:option});
     var a=this.state.selectedAnswer;
     a[index]=option;
     this.setState({selectedAnswer:a});
-    console.log('selected answer : ',this.state.selectedAnswer);
   }
   render(){
     var topic;
@@ -87,10 +84,10 @@ export default class TakeQuiz extends React.Component {
                 <h4>{item.question}</h4>
               </Segment>
               <Segment>
-                <Radio label={item.options[0]} value={item.options[0]} checked={this.state.value === item.options[0]} onClick={this.handleSelectAnswer.bind(this,i,item.options[0])} style={{paddingRight:'20px'}}/>
-                <Radio label={item.options[1]} value={item.options[1]} checked={this.state.value === item.options[1]} onClick={this.handleSelectAnswer.bind(this,i,item.options[1])} style={{paddingRight:'20px'}}/>
-                <Radio label={item.options[2]} value={item.options[2]} checked={this.state.value === item.options[2]} onClick={this.handleSelectAnswer.bind(this,i,item.options[2])} style={{paddingRight:'20px'}}/>
-                <Radio label={item.options[3]} value={item.options[3]} checked={this.state.value === item.options[3]} onClick={this.handleSelectAnswer.bind(this,i,item.options[3])} />
+                <Radio label={item.options[0]} value={item.options[0]} checked={this.state.selectedAnswer[i] === item.options[0]} onClick={this.handleSelectAnswer.bind(this,i,item.options[0])} style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[1]} value={item.options[1]} checked={this.state.selectedAnswer[i] === item.options[1]} onClick={this.handleSelectAnswer.bind(this,i,item.options[1])} style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[2]} value={item.options[2]} checked={this.state.selectedAnswer[i] === item.options[2]} onClick={this.handleSelectAnswer.bind(this,i,item.options[2])} style={{paddingRight:'20px'}}/>
+                <Radio label={item.options[3]} value={item.options[3]} checked={this.state.selectedAnswer[i] === item.options[3]} onClick={this.handleSelectAnswer.bind(this,i,item.options[3])} />
               </Segment>
             </Segment.Group>
           );
@@ -106,6 +103,7 @@ export default class TakeQuiz extends React.Component {
                   <Button basic color='red' inverted onClick={this.handleCloseConfirmSubmit} >
                     <Icon name='remove' /> No
                   </Button>
+
                   <Button color='green' inverted onClick={this.handleFinalSubmit} >
                     <Icon name='checkmark' /> Yes
                   </Button>
@@ -113,7 +111,7 @@ export default class TakeQuiz extends React.Component {
               </Modal>
     if (this.state.timer<=0) {
       return(
-        <Feedback obj={this.state.obj} selected={this.state.selectedAnswer} uid={this.state.uid}/>
+        <Redirect to={'/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid} />
       );
     }
     else {

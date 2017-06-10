@@ -2,11 +2,8 @@ import React from 'react';
 import {Button, Message, Segment} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
 import Appbar from './../components/appbar.jsx';
+
 export default class confirmTakeQuiz extends React.Component{
-  componentDidMount()
-  {
-    console.log('inside confirmTakeQuiz',this.props);
-  }
   render(){
     return(
       <div>

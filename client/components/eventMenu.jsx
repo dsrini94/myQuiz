@@ -21,7 +21,6 @@ export default class EventMenu extends React.Component {
                 console.log('Err in eventMenu Did Mount : ',err);
               }
               else{
-                console.log('eMenu : ',res.text);
                 this.setState({topics : JSON.parse(res.text).topics});
               }
            });

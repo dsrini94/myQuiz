@@ -1,4 +1,3 @@
-4
 import React from 'react';
 import Request from 'superagent';
 import Appbar from './appbar.jsx';
@@ -16,7 +15,6 @@ export default class QuizResult extends React.Component{
   }
   componentDidMount(){
     this.setState({uid : this.props.match.params.uid});
-    console.log('inside Quiz result'+this.props.match.params.uid);
     Request.post('/validate')
       .send({topic:this.props.match.params.topic,
             subtopic:this.props.match.params.subtopic,
@@ -26,7 +24,6 @@ export default class QuizResult extends React.Component{
           })
       .end((err, res)=>{
         this.setState({result:JSON.parse(res.text)});
-        console.log('QRes - > ',this.state.result);
     });
   }
   render(){
@@ -69,7 +66,7 @@ export default class QuizResult extends React.Component{
                         <Button color='teal'>Take me leaderboard</Button>
                         </Link>
                         <Button.Or />
-                          <Link to={'/leaderboard'}>
+                          <Link to={'/dashboard'+'/'+this.state.uid}>
                         <Button color='blue'>Take me dashboard</Button>
                         </Link>
                       </Button.Group>

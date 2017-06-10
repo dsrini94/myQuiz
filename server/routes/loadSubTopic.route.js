@@ -2,16 +2,13 @@ const loadSubTopic = require('express').Router()
     , QuizSchema = require('./../models/quiz.schema.js');
 
 loadSubTopic.post('/loadSubTopic', function(req, res){
-  console.log('subtopicView',req.body.topic);
   var a = {
     subTopicDees : []
   };
   QuizSchema.find({topic:req.body.topic}, function(err, reply){
-    console.log('rep', reply);
     a = {
       subTopicDees : eventSegregation(reply)
     };
-    console.log('aaa ',a);
     res.send(a);
   });
 });

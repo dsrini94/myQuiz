@@ -12,7 +12,6 @@ export default class Events extends React.Component{
   }
 
   componentDidMount(){
-    console.log('inside events',this.props);
     var that = this;
     Request.get('/events').end(function(err, res){
       that.setState({eventsArr : JSON.parse(res.text).eventsArr});
@@ -32,7 +31,6 @@ export default class Events extends React.Component{
         , mmm = dd.getMonth()+1
         , currentDate = dd.getDate()+'/'+mmm+'/'+dd.getFullYear()
         , live = '';
-        console.log('st : ',st, dd, et);
       if ((st<=dd)&&(et>=dd)) {
         live = <span style={{color:'red'}}><strong>Live!</strong></span>
       }

@@ -9,7 +9,6 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
   client.search(req.body.topic+' logo')
     .then(function(images){
      var link=images[0].url;
-     console.log('search ',link);
      var topic = req.body.topic
        , subtopic = req.body.subtopic
        , hostedBy = req.body.hostedBy

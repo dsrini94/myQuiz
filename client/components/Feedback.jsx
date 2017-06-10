@@ -7,11 +7,11 @@ export default class Feedback extends React.Component{
     super(props);
     this.state={
       value:''
-    }
+    };
+    this.handleChange=this.handleChange.bind(this);
   }
-  componentDidMount()
-  {
-    console.log('inside feedback' , this.props);
+  handleChange(e, value){
+    this.setState({value : value})
   }
   render(){
     return(
@@ -32,20 +32,20 @@ export default class Feedback extends React.Component{
             <Segment>
               <h4>The questions are relevent to the topic</h4>
               <Divider />
-              <Radio label="Strongly Disagree" value='Strongly Disagree' checked={this.state.value === 'this'}/>
-              <Radio label="Disagree" value='Disagree' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
-              <Radio label="Neutral" value='Neutral' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
-              <Radio label="Agree" value='Agree' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
-              <Radio label="Strongly Agree" value='Strongly Agree' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
+              <Radio label="Strongly Disagree" value='Strongly Disagree' checked={this.state.value === 'Strongly Disagree'} onClick={this.handleChange.bind(this, 'Strongly Disagree')}/>
+              <Radio label="Disagree" value='Disagree' checked={this.state.value === 'Disagree'} onClick={this.handleChange.bind(this, 'Disagree')} style={{marginLeft:'20px'}}/>
+              <Radio label="Neutral" value='Neutral' checked={this.state.value === 'Neutral'} onClick={this.handleChange.bind(this, 'Neutral')} style={{marginLeft:'20px'}}/>
+              <Radio label="Agree" value='Agree' checked={this.state.value === 'Agree'} onClick={this.handleChange.bind(this, 'Agree')} style={{marginLeft:'20px'}}/>
+              <Radio label="Strongly Agree" value='Strongly Agree' checked={this.state.value === 'Strongly Agree'} onClick={this.handleChange.bind(this, 'Strongly Agree')} style={{marginLeft:'20px'}}/>
             </Segment>
             <Segment>
               <h4>The questions covers most of the portion in the topic</h4>
               <Divider />
-              <Radio label="Strongly Disagree" value='Strongly Disagree' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
-              <Radio label="Disagree" value='Disagree' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
-              <Radio label="Neutral" value='Neutral' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
-              <Radio label="Agree" value='Agree' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
-              <Radio label="Strongly Agree" value='Strongly Agree' checked={this.state.value === 'this'} style={{marginLeft:'20px'}}/>
+              <Radio label="Strongly Disagree" value='Strongly Disagree' checked={this.state.value === 'Strongly Disagree'}/>
+              <Radio label="Disagree" value='Disagree' checked={this.state.value === 'Disagree'} style={{marginLeft:'20px'}}/>
+              <Radio label="Neutral" value='Neutral' checked={this.state.value === 'Neutral'} style={{marginLeft:'20px'}}/>
+              <Radio label="Agree" value='Agree' checked={this.state.value === 'Agree'} style={{marginLeft:'20px'}}/>
+              <Radio label="Strongly Agree" value='Strongly Agree' checked={this.state.value === 'Strongly Agree'} style={{marginLeft:'20px'}}/>
             </Segment>
             <Segment>
               <h4>The questions are tougher to answer</h4>

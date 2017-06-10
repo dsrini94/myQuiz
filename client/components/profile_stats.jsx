@@ -17,7 +17,6 @@ export default class ProfileStats extends React.Component
           console.log(err);
         else
         {
-          console.log(JSON.parse(res.text).id.properties.totalScore);
           resobj=JSON.parse(res.text);
           this.setState({aQuiz:resobj.id.properties.attendedQuiz,tScore:resobj.id.properties.totalScore
           ,rank:resobj.id.properties.rank,hQuiz:resobj.id.properties.hostedQuiz,userId:resobj.id.properties.userId});

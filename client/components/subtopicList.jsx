@@ -18,7 +18,6 @@ export default class SubtopicList extends React.Component{
   }
 
   render(){
-    console.log(this.state.sbtList.length);
     var sbt = this.state.sbtList.map((item,i)=>{
       var d = new Date(item.date);
       var month = d.getMonth()+1;

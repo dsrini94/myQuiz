@@ -30,7 +30,7 @@ export default class LoginPage extends React.Component
                                 </Message>});
     }
     else
-      if(this.state.userName.length<8)
+      if(this.state.userName.length<5)
       {
         this.setState({warningMsg: <Message negative>
                                     <Message.Header>Invalid username</Message.Header>

@@ -7,7 +7,6 @@ events.get('/events', function(req, res){
     eventsArr : []
   };
   QuizSchema.find({}, function(err, reply){
-    console.log('res - > ',reply);
     if (err) {
       // console.log('Error in Retrieving the events in {events.route.js} ',err);
     } else {
@@ -44,8 +43,6 @@ function eventSegregation(val){
     var stt = st.getDate()+'/'+m+'/'+st.getFullYear();
     var mmm = current.getMonth()+1;
     var currentDate = current.getDate()+'/'+mmm+'/'+current.getFullYear()
-    console.log('date : ',stt);
-    console.log('current : ',currentDate);
 
     if(stt>=currentDate){
       obj = {
