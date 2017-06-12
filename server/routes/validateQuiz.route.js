@@ -5,7 +5,6 @@ const validate = require('express').Router()
 validate.post("/validate",function(req,res){
   var marks=0;
   var totalRightQues=0;
-  console.log(req.body.uid);
   //fetches the correctoption from database to validate
   QuizSchema.find({'topic':req.body.topic,'subtopic':req.body.subtopic, 'date':req.body.date},function(err,reply){
     reply[0].questions.map(function(question,i){

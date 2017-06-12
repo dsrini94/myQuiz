@@ -12,7 +12,6 @@ export default class Events extends React.Component{
   }
 
   componentDidMount(){
-    console.log('inside events',this.props);
     var that = this;
     Request.get('/events').end(function(err, res){
       that.setState({eventsArr : JSON.parse(res.text).eventsArr});
@@ -22,9 +21,22 @@ export default class Events extends React.Component{
   render(){
     var that = this;
     var cardContent = this.state.eventsArr.map(function(item, i){
-      var d = new Date(item.date);
-      var month = d.getMonth()+1;
-      var date = d.getDate()+'/'+month+'/'+d.getFullYear();
+      var st = new Date(item.st)
+        , m = st.getMonth()+1
+        , stt = st.getDate()+'/'+m+'/'+st.getFullYear()
+        , et = new Date(item.et)
+        , mm = et.getMonth()+1
+        , ett = et.getDate()+'/'+mm+'/'+et.getFullYear()
+        , dd = new Date()
+        , mmm = dd.getMonth()+1
+        , currentDate = dd.getDate()+'/'+mmm+'/'+dd.getFullYear()
+        , live = '';
+      if ((st<=dd)&&(et>=dd)) {
+        live = <span style={{color:'red'}}><strong>Live!</strong></span>
+      }
+      else {
+        live = <span><strong>{stt}</strong></span>;
+      }
       return(
         <Card key={i}>
           <Card.Content>
@@ -40,7 +52,7 @@ export default class Events extends React.Component{
               {item.subtopic}
             </Card.Meta>
             <Card.Description>
-              <strong>{date}</strong>
+              {live}
             </Card.Description>
           </Card.Content>
           <Card.Content extra>

@@ -92,7 +92,7 @@ export default class HorizontalTransition extends React.Component {
     Request.post('/saveLaunchQuiz')
             .send({topic:this.state.topic,subtopic:this.state.subtopic,hostedBy:this.props.match.params.uid,questions:this.state.questions,startDate:this.state.startDate,startTime:this.state.startTime,endTime:this.state.endTime})
             .end(function(err, res){
-              console.log(res.text);
+              console.log('Error in launching - > ',err);
             })
   }
 

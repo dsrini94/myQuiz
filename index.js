@@ -42544,11 +42544,11 @@
 	  // ----------------------------------------
 
 	  // Use key, childKey, or generate key
-	  if ((0, _isNil3.default)(props.key)) {
+	  if (!props.key) {
 	    var childKey = props.childKey;
 
 
-	    if (!(0, _isNil3.default)(childKey)) {
+	    if (childKey) {
 	      // apply and consume the childKey
 	      props.key = typeof childKey === 'function' ? childKey(props) : childKey;
 	      delete props.childKey;
@@ -53646,6 +53646,10 @@
 
 	var _map3 = _interopRequireDefault(_map2);
 
+	var _isNil2 = __webpack_require__(570);
+
+	var _isNil3 = _interopRequireDefault(_isNil2);
+
 	var _every2 = __webpack_require__(758);
 
 	var _every3 = _interopRequireDefault(_every2);
@@ -53714,10 +53718,6 @@
 
 	var _isEqual3 = _interopRequireDefault(_isEqual2);
 
-	var _isNil2 = __webpack_require__(570);
-
-	var _isNil3 = _interopRequireDefault(_isNil2);
-
 	var _classnames = __webpack_require__(571);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -53759,10 +53759,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var debug = (0, _lib.makeDebugger)('dropdown');
-
-	var getKeyOrValue = function getKeyOrValue(key, value) {
-	  return (0, _isNil3.default)(key) ? value : key;
-	};
 
 	/**
 	 * A dropdown allows a user to select a value from a series of options.
@@ -54047,15 +54043,14 @@
 
 	      // insert the "add" item
 	      if (allowAdditions && search && searchQuery && !(0, _some3.default)(filteredOptions, { text: searchQuery })) {
-	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'addition-label' }) : additionLabel || '';
+	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'label' }) : additionLabel || '';
 
 	        var addItem = {
-	          key: 'addition',
 	          // by using an array, we can pass multiple elements, but when doing so
 	          // we must specify a `key` for React to know which one is which
 	          text: [additionLabelElement, _react2.default.createElement(
 	            'b',
-	            { key: 'addition-query' },
+	            { key: 'addition' },
 	            searchQuery
 	          )],
 	          value: searchQuery,
@@ -54332,7 +54327,7 @@
 	        (0, _map3.default)(options, function (option, i) {
 	          return _react2.default.createElement(
 	            'option',
-	            { key: getKeyOrValue(option.key, option.value), value: option.value },
+	            { key: option.key || option.value, value: option.value },
 	            option.text
 	          );
 	        })
@@ -54402,7 +54397,7 @@
 	        var defaultProps = {
 	          active: item.value === selectedLabel,
 	          as: 'a',
-	          key: getKeyOrValue(item.key, item.value),
+	          key: item.key || item.value,
 	          onClick: _this.handleLabelClick,
 	          onRemove: _this.handleLabelRemove,
 	          value: item.value
@@ -54441,7 +54436,6 @@
 	          onClick: _this.handleItemClick,
 	          selected: selectedIndex === i
 	        }, opt, {
-	          key: getKeyOrValue(opt.key, opt.value),
 	          // Needed for handling click events on disabled items
 	          style: (0, _extends3.default)({}, opt.style, { pointerEvents: 'all' })
 	        }));
@@ -74261,9 +74255,38 @@
 	    value: function render() {
 	      var that = this;
 	      var cardContent = this.state.eventsArr.map(function (item, i) {
-	        var d = new Date(item.date);
-	        var month = d.getMonth() + 1;
-	        var date = d.getDate() + '/' + month + '/' + d.getFullYear();
+	        var st = new Date(item.st),
+	            m = st.getMonth() + 1,
+	            stt = st.getDate() + '/' + m + '/' + st.getFullYear(),
+	            et = new Date(item.et),
+	            mm = et.getMonth() + 1,
+	            ett = et.getDate() + '/' + mm + '/' + et.getFullYear(),
+	            dd = new Date(),
+	            mmm = dd.getMonth() + 1,
+	            currentDate = dd.getDate() + '/' + mmm + '/' + dd.getFullYear(),
+	            live = '';
+	        console.log('st : ', st, dd, et);
+	        if (st <= dd && et >= dd) {
+	          live = _react2.default.createElement(
+	            'span',
+	            { style: { color: 'red' } },
+	            _react2.default.createElement(
+	              'strong',
+	              null,
+	              'Live!'
+	            )
+	          );
+	        } else {
+	          live = _react2.default.createElement(
+	            'span',
+	            null,
+	            _react2.default.createElement(
+	              'strong',
+	              null,
+	              stt
+	            )
+	          );
+	        }
 	        return _react2.default.createElement(
 	          _semanticUiReact.Card,
 	          { key: i },
@@ -74288,11 +74311,7 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Card.Description,
 	              null,
-	              _react2.default.createElement(
-	                'strong',
-	                null,
-	                date
-	              )
+	              live
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -75568,10 +75587,6 @@
 
 	var _reactRouterDom = __webpack_require__(182);
 
-	var _Feedback = __webpack_require__(967);
-
-	var _Feedback2 = _interopRequireDefault(_Feedback);
-
 	var _superagent = __webpack_require__(944);
 
 	var _superagent2 = _interopRequireDefault(_superagent);
@@ -75583,6 +75598,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import Feedback from './../components/Feedback.jsx';
+
 
 	var TakeQuiz = function (_React$Component) {
 	  _inherits(TakeQuiz, _React$Component);
@@ -75600,7 +75617,6 @@
 	      ajax: true,
 	      quizData: [],
 	      selectedAnswer: {},
-	      value: '',
 	      obj: {},
 	      uid: ''
 	    };
@@ -75653,6 +75669,7 @@
 	    key: 'handleFinalSubmit',
 	    value: function handleFinalSubmit() {
 	      this.setState({ submit: false, timer: 0 });
+	      window.location.assign('http://localhost:3000/#/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid);
 	    }
 	  }, {
 	    key: 'handleSelectAnswer',
@@ -75698,10 +75715,10 @@
 	            _react2.default.createElement(
 	              _semanticUiReact.Segment,
 	              null,
-	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[0], value: item.options[0], checked: _this3.state.value === item.options[0], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[0]), style: { paddingRight: '20px' } }),
-	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[1], value: item.options[1], checked: _this3.state.value === item.options[1], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[1]), style: { paddingRight: '20px' } }),
-	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[2], value: item.options[2], checked: _this3.state.value === item.options[2], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[2]), style: { paddingRight: '20px' } }),
-	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[3], value: item.options[3], checked: _this3.state.value === item.options[3], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[3]) })
+	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[0], value: item.options[0], checked: _this3.state.selectedAnswer[i] === item.options[0], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[0]), style: { paddingRight: '20px' } }),
+	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[1], value: item.options[1], checked: _this3.state.selectedAnswer[i] === item.options[1], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[1]), style: { paddingRight: '20px' } }),
+	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[2], value: item.options[2], checked: _this3.state.selectedAnswer[i] === item.options[2], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[2]), style: { paddingRight: '20px' } }),
+	              _react2.default.createElement(_semanticUiReact.Radio, { label: item.options[3], value: item.options[3], checked: _this3.state.selectedAnswer[i] === item.options[3], onClick: _this3.handleSelectAnswer.bind(_this3, i, item.options[3]) })
 	            )
 	          );
 	        });
@@ -75737,7 +75754,7 @@
 	        )
 	      );
 	      if (this.state.timer <= 0) {
-	        return _react2.default.createElement(_Feedback2.default, { obj: this.state.obj, selected: this.state.selectedAnswer, uid: this.state.uid });
+	        return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid });
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
@@ -75866,6 +75883,7 @@
 	    _this.state = {
 	      value: ''
 	    };
+	    _this.handleChange = _this.handleChange.bind(_this);
 	    return _this;
 	  }
 
@@ -75873,6 +75891,11 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      console.log('inside feedback', this.props);
+	    }
+	  }, {
+	    key: 'handleChange',
+	    value: function handleChange(e, value) {
+	      this.setState({ value: value });
 	    }
 	  }, {
 	    key: 'render',
@@ -75914,11 +75937,11 @@
 	                  'The questions are relevent to the topic'
 	                ),
 	                _react2.default.createElement(_semanticUiReact.Divider, null),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Disagree', value: 'Strongly Disagree', checked: this.state.value === 'this' }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Disagree', value: 'Disagree', checked: this.state.value === 'this', style: { marginLeft: '20px' } }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Neutral', value: 'Neutral', checked: this.state.value === 'this', style: { marginLeft: '20px' } }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Agree', value: 'Agree', checked: this.state.value === 'this', style: { marginLeft: '20px' } }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Agree', value: 'Strongly Agree', checked: this.state.value === 'this', style: { marginLeft: '20px' } })
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Disagree', value: 'Strongly Disagree', checked: this.state.value === 'Strongly Disagree', onClick: this.handleChange.bind(this, 'Strongly Disagree') }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Disagree', value: 'Disagree', checked: this.state.value === 'Disagree', onClick: this.handleChange.bind(this, 'Disagree'), style: { marginLeft: '20px' } }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Neutral', value: 'Neutral', checked: this.state.value === 'Neutral', onClick: this.handleChange.bind(this, 'Neutral'), style: { marginLeft: '20px' } }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Agree', value: 'Agree', checked: this.state.value === 'Agree', onClick: this.handleChange.bind(this, 'Agree'), style: { marginLeft: '20px' } }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Agree', value: 'Strongly Agree', checked: this.state.value === 'Strongly Agree', onClick: this.handleChange.bind(this, 'Strongly Agree'), style: { marginLeft: '20px' } })
 	              ),
 	              _react2.default.createElement(
 	                _semanticUiReact.Segment,
@@ -75929,11 +75952,11 @@
 	                  'The questions covers most of the portion in the topic'
 	                ),
 	                _react2.default.createElement(_semanticUiReact.Divider, null),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Disagree', value: 'Strongly Disagree', checked: this.state.value === 'this', style: { marginLeft: '20px' } }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Disagree', value: 'Disagree', checked: this.state.value === 'this', style: { marginLeft: '20px' } }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Neutral', value: 'Neutral', checked: this.state.value === 'this', style: { marginLeft: '20px' } }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Agree', value: 'Agree', checked: this.state.value === 'this', style: { marginLeft: '20px' } }),
-	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Agree', value: 'Strongly Agree', checked: this.state.value === 'this', style: { marginLeft: '20px' } })
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Disagree', value: 'Strongly Disagree', checked: this.state.value === 'Strongly Disagree' }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Disagree', value: 'Disagree', checked: this.state.value === 'Disagree', style: { marginLeft: '20px' } }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Neutral', value: 'Neutral', checked: this.state.value === 'Neutral', style: { marginLeft: '20px' } }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Agree', value: 'Agree', checked: this.state.value === 'Agree', style: { marginLeft: '20px' } }),
+	                _react2.default.createElement(_semanticUiReact.Radio, { label: 'Strongly Agree', value: 'Strongly Agree', checked: this.state.value === 'Strongly Agree', style: { marginLeft: '20px' } })
 	              ),
 	              _react2.default.createElement(
 	                _semanticUiReact.Segment,
@@ -94009,8 +94032,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	4;
 
 	var QuizResult = function (_React$Component) {
 	  _inherits(QuizResult, _React$Component);

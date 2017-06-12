@@ -8,8 +8,6 @@ const imageNames = ['photo_aancfg.png','images_u6emeq.jpg','avatars-000280483895
 
 //router
 authenticate.post('/authenticate',(req,res)=>{
-  console.log('in the authentication');
-  console.log(req.body.adid);
   neodb.cypher({
     query:"match (id:users {userId:{adid}}) return *",
     params:{

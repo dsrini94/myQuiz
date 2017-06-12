@@ -14,7 +14,6 @@ export default class MbileEvents extends React.Component
   }
 
   componentDidMount(){
-    console.log('inside events',this.props);
     var that = this;
     Request.get('/events').end(function(err, res){
       that.setState({eventsArr : JSON.parse(res.text).eventsArr});
