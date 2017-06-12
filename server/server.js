@@ -33,7 +33,7 @@ myQuizServer.use(expressInstance.static('./../'));
 //routes
 myQuizServer.use('/',(req,res,next)=>{
   next();
-},authenticate, launchQuiz, events, loadTopics, loadSubTopic, quiz, validate,profileStats,leaderboard);
+},authenticate, launchQuiz, events, loadTopics, loadSubTopic, quiz, validate, profileStats, leaderboard);
 
 //Server will be live on port 3000
 myQuizServer.listen(3000,()=>{
