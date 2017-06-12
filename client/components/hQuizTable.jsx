@@ -1,80 +1,60 @@
 import React from 'react';
 import { Divider,Grid,Table,Header,Image,Segment  } from 'semantic-ui-react';
+import Request from 'superagent';
 
-export default class HostedQuizTable extends React.Component
-{
-  render()
-  {
+export default class HostedQuizTable extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      results : []
+    };
+  }
+  componentDidMount(){
+    Request.post('/hResult')
+          .send({hostedBy : this.props.hostedBy})
+          .end((err, res)=>{
+            if (err) {
+              console.log(err);
+            } else {
+              this.setState({results : JSON.parse(res.text)});
+            }
+          });
+  }
+  render(){
+    var display = this.state.results.map((item,i)=>{
+      var topic = item.topic
+        , subtopic = item.subtopic;
+      if(item.participants.length!=0){
+        return(
+          item.participants.map((item, i)=>{
+            return(
+              <Table.Row>
+                <Table.Cell>{topic}</Table.Cell>
+                <Table.Cell>{subtopic}</Table.Cell>
+                <Table.Cell>{item.userId}</Table.Cell>
+                <Table.Cell>{item.score}</Table.Cell>
+              </Table.Row>
+            );
+          })
+        );
+      }
+    });
     return (
       <Segment>
-      <Table fixed inverted>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell width={8}>Participants</Table.HeaderCell>
-        <Table.HeaderCell width={8}>Scores</Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-
-    <Table.Body>
-      <Table.Row>
-        <Table.Cell>
-          <Header as='h4' image>
-            <Image src='/assets/images/avatar/small/lena.png' shape='rounded' size='mini' />
-            <Header.Content style={{color:'#dce1ea'}} >
-              Lena
-              <Header.Subheader style={{color:'#dce1ea'}}>Human Resources</Header.Subheader>
-            </Header.Content>
-          </Header>
-        </Table.Cell>
-        <Table.Cell>
-          22
-        </Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.Cell>
-          <Header as='h4' image>
-            <Image src='/assets/images/avatar/small/matthew.png' shape='rounded' size='mini' />
-            <Header.Content style={{color:'#dce1ea'}}>
-              Matthew
-              <Header.Subheader style={{color:'#dce1ea'}}>Fabric Design</Header.Subheader>
-            </Header.Content>
-          </Header>
-        </Table.Cell>
-        <Table.Cell>
-          15
-        </Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.Cell>
-          <Header as='h4' image>
-            <Image src='/assets/images/avatar/small/lindsay.png' shape='rounded' size='mini' />
-            <Header.Content style={{color:'#dce1ea'}}>
-              Lindsay
-              <Header.Subheader style={{color:'#dce1ea'}}>Entertainment</Header.Subheader>
-            </Header.Content>
-          </Header>
-        </Table.Cell>
-        <Table.Cell>
-          12
-        </Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.Cell>
-          <Header as='h4' image>
-            <Image src='/assets/images/avatar/small/mark.png' shape='rounded' size='mini' />
-            <Header.Content style={{color:'#dce1ea'}}>
-              Mark
-              <Header.Subheader style={{color:'#dce1ea'}}>Executive</Header.Subheader>
-            </Header.Content>
-          </Header>
-        </Table.Cell>
-        <Table.Cell>
-          11
-        </Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
-</Segment>
+        <Table fixed inverted>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell width={4}>Topic</Table.HeaderCell>
+              <Table.HeaderCell width={4}>Sub Topic</Table.HeaderCell>
+              <Table.HeaderCell width={4}>Participants</Table.HeaderCell>
+              <Table.HeaderCell width={4}>Scores</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {display}
+          </Table.Body>
+        </Table>
+      </Segment>
     );
   }
 }
