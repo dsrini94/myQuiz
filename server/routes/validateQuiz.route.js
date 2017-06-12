@@ -1,10 +1,13 @@
 const validate = require('express').Router()
     , QuizSchema = require('./../models/quiz.schema.js')
-    ,neodb = require('./../connections/db.neo4j.js');
+    , neodb = require('./../connections/db.neo4j.js');
 
 validate.post("/validate",function(req,res){
-  var marks=0;
-  var totalRightQues=0;
+  var uid = req.body.uid
+    , marks=0
+    , totalRightQues=0
+    , participant = {}
+
   //fetches the correctoption from database to validate
   QuizSchema.find({'topic':req.body.topic,'subtopic':req.body.subtopic, 'date':req.body.date},function(err,reply){
     reply[0].questions.map(function(question,i){
@@ -16,6 +19,19 @@ validate.post("/validate",function(req,res){
     var result={
       marks : marks
     };
+    participant = {
+      userId : uid,
+      score : marks
+    }
+    QuizSchema.update({'topic':req.body.topic,'subtopic':req.body.subtopic, 'date':req.body.date, hostedBy:req.body.hostedBy},
+                      {$push: {participants: participant}},
+                      function(err, reply){
+                        if (err) {
+                          console.log('error in updating participant array - > ',err);
+                        } else {
+                          console.log('here is rep ', reply);
+                        }
+    });
     //match the user id in neo4j db
     neodb.cypher({
       query:"match (id:users {userId:{adid}}) return id",

@@ -24,7 +24,7 @@ Replacement of any participant  of a team is not allowed after registration  <br
 Teams selected for the final rounds  will be allowed to give themselves an appropriate name related to the competition by which they may want to be known
           </Segment>
           <Button.Group>
-            <Button>Cancel</Button>
+            <Link to={'/dashboard/'+this.props.match.params.uid}><Button>Cancel</Button></Link>
             <Button.Or />
             <Link to={'/takeQuiz/quiz/'+this.props.match.params.topic+'/'+this.props.match.params.subtopic+'/'+this.props.match.params.date+'/'+this.props.match.params.uid}><Button positive>Start</Button></Link>
           </Button.Group>

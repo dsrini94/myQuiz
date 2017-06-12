@@ -19,6 +19,7 @@ export default class QuizResult extends React.Component{
       .send({topic:this.props.match.params.topic,
             subtopic:this.props.match.params.subtopic,
             date : this.props.match.params.date,
+            hostedBy : this.props.match.params.hostedBy,
             selected : JSON.parse(this.props.match.params.selected),
             uid : this.props.match.params.uid
           })

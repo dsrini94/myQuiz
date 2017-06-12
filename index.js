@@ -133,7 +133,7 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/quizAdded/:date/:time/:uid', component: _QuizAdded2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/confirm/:topic/:subtopic/:date/:uid', component: _confirmTakeQuiz2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/quiz/:topic/:subtopic/:date/:uid', component: _TakeQuiz2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/result/:topic/:subtopic/:date/:selected/:uid', component: _QuizResult2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/result/:topic/:subtopic/:date/:hostedBy/:selected/:uid', component: _QuizResult2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/leaderboard/:uid', component: _leaderBoard2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/hquizresult/:uid', component: _hQuiz2.default })
 	    )
@@ -74158,7 +74158,6 @@
 	            'Hosted Quiz'
 	          )
 	        ),
-	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(_semanticUiReact.Divider, null),
 	        _react2.default.createElement(
 	          _reactRouterDom.Link,
@@ -74188,6 +74187,24 @@
 	              _semanticUiReact.Button,
 	              { secondary: true },
 	              'Hosted Quiz Data'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.Divider,
+	          { horizontal: true },
+	          'Or'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouterDom.Link,
+	          { to: '/leaderboard/' + this.state.userId },
+	          _react2.default.createElement(
+	            'center',
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { color: 'red' },
+	              'Leaderboard'
 	            )
 	          )
 	        )
@@ -75537,9 +75554,13 @@
 	            _semanticUiReact.Button.Group,
 	            null,
 	            _react2.default.createElement(
-	              _semanticUiReact.Button,
-	              null,
-	              'Cancel'
+	              _reactRouterDom.Link,
+	              { to: '/dashboard/' + this.props.match.params.uid },
+	              _react2.default.createElement(
+	                _semanticUiReact.Button,
+	                null,
+	                'Cancel'
+	              )
 	            ),
 	            _react2.default.createElement(_semanticUiReact.Button.Or, null),
 	            _react2.default.createElement(
@@ -75608,12 +75629,13 @@
 	      submit: false,
 	      percent: 100,
 	      timer: 30,
-	      reduction: 3.3333333,
+	      reduction: 3.333,
 	      ajax: true,
 	      quizData: [],
 	      selectedAnswer: {},
 	      obj: {},
-	      uid: ''
+	      uid: '',
+	      hostedBy: ''
 	    };
 	    _this.handleOpenConfirmSubmit = _this.handleOpenConfirmSubmit.bind(_this);
 	    _this.handleCloseConfirmSubmit = _this.handleCloseConfirmSubmit.bind(_this);
@@ -75637,7 +75659,12 @@
 	      this.setState({ obj: obj, uid: this.props.match.params.uid });
 	      if (this.state.ajax) {
 	        _superagent2.default.post('/quiz').send({ topic: this.props.match.params.topic, subtopic: this.props.match.params.subtopic, date: this.props.match.params.date }).end(function (err, res) {
-	          _this2.setState({ ajax: false, quizData: JSON.parse(res.text).que });
+	          // Below 2 variables require Bug correction
+	          var timer = JSON.parse(res.text).que.length * 30,
+	              reduction = 100 / timer;
+	          // console.log(' ------------------- ',timer, reduction);
+	          _this2.setState({ ajax: false, quizData: JSON.parse(res.text).que, hostedBy: JSON.parse(res.text).que[0].hostedBy });
+	          console.log('---- > ', _this2.state.hostedBy);
 	        });
 	      }
 	    }
@@ -75663,7 +75690,7 @@
 	    key: 'handleFinalSubmit',
 	    value: function handleFinalSubmit() {
 	      this.setState({ submit: false, timer: 0 });
-	      window.location.assign('http://localhost:3000/#/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid);
+	      window.location.assign('http://10.201.174.205:3001/#/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + this.state.hostedBy + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid);
 	    }
 	  }, {
 	    key: 'handleSelectAnswer',
@@ -75747,7 +75774,7 @@
 	        )
 	      );
 	      if (this.state.timer <= 0) {
-	        return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid });
+	        return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + this.state.hostedBy + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid });
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
@@ -93456,22 +93483,97 @@
 	var Leaderboard = function (_React$Component) {
 	  _inherits(Leaderboard, _React$Component);
 
-	  function Leaderboard() {
+	  function Leaderboard(props) {
 	    _classCallCheck(this, Leaderboard);
 
-	    return _possibleConstructorReturn(this, (Leaderboard.__proto__ || Object.getPrototypeOf(Leaderboard)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (Leaderboard.__proto__ || Object.getPrototypeOf(Leaderboard)).call(this, props));
+
+	    _this.state = {
+	      leaders: []
+	    };
+	    return _this;
 	  }
 
 	  _createClass(Leaderboard, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      var _this2 = this;
+
 	      _superagent2.default.get('/fetchleaders').end(function (err, res) {
-	        if (err) console.log(err);else console.log(JSON.parse(res.text));
+	        if (err) {
+	          console.log(err);
+	        } else {
+	          _this2.setState({ leaders: JSON.parse(res.text) });
+	        }
 	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
+	      var me = this.state.leaders.map(function (item, i) {
+	        if (item.id.properties.userId === _this3.props.match.params.uid) {
+	          return _react2.default.createElement(
+	            _semanticUiReact.Table.Row,
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Table.Cell,
+	              null,
+	              item.id.properties.totalScore
+	            ),
+	            _react2.default.createElement(
+	              _semanticUiReact.Table.Cell,
+	              null,
+	              _react2.default.createElement(
+	                _semanticUiReact.Header,
+	                { as: 'h4', image: true },
+	                _react2.default.createElement(_semanticUiReact.Image, { src: 'http://www.lte-esafety.co.uk/wp-content/uploads/2015/06/avatar.png', shape: 'rounded', size: 'mini' }),
+	                _react2.default.createElement(
+	                  _semanticUiReact.Header.Content,
+	                  { style: { color: '#dce1ea' } },
+	                  item.id.properties.userId,
+	                  _react2.default.createElement(
+	                    _semanticUiReact.Header.Subheader,
+	                    { style: { color: '#dce1ea' } },
+	                    'Human Resources'
+	                  )
+	                )
+	              )
+	            )
+	          );
+	        }
+	      });
+	      var all = this.state.leaders.map(function (item, i) {
+	        return _react2.default.createElement(
+	          _semanticUiReact.Table.Row,
+	          null,
+	          _react2.default.createElement(
+	            _semanticUiReact.Table.Cell,
+	            null,
+	            item.id.properties.totalScore
+	          ),
+	          _react2.default.createElement(
+	            _semanticUiReact.Table.Cell,
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Header,
+	              { as: 'h4', image: true },
+	              _react2.default.createElement(_semanticUiReact.Image, { src: 'http://www.lte-esafety.co.uk/wp-content/uploads/2015/06/avatar.png', shape: 'rounded', size: 'mini' }),
+	              _react2.default.createElement(
+	                _semanticUiReact.Header.Content,
+	                { style: { color: '#dce1ea' } },
+	                item.id.properties.userId,
+	                _react2.default.createElement(
+	                  _semanticUiReact.Header.Subheader,
+	                  { style: { color: '#dce1ea' } },
+	                  'Human Resources'
+	                )
+	              )
+	            )
+	          )
+	        );
+	      });
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -93529,43 +93631,7 @@
 	                    _react2.default.createElement(
 	                      _semanticUiReact.Table.Body,
 	                      null,
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Row,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          '22'
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header,
-	                            { as: 'h4', image: true },
-	                            _react2.default.createElement(_semanticUiReact.Image, { src: 'http://www.lte-esafety.co.uk/wp-content/uploads/2015/06/avatar.png', shape: 'rounded', size: 'mini' }),
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Content,
-	                              { style: { color: '#dce1ea' } },
-	                              'SR354095',
-	                              _react2.default.createElement(
-	                                _semanticUiReact.Header.Subheader,
-	                                { style: { color: '#dce1ea' } },
-	                                'Human Resources'
-	                              )
-	                            )
-	                          ),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Progress,
-	                            { percent: 80, size: 'small', color: 'teal' },
-	                            _react2.default.createElement(
-	                              'span',
-	                              { style: { color: '#dce1ea' } },
-	                              'Rank 1'
-	                            )
-	                          )
-	                        )
-	                      )
+	                      me
 	                    )
 	                  ),
 	                  _react2.default.createElement(_semanticUiReact.Divider, null),
@@ -93593,154 +93659,7 @@
 	                    _react2.default.createElement(
 	                      _semanticUiReact.Table.Body,
 	                      null,
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Row,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          '22'
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header,
-	                            { as: 'h4', image: true },
-	                            _react2.default.createElement(_semanticUiReact.Image, { src: 'http://www.lte-esafety.co.uk/wp-content/uploads/2015/06/avatar.png', shape: 'rounded', size: 'mini' }),
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Content,
-	                              { style: { color: '#dce1ea' } },
-	                              'SR354095',
-	                              _react2.default.createElement(
-	                                _semanticUiReact.Header.Subheader,
-	                                { style: { color: '#dce1ea' } },
-	                                'Human Resources'
-	                              )
-	                            )
-	                          ),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Progress,
-	                            { percent: 80, size: 'small', color: 'teal' },
-	                            _react2.default.createElement(
-	                              'span',
-	                              { style: { color: '#dce1ea' } },
-	                              'Rank 1'
-	                            )
-	                          )
-	                        )
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Row,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          '15'
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header,
-	                            { as: 'h4', image: true },
-	                            _react2.default.createElement(_semanticUiReact.Image, { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzNBx0msMzSif0RJPTzBHELtmPzhe-4y5txYNfGK4QoJbSnzzN', shape: 'rounded', size: 'mini' }),
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Content,
-	                              { style: { color: '#dce1ea' } },
-	                              'RU353437',
-	                              _react2.default.createElement(
-	                                _semanticUiReact.Header.Subheader,
-	                                { style: { color: '#dce1ea' } },
-	                                'Fabric Design'
-	                              )
-	                            )
-	                          ),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Progress,
-	                            { percent: 60, size: 'small', color: 'teal' },
-	                            _react2.default.createElement(
-	                              'span',
-	                              { style: { color: '#dce1ea' } },
-	                              'Rank 2'
-	                            )
-	                          )
-	                        )
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Row,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          '12'
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header,
-	                            { as: 'h4', image: true },
-	                            _react2.default.createElement(_semanticUiReact.Image, { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzTfqeVVaiXQ_QeKrcc246WC04FNcO4tCGYxeawhTdFs96QVw', shape: 'rounded', size: 'mini' }),
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Content,
-	                              { style: { color: '#dce1ea' } },
-	                              'VA443322',
-	                              _react2.default.createElement(
-	                                _semanticUiReact.Header.Subheader,
-	                                { style: { color: '#dce1ea' } },
-	                                'Entertainment'
-	                              )
-	                            )
-	                          ),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Progress,
-	                            { percent: 50, size: 'small', color: 'teal' },
-	                            _react2.default.createElement(
-	                              'span',
-	                              { style: { color: '#dce1ea' } },
-	                              'Rank 3'
-	                            )
-	                          )
-	                        )
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Row,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          '11'
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Table.Cell,
-	                          null,
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header,
-	                            { as: 'h4', image: true },
-	                            _react2.default.createElement(_semanticUiReact.Image, { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrpLyBVUtD-_Ej_Kckce_w069hMLma5iY4w9BDlIy40esgpoB', shape: 'rounded', size: 'mini' }),
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Content,
-	                              { style: { color: '#dce1ea' } },
-	                              'ED445566',
-	                              _react2.default.createElement(
-	                                _semanticUiReact.Header.Subheader,
-	                                { style: { color: '#dce1ea' } },
-	                                'Executive'
-	                              )
-	                            )
-	                          ),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Progress,
-	                            { percent: 10, size: 'small', color: 'teal' },
-	                            _react2.default.createElement(
-	                              'span',
-	                              { style: { color: '#dce1ea' } },
-	                              'Rank 4'
-	                            )
-	                          )
-	                        )
-	                      )
+	                      all
 	                    )
 	                  )
 	                )
@@ -93776,43 +93695,7 @@
 	                  _react2.default.createElement(
 	                    _semanticUiReact.Table.Body,
 	                    null,
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Table.Row,
-	                      null,
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        '22'
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Header,
-	                          { as: 'h4', image: true },
-	                          _react2.default.createElement(_semanticUiReact.Image, { src: 'http://www.lte-esafety.co.uk/wp-content/uploads/2015/06/avatar.png', shape: 'rounded', size: 'mini' }),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header.Content,
-	                            { style: { color: '#dce1ea' } },
-	                            'SR354095',
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Subheader,
-	                              { style: { color: '#dce1ea' } },
-	                              'Human Resources'
-	                            )
-	                          )
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Progress,
-	                          { percent: 80, size: 'small', color: 'teal' },
-	                          _react2.default.createElement(
-	                            'span',
-	                            { style: { color: '#dce1ea' } },
-	                            'Rank 1'
-	                          )
-	                        )
-	                      )
-	                    )
+	                    me
 	                  )
 	                ),
 	                _react2.default.createElement(_semanticUiReact.Divider, null),
@@ -93822,154 +93705,7 @@
 	                  _react2.default.createElement(
 	                    _semanticUiReact.Table.Body,
 	                    null,
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Table.Row,
-	                      null,
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        '22'
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Header,
-	                          { as: 'h4', image: true },
-	                          _react2.default.createElement(_semanticUiReact.Image, { src: 'http://www.lte-esafety.co.uk/wp-content/uploads/2015/06/avatar.png', shape: 'rounded', size: 'mini' }),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header.Content,
-	                            { style: { color: '#dce1ea' } },
-	                            'SR354095',
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Subheader,
-	                              { style: { color: '#dce1ea' } },
-	                              'Human Resources'
-	                            )
-	                          )
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Progress,
-	                          { percent: 80, size: 'small', color: 'teal' },
-	                          _react2.default.createElement(
-	                            'span',
-	                            { style: { color: '#dce1ea' } },
-	                            'Rank 1'
-	                          )
-	                        )
-	                      )
-	                    ),
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Table.Row,
-	                      null,
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        '15'
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Header,
-	                          { as: 'h4', image: true },
-	                          _react2.default.createElement(_semanticUiReact.Image, { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzNBx0msMzSif0RJPTzBHELtmPzhe-4y5txYNfGK4QoJbSnzzN', shape: 'rounded', size: 'mini' }),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header.Content,
-	                            { style: { color: '#dce1ea' } },
-	                            'RU353437',
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Subheader,
-	                              { style: { color: '#dce1ea' } },
-	                              'Fabric Design'
-	                            )
-	                          )
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Progress,
-	                          { percent: 60, size: 'small', color: 'teal' },
-	                          _react2.default.createElement(
-	                            'span',
-	                            { style: { color: '#dce1ea' } },
-	                            'Rank 2'
-	                          )
-	                        )
-	                      )
-	                    ),
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Table.Row,
-	                      null,
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        '12'
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Header,
-	                          { as: 'h4', image: true },
-	                          _react2.default.createElement(_semanticUiReact.Image, { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyzTfqeVVaiXQ_QeKrcc246WC04FNcO4tCGYxeawhTdFs96QVw', shape: 'rounded', size: 'mini' }),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header.Content,
-	                            { style: { color: '#dce1ea' } },
-	                            'VA443322',
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Subheader,
-	                              { style: { color: '#dce1ea' } },
-	                              'Entertainment'
-	                            )
-	                          )
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Progress,
-	                          { percent: 50, size: 'small', color: 'teal' },
-	                          _react2.default.createElement(
-	                            'span',
-	                            { style: { color: '#dce1ea' } },
-	                            'Rank 3'
-	                          )
-	                        )
-	                      )
-	                    ),
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Table.Row,
-	                      null,
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        '11'
-	                      ),
-	                      _react2.default.createElement(
-	                        _semanticUiReact.Table.Cell,
-	                        null,
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Header,
-	                          { as: 'h4', image: true },
-	                          _react2.default.createElement(_semanticUiReact.Image, { src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSrpLyBVUtD-_Ej_Kckce_w069hMLma5iY4w9BDlIy40esgpoB', shape: 'rounded', size: 'mini' }),
-	                          _react2.default.createElement(
-	                            _semanticUiReact.Header.Content,
-	                            { style: { color: '#dce1ea' } },
-	                            'ED445566',
-	                            _react2.default.createElement(
-	                              _semanticUiReact.Header.Subheader,
-	                              { style: { color: '#dce1ea' } },
-	                              'Executive'
-	                            )
-	                          )
-	                        ),
-	                        _react2.default.createElement(
-	                          _semanticUiReact.Progress,
-	                          { percent: 10, size: 'small', color: 'teal' },
-	                          _react2.default.createElement(
-	                            'span',
-	                            { style: { color: '#dce1ea' } },
-	                            'Rank 4'
-	                          )
-	                        )
-	                      )
-	                    )
+	                    all
 	                  )
 	                )
 	              )
@@ -94046,6 +93782,7 @@
 	      _superagent2.default.post('/validate').send({ topic: this.props.match.params.topic,
 	        subtopic: this.props.match.params.subtopic,
 	        date: this.props.match.params.date,
+	        hostedBy: this.props.match.params.hostedBy,
 	        selected: JSON.parse(this.props.match.params.selected),
 	        uid: this.props.match.params.uid
 	      }).end(function (err, res) {
@@ -94208,10 +93945,6 @@
 
 	var _hQuizTable2 = _interopRequireDefault(_hQuizTable);
 
-	var _hQuizMenu = __webpack_require__(1093);
-
-	var _hQuizMenu2 = _interopRequireDefault(_hQuizMenu);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94219,6 +93952,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// import HostedQuizMenu from './../components/hQuizMenu.jsx';
 
 	var HostedQuizResult = function (_React$Component) {
 	  _inherits(HostedQuizResult, _React$Component);
@@ -94264,17 +93999,8 @@
 	            null,
 	            _react2.default.createElement(
 	              _semanticUiReact.Grid.Column,
-	              { width: 4 },
-	              _react2.default.createElement(
-	                'center',
-	                null,
-	                _react2.default.createElement(_hQuizMenu2.default, { handleSubtopicMethod: this.handleSubtopic })
-	              )
-	            ),
-	            _react2.default.createElement(
-	              _semanticUiReact.Grid.Column,
-	              { width: 12 },
-	              _react2.default.createElement(_hQuizTable2.default, null)
+	              { width: 16 },
+	              _react2.default.createElement(_hQuizTable2.default, { hostedBy: this.props.match.params.uid })
 	            )
 	          )
 	        )
@@ -94305,6 +94031,10 @@
 
 	var _semanticUiReact = __webpack_require__(377);
 
+	var _superagent = __webpack_require__(944);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94316,15 +94046,65 @@
 	var HostedQuizTable = function (_React$Component) {
 	  _inherits(HostedQuizTable, _React$Component);
 
-	  function HostedQuizTable() {
+	  function HostedQuizTable(props) {
 	    _classCallCheck(this, HostedQuizTable);
 
-	    return _possibleConstructorReturn(this, (HostedQuizTable.__proto__ || Object.getPrototypeOf(HostedQuizTable)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (HostedQuizTable.__proto__ || Object.getPrototypeOf(HostedQuizTable)).call(this, props));
+
+	    _this.state = {
+	      results: []
+	    };
+	    return _this;
 	  }
 
 	  _createClass(HostedQuizTable, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this2 = this;
+
+	      _superagent2.default.post('/hResult').send({ hostedBy: this.props.hostedBy }).end(function (err, res) {
+	        if (err) {
+	          console.log(err);
+	        } else {
+	          _this2.setState({ results: JSON.parse(res.text) });
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var display = this.state.results.map(function (item, i) {
+	        var topic = item.topic,
+	            subtopic = item.subtopic;
+	        if (item.participants.length != 0) {
+	          return item.participants.map(function (item, i) {
+	            return _react2.default.createElement(
+	              _semanticUiReact.Table.Row,
+	              null,
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                topic
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                subtopic
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                item.userId
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                item.score
+	              )
+	            );
+	          });
+	        }
+	      });
 	      return _react2.default.createElement(
 	        _semanticUiReact.Segment,
 	        null,
@@ -94339,12 +94119,22 @@
 	              null,
 	              _react2.default.createElement(
 	                _semanticUiReact.Table.HeaderCell,
-	                { width: 8 },
+	                { width: 4 },
+	                'Topic'
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.HeaderCell,
+	                { width: 4 },
+	                'Sub Topic'
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.HeaderCell,
+	                { width: 4 },
 	                'Participants'
 	              ),
 	              _react2.default.createElement(
 	                _semanticUiReact.Table.HeaderCell,
-	                { width: 8 },
+	                { width: 4 },
 	                'Scores'
 	              )
 	            )
@@ -94352,118 +94142,7 @@
 	          _react2.default.createElement(
 	            _semanticUiReact.Table.Body,
 	            null,
-	            _react2.default.createElement(
-	              _semanticUiReact.Table.Row,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.Header,
-	                  { as: 'h4', image: true },
-	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/lena.png', shape: 'rounded', size: 'mini' }),
-	                  _react2.default.createElement(
-	                    _semanticUiReact.Header.Content,
-	                    { style: { color: '#dce1ea' } },
-	                    'Lena',
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Header.Subheader,
-	                      { style: { color: '#dce1ea' } },
-	                      'Human Resources'
-	                    )
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                '22'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              _semanticUiReact.Table.Row,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.Header,
-	                  { as: 'h4', image: true },
-	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/matthew.png', shape: 'rounded', size: 'mini' }),
-	                  _react2.default.createElement(
-	                    _semanticUiReact.Header.Content,
-	                    { style: { color: '#dce1ea' } },
-	                    'Matthew',
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Header.Subheader,
-	                      { style: { color: '#dce1ea' } },
-	                      'Fabric Design'
-	                    )
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                '15'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              _semanticUiReact.Table.Row,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.Header,
-	                  { as: 'h4', image: true },
-	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/lindsay.png', shape: 'rounded', size: 'mini' }),
-	                  _react2.default.createElement(
-	                    _semanticUiReact.Header.Content,
-	                    { style: { color: '#dce1ea' } },
-	                    'Lindsay',
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Header.Subheader,
-	                      { style: { color: '#dce1ea' } },
-	                      'Entertainment'
-	                    )
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                '12'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              _semanticUiReact.Table.Row,
-	              null,
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                _react2.default.createElement(
-	                  _semanticUiReact.Header,
-	                  { as: 'h4', image: true },
-	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/mark.png', shape: 'rounded', size: 'mini' }),
-	                  _react2.default.createElement(
-	                    _semanticUiReact.Header.Content,
-	                    { style: { color: '#dce1ea' } },
-	                    'Mark',
-	                    _react2.default.createElement(
-	                      _semanticUiReact.Header.Subheader,
-	                      { style: { color: '#dce1ea' } },
-	                      'Executive'
-	                    )
-	                  )
-	                )
-	              ),
-	              _react2.default.createElement(
-	                _semanticUiReact.Table.Cell,
-	                null,
-	                '11'
-	              )
-	            )
+	            display
 	          )
 	        )
 	      );
@@ -94474,129 +94153,6 @@
 	}(_react2.default.Component);
 
 	exports.default = HostedQuizTable;
-
-/***/ }),
-/* 1093 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _semanticUiReact = __webpack_require__(377);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HostedQuizMenu = function (_React$Component) {
-	  _inherits(HostedQuizMenu, _React$Component);
-
-	  function HostedQuizMenu() {
-	    _classCallCheck(this, HostedQuizMenu);
-
-	    return _possibleConstructorReturn(this, (HostedQuizMenu.__proto__ || Object.getPrototypeOf(HostedQuizMenu)).apply(this, arguments));
-	  }
-
-	  _createClass(HostedQuizMenu, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      return _react2.default.createElement(
-	        _semanticUiReact.Menu,
-	        { vertical: true, inverted: true },
-	        _react2.default.createElement(
-	          _semanticUiReact.Menu.Item,
-	          null,
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Header,
-	            null,
-	            'Products'
-	          ),
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Menu,
-	            null,
-	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'enterprise', value: 'enterprise', onClick: function onClick(e) {
-	                _this2.props.handleSubtopicMethod(_this2);
-	              } }),
-	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'consumer' })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          _semanticUiReact.Menu.Item,
-	          null,
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Header,
-	            null,
-	            'CMS Solutions'
-	          ),
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Menu,
-	            null,
-	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'rails' }),
-	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'python' }),
-	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'php' })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          _semanticUiReact.Menu.Item,
-	          null,
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Header,
-	            null,
-	            'Hosting'
-	          ),
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Menu,
-	            null,
-	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'shared' }),
-	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'dedicated' })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          _semanticUiReact.Menu.Item,
-	          null,
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Header,
-	            null,
-	            'Support'
-	          ),
-	          _react2.default.createElement(
-	            _semanticUiReact.Menu.Menu,
-	            null,
-	            _react2.default.createElement(
-	              _semanticUiReact.Menu.Item,
-	              { name: 'email' },
-	              'E-mail Support'
-	            ),
-	            _react2.default.createElement(
-	              _semanticUiReact.Menu.Item,
-	              { name: 'faq' },
-	              'FAQs'
-	            )
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return HostedQuizMenu;
-	}(_react2.default.Component);
-
-	exports.default = HostedQuizMenu;
 
 /***/ })
 /******/ ]);

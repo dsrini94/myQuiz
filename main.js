@@ -30,7 +30,7 @@ ReactDom.render(
         <Route path='/quizAdded/:date/:time/:uid' component={QuizAdded} />
         <Route path='/takeQuiz/confirm/:topic/:subtopic/:date/:uid' component={confirmTakeQuiz} />
         <Route path='/takeQuiz/quiz/:topic/:subtopic/:date/:uid' component={TakeQuiz} />
-        <Route path='/takeQuiz/result/:topic/:subtopic/:date/:selected/:uid' component={QuizResult} />
+        <Route path='/takeQuiz/result/:topic/:subtopic/:date/:hostedBy/:selected/:uid' component={QuizResult} />
         <Route path='/leaderboard/:uid' component={Leaderboard} />
         <Route path='/hquizresult/:uid' component={HostedQuizResult} />
       </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import {Message, Segment, Icon, Header, Radio, Button,Divider} from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
-
 export default class Feedback extends React.Component{
   constructor(props){
     super(props);

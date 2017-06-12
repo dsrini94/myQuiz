@@ -3,7 +3,6 @@ import { Form,Menu, Button, Segment, Header, Icon, Modal, Radio, Progress, Grid 
 import { Link,Redirect } from 'react-router-dom';
 // import Feedback from './../components/Feedback.jsx';
 import Request from 'superagent';
-
 export default class TakeQuiz extends React.Component {
   constructor(props) {
     super();
@@ -11,12 +10,13 @@ export default class TakeQuiz extends React.Component {
       submit : false,
       percent : 100,
       timer : 30,
-      reduction : 3.3333333,
+      reduction : 3.333,
       ajax : true,
       quizData : [],
       selectedAnswer : {},
       obj : {},
-      uid:''
+      uid:'',
+      hostedBy:''
     }
     this.handleOpenConfirmSubmit=this.handleOpenConfirmSubmit.bind(this);
     this.handleCloseConfirmSubmit=this.handleCloseConfirmSubmit.bind(this);
@@ -34,7 +34,12 @@ export default class TakeQuiz extends React.Component {
       Request.post('/quiz')
             .send({topic:this.props.match.params.topic, subtopic:this.props.match.params.subtopic, date : this.props.match.params.date})
             .end((err, res)=>{
-              this.setState({ajax:false, quizData: JSON.parse(res.text).que, });
+              // Below 2 variables require Bug correction
+              var timer = JSON.parse(res.text).que.length * 30
+                , reduction = 100/timer;
+              // console.log(' ------------------- ',timer, reduction);
+              this.setState({ajax:false, quizData: JSON.parse(res.text).que, hostedBy: JSON.parse(res.text).que[0].hostedBy});
+              console.log('---- > ',this.state.hostedBy);
       });
     }
   }
@@ -52,7 +57,7 @@ export default class TakeQuiz extends React.Component {
   }
   handleFinalSubmit(){
     this.setState({submit:false, timer:0});
-    window.location.assign('http://localhost:3000/#/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid);
+    window.location.assign('http://10.201.174.205:3001/#/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+this.state.hostedBy+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid);
   }
   handleSelectAnswer(index,option){
     this.setState({value:option});
@@ -75,7 +80,7 @@ export default class TakeQuiz extends React.Component {
       }
     }
     var question = this.state.quizData.map((item,i)=>{
-      topic=item.topic;
+      topic = item.topic;
       return(
         item.questions.map((item,i)=>{
           return(
@@ -103,7 +108,6 @@ export default class TakeQuiz extends React.Component {
                   <Button basic color='red' inverted onClick={this.handleCloseConfirmSubmit} >
                     <Icon name='remove' /> No
                   </Button>
-
                   <Button color='green' inverted onClick={this.handleFinalSubmit} >
                     <Icon name='checkmark' /> Yes
                   </Button>
@@ -111,7 +115,7 @@ export default class TakeQuiz extends React.Component {
               </Modal>
     if (this.state.timer<=0) {
       return(
-        <Redirect to={'/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid} />
+        <Redirect to={'/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+this.state.hostedBy+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid} />
       );
     }
     else {

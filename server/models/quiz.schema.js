@@ -10,7 +10,8 @@ var quizSchema=new Schema({
     date:Date,
     startTime:Date,
     endTime:Date,
-    questions:[{question:String,options:[String],correctoption:String}]
+    questions:[{question:String,options:[String],correctoption:String}],
+		participants:[{userId:String,score:Number}]
 });
 
 
