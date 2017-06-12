@@ -14,6 +14,8 @@ import CreateQuiz from './client/views/CreateQuiz.jsx';
 import QuizAdded from './client/components/QuizAdded.jsx';
 import Leaderboard from './client/views/leaderBoard.jsx';
 import QuizResult from './client/components/QuizResult.jsx';
+import HostedQuizResult from './client/views/hQuiz.jsx';
+
 injectTapEventPlugin();
 
 ReactDom.render(
@@ -29,7 +31,8 @@ ReactDom.render(
         <Route path='/takeQuiz/confirm/:topic/:subtopic/:date/:uid' component={confirmTakeQuiz} />
         <Route path='/takeQuiz/quiz/:topic/:subtopic/:date/:uid' component={TakeQuiz} />
         <Route path='/takeQuiz/result/:topic/:subtopic/:date/:selected/:uid' component={QuizResult} />
-        <Route path='/leaderboard' component={Leaderboard} />
+        <Route path='/leaderboard/:uid' component={Leaderboard} />
+        <Route path='/hquizresult/:uid' component={HostedQuizResult} />
       </div>
     </HashRouter>
   </MuiThemeProvider>,

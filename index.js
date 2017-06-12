@@ -108,6 +108,10 @@
 
 	var _QuizResult2 = _interopRequireDefault(_QuizResult);
 
+	var _hQuiz = __webpack_require__(1091);
+
+	var _hQuiz2 = _interopRequireDefault(_hQuiz);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	(0, _reactTapEventPlugin2.default)();
@@ -130,7 +134,8 @@
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/confirm/:topic/:subtopic/:date/:uid', component: _confirmTakeQuiz2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/quiz/:topic/:subtopic/:date/:uid', component: _TakeQuiz2.default }),
 	      _react2.default.createElement(_reactRouterDom.Route, { path: '/takeQuiz/result/:topic/:subtopic/:date/:selected/:uid', component: _QuizResult2.default }),
-	      _react2.default.createElement(_reactRouterDom.Route, { path: '/leaderboard', component: _leaderBoard2.default })
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/leaderboard/:uid', component: _leaderBoard2.default }),
+	      _react2.default.createElement(_reactRouterDom.Route, { path: '/hquizresult/:uid', component: _hQuiz2.default })
 	    )
 	  )
 	), document.getElementById("content"));
@@ -74164,8 +74169,26 @@
 	            null,
 	            _react2.default.createElement(
 	              _semanticUiReact.Button,
-	              { color: 'red' },
+	              { primary: true },
 	              'Create your Quiz'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.Divider,
+	          { horizontal: true },
+	          'Or'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouterDom.Link,
+	          { to: '/hquizresult/' + this.state.userId },
+	          _react2.default.createElement(
+	            'center',
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { secondary: true },
+	              'Hosted Quiz Data'
 	            )
 	          )
 	        )
@@ -93407,6 +93430,10 @@
 
 	var _semanticUiReact = __webpack_require__(377);
 
+	var _superagent = __webpack_require__(944);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -93425,6 +93452,13 @@
 	  }
 
 	  _createClass(Leaderboard, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      _superagent2.default.get('/fetchleaders').end(function (err, res) {
+	        if (err) console.log(err);else console.log(JSON.parse(res.text));
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -93433,7 +93467,7 @@
 	        _react2.default.createElement(
 	          _semanticUiReact.Grid,
 	          { only: 'tablet computer' },
-	          _react2.default.createElement(_appbar2.default, null),
+	          _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid }),
 	          _react2.default.createElement(
 	            _semanticUiReact.Grid,
 	            { celled: 'internally' },
@@ -94109,7 +94143,7 @@
 	                  null,
 	                  _react2.default.createElement(
 	                    _reactRouterDom.Link,
-	                    { to: '/leaderboard' },
+	                    { to: '/leaderboard' + '/' + this.state.uid },
 	                    _react2.default.createElement(
 	                      _semanticUiReact.Button,
 	                      { color: 'teal' },
@@ -94119,7 +94153,7 @@
 	                  _react2.default.createElement(_semanticUiReact.Button.Or, null),
 	                  _react2.default.createElement(
 	                    _reactRouterDom.Link,
-	                    { to: '/leaderboard' },
+	                    { to: '/dashboard' + '/' + this.state.uid },
 	                    _react2.default.createElement(
 	                      _semanticUiReact.Button,
 	                      { color: 'blue' },
@@ -94140,6 +94174,422 @@
 	}(_react2.default.Component);
 
 	exports.default = QuizResult;
+
+/***/ }),
+/* 1091 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _appbar = __webpack_require__(953);
+
+	var _appbar2 = _interopRequireDefault(_appbar);
+
+	var _semanticUiReact = __webpack_require__(377);
+
+	var _hQuizTable = __webpack_require__(1092);
+
+	var _hQuizTable2 = _interopRequireDefault(_hQuizTable);
+
+	var _hQuizMenu = __webpack_require__(1093);
+
+	var _hQuizMenu2 = _interopRequireDefault(_hQuizMenu);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HostedQuizResult = function (_React$Component) {
+	  _inherits(HostedQuizResult, _React$Component);
+
+	  function HostedQuizResult(props) {
+	    _classCallCheck(this, HostedQuizResult);
+
+	    var _this = _possibleConstructorReturn(this, (HostedQuizResult.__proto__ || Object.getPrototypeOf(HostedQuizResult)).call(this, props));
+
+	    _this.state = { uid: '', subtopic: '' };
+	    _this.handleSubtopic = _this.handleSubtopic.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(HostedQuizResult, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.setState({ uid: this.props.match.params.uid });
+	    }
+	  }, {
+	    key: 'handleSubtopic',
+	    value: function handleSubtopic(e) {
+	      // this.setState({subtopic:subtopic});
+	      console.log('called', e);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(_appbar2.default, { uid: this.props.match.params.uid }),
+	        _react2.default.createElement(
+	          _semanticUiReact.Header,
+	          { as: 'h3', block: true, textAlign: 'center', inverted: true },
+	          'Hosted Quiz Results'
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.Grid,
+	          { divided: true },
+	          _react2.default.createElement(
+	            _semanticUiReact.Grid.Row,
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Grid.Column,
+	              { width: 4 },
+	              _react2.default.createElement(
+	                'center',
+	                null,
+	                _react2.default.createElement(_hQuizMenu2.default, { handleSubtopicMethod: this.handleSubtopic })
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _semanticUiReact.Grid.Column,
+	              { width: 12 },
+	              _react2.default.createElement(_hQuizTable2.default, null)
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return HostedQuizResult;
+	}(_react2.default.Component);
+
+	exports.default = HostedQuizResult;
+
+/***/ }),
+/* 1092 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(377);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HostedQuizTable = function (_React$Component) {
+	  _inherits(HostedQuizTable, _React$Component);
+
+	  function HostedQuizTable() {
+	    _classCallCheck(this, HostedQuizTable);
+
+	    return _possibleConstructorReturn(this, (HostedQuizTable.__proto__ || Object.getPrototypeOf(HostedQuizTable)).apply(this, arguments));
+	  }
+
+	  _createClass(HostedQuizTable, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        _semanticUiReact.Segment,
+	        null,
+	        _react2.default.createElement(
+	          _semanticUiReact.Table,
+	          { fixed: true, inverted: true },
+	          _react2.default.createElement(
+	            _semanticUiReact.Table.Header,
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Table.Row,
+	              null,
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.HeaderCell,
+	                { width: 8 },
+	                'Participants'
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.HeaderCell,
+	                { width: 8 },
+	                'Scores'
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            _semanticUiReact.Table.Body,
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Table.Row,
+	              null,
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                _react2.default.createElement(
+	                  _semanticUiReact.Header,
+	                  { as: 'h4', image: true },
+	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/lena.png', shape: 'rounded', size: 'mini' }),
+	                  _react2.default.createElement(
+	                    _semanticUiReact.Header.Content,
+	                    { style: { color: '#dce1ea' } },
+	                    'Lena',
+	                    _react2.default.createElement(
+	                      _semanticUiReact.Header.Subheader,
+	                      { style: { color: '#dce1ea' } },
+	                      'Human Resources'
+	                    )
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                '22'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _semanticUiReact.Table.Row,
+	              null,
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                _react2.default.createElement(
+	                  _semanticUiReact.Header,
+	                  { as: 'h4', image: true },
+	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/matthew.png', shape: 'rounded', size: 'mini' }),
+	                  _react2.default.createElement(
+	                    _semanticUiReact.Header.Content,
+	                    { style: { color: '#dce1ea' } },
+	                    'Matthew',
+	                    _react2.default.createElement(
+	                      _semanticUiReact.Header.Subheader,
+	                      { style: { color: '#dce1ea' } },
+	                      'Fabric Design'
+	                    )
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                '15'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _semanticUiReact.Table.Row,
+	              null,
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                _react2.default.createElement(
+	                  _semanticUiReact.Header,
+	                  { as: 'h4', image: true },
+	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/lindsay.png', shape: 'rounded', size: 'mini' }),
+	                  _react2.default.createElement(
+	                    _semanticUiReact.Header.Content,
+	                    { style: { color: '#dce1ea' } },
+	                    'Lindsay',
+	                    _react2.default.createElement(
+	                      _semanticUiReact.Header.Subheader,
+	                      { style: { color: '#dce1ea' } },
+	                      'Entertainment'
+	                    )
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                '12'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _semanticUiReact.Table.Row,
+	              null,
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                _react2.default.createElement(
+	                  _semanticUiReact.Header,
+	                  { as: 'h4', image: true },
+	                  _react2.default.createElement(_semanticUiReact.Image, { src: '/assets/images/avatar/small/mark.png', shape: 'rounded', size: 'mini' }),
+	                  _react2.default.createElement(
+	                    _semanticUiReact.Header.Content,
+	                    { style: { color: '#dce1ea' } },
+	                    'Mark',
+	                    _react2.default.createElement(
+	                      _semanticUiReact.Header.Subheader,
+	                      { style: { color: '#dce1ea' } },
+	                      'Executive'
+	                    )
+	                  )
+	                )
+	              ),
+	              _react2.default.createElement(
+	                _semanticUiReact.Table.Cell,
+	                null,
+	                '11'
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return HostedQuizTable;
+	}(_react2.default.Component);
+
+	exports.default = HostedQuizTable;
+
+/***/ }),
+/* 1093 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _semanticUiReact = __webpack_require__(377);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HostedQuizMenu = function (_React$Component) {
+	  _inherits(HostedQuizMenu, _React$Component);
+
+	  function HostedQuizMenu() {
+	    _classCallCheck(this, HostedQuizMenu);
+
+	    return _possibleConstructorReturn(this, (HostedQuizMenu.__proto__ || Object.getPrototypeOf(HostedQuizMenu)).apply(this, arguments));
+	  }
+
+	  _createClass(HostedQuizMenu, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        _semanticUiReact.Menu,
+	        { vertical: true, inverted: true },
+	        _react2.default.createElement(
+	          _semanticUiReact.Menu.Item,
+	          null,
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Header,
+	            null,
+	            'Products'
+	          ),
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Menu,
+	            null,
+	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'enterprise', value: 'enterprise', onClick: function onClick(e) {
+	                _this2.props.handleSubtopicMethod(_this2);
+	              } }),
+	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'consumer' })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.Menu.Item,
+	          null,
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Header,
+	            null,
+	            'CMS Solutions'
+	          ),
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Menu,
+	            null,
+	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'rails' }),
+	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'python' }),
+	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'php' })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.Menu.Item,
+	          null,
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Header,
+	            null,
+	            'Hosting'
+	          ),
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Menu,
+	            null,
+	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'shared' }),
+	            _react2.default.createElement(_semanticUiReact.Menu.Item, { name: 'dedicated' })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.Menu.Item,
+	          null,
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Header,
+	            null,
+	            'Support'
+	          ),
+	          _react2.default.createElement(
+	            _semanticUiReact.Menu.Menu,
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Menu.Item,
+	              { name: 'email' },
+	              'E-mail Support'
+	            ),
+	            _react2.default.createElement(
+	              _semanticUiReact.Menu.Item,
+	              { name: 'faq' },
+	              'FAQs'
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return HostedQuizMenu;
+	}(_react2.default.Component);
+
+	exports.default = HostedQuizMenu;
 
 /***/ })
 /******/ ]);

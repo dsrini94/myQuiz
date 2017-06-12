@@ -1,15 +1,25 @@
 import React from 'react';
 import Appbar from './../components/appbar.jsx';
 import { Divider,Grid,Segment,Table,Header,Image,Progress  } from 'semantic-ui-react';
-
+import request from 'superagent';
 export default class Leaderboard extends React.Component
 {
+
+  componentDidMount()
+  {
+    request.get('/fetchleaders').end((err,res)=>{
+      if(err)
+        console.log(err);
+        else
+          console.log(JSON.parse(res.text));
+    })
+  }
   render()
   {
     return(
       <div>
         <Grid only='tablet computer'>
-        <Appbar />
+        <Appbar uid={this.props.match.params.uid}/>
         <Grid celled='internally'>
           <Grid.Row only='tablet computer'>
             <Grid.Column width={16}>

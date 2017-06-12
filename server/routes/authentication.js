@@ -23,10 +23,10 @@ authenticate.post('/authenticate',(req,res)=>{
           params:{
             imageName:imageNames[Math.floor(Math.random() * (19 - 0)) + 0],
             adid:req.body.adid,
-            Prank:"0",
-            score:"0",
-            hQuiz:"0",
-            aQuiz:"0"
+            Prank:0,
+            score:0,
+            hQuiz:0,
+            aQuiz:0
           }
       },function(err,result){
           res.send(redirectPage+'/'+result[0].id.properties.userId);

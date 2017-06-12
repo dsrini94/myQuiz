@@ -1,6 +1,7 @@
 const launchQuiz = require('express').Router()
     , QuizSchema = require('./../models/quiz.schema.js')
     , GoogleImages = require('google-images')
+    , neodb = require('./../connections/db.neo4j.js')
     , client = new GoogleImages('006703518498526470931:fbn-v7xsm2g', 'AIzaSyCtP850ZXwm0vrHeaQzqd6wq6uuxw1qV8s');
 
 //Post the quiz into MongoDB ---------->
@@ -57,6 +58,47 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
          console.log('Oops! Error in saving quiz to DB', err);
        } else {
          console.log('Quiz saved to DB', reply);
+         //fetching data from neo4j
+         neodb.cypher({
+           query:"match (id:users {userId:{adid}}) return *",
+           params:{
+             adid:req.body.hostedBy,
+           }
+         },function(err,result){
+             if(err)
+               console.log(err);
+             else{
+               console.log('----rank---',result[0].id.properties.rank);
+               neodb.cypher({
+                 query:"match (id:users {userId:{adid}}) set id.hostedQuiz = {hQuiz} return id",
+                 params:{
+                   adid:req.body.hostedBy,
+                   hQuiz:parseInt(result[0].id.properties.rank) + 1,
+                 }
+               },function(err,result){
+                 if(err)
+                    console.log('error in updating hQuiz',err);
+                  else {
+                    neodb.cypher({
+                      query:"match (node1:users {userId:{adid}}) return node1",
+
+                      params:{
+                        adid:req.body.hostedBy,
+                        topic:req.body.topic,
+                        subtopic:req.body.subtopic,
+                      }
+                    },function(err,result){
+                        if(err)
+                          console.log('error in creating relationship' , err);
+                        else {
+                          console.log(result);
+                          res.send('success');
+                        }
+                    })
+                  }
+               })
+                  }
+         })
        }
      });
   });

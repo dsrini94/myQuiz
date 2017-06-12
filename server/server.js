@@ -12,7 +12,8 @@ const authenticate = require('./routes/authentication.js')
     , loadSubTopic = require('./routes/loadSubTopic.route.js')
     , quiz = require('./routes/quiz.route.js')
     , validate = require('./routes/validateQuiz.route.js')
-    , profileStats = require('./routes/fetchProfileDetails.route.js');
+    , profileStats = require('./routes/fetchProfileDetails.route.js')
+    , leaderboard = require('./routes/leaderboard.route.js');
 
 //MongoDB Connection ---------->
 MonDB.on('error', console.error.bind(console, 'connection error:'));
@@ -32,7 +33,7 @@ myQuizServer.use(expressInstance.static('./../'));
 //routes
 myQuizServer.use('/',(req,res,next)=>{
   next();
-},authenticate, launchQuiz, events, loadTopics, loadSubTopic, quiz, validate,profileStats);
+},authenticate, launchQuiz, events, loadTopics, loadSubTopic, quiz, validate,profileStats,leaderboard);
 
 //Server will be live on port 3000
 myQuizServer.listen(3000,()=>{

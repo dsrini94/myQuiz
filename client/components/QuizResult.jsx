@@ -65,11 +65,11 @@ export default class QuizResult extends React.Component{
                     </Menu>
                     <Divider />
                       <Button.Group>
-                        <Link to={'/leaderboard'}>
+                        <Link to={'/leaderboard'+'/'+this.state.uid}>
                         <Button color='teal'>Take me leaderboard</Button>
                         </Link>
                         <Button.Or />
-                          <Link to={'/leaderboard'}>
+                          <Link to={'/dashboard'+'/'+this.state.uid}>
                         <Button color='blue'>Take me dashboard</Button>
                         </Link>
                       </Button.Group>
