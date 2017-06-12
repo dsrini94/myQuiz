@@ -1,5 +1,5 @@
 const authenticate = require('express').Router();
-const redirectPage = 'http://localhost:3000/#/dashboard';
+const redirectPage = 'http://10.201.174.205:3001/#/dashboard';
 
 //neo4j connection
 const neodb = require('./../connections/db.neo4j.js');

@@ -46,13 +46,16 @@ export default class ProfileStats extends React.Component
             Hosted Quiz
           </Menu.Item>
         </Menu>
-        <br/>
         <Divider />
           <Link to={'/createQuiz/'+this.state.userId}><center><Button primary>Create your Quiz</Button></center></Link>
           <Divider horizontal>
             Or
           </Divider>
           <Link to={'/hquizresult/'+this.state.userId}><center><Button secondary >Hosted Quiz Data</Button></center></Link>
+          <Divider horizontal>
+            Or
+          </Divider>
+          <Link to={'/leaderboard/'+this.state.userId}><center><Button color='red' >Leaderboard</Button></center></Link>
     </div>
     );
   }

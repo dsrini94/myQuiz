@@ -36,7 +36,7 @@ myQuizServer.use('/',(req,res,next)=>{
   next();
 },authenticate, launchQuiz, events, loadTopics, loadSubTopic, quiz, validate, profileStats, leaderboard, hResult);
 
-//Server will be live on port 3000
-myQuizServer.listen(3000,()=>{
+//Server will be live on port 3001
+myQuizServer.listen(3001,()=>{
   console.log('myQuizServer is on');
 });

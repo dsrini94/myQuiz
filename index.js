@@ -42544,11 +42544,11 @@
 	  // ----------------------------------------
 
 	  // Use key, childKey, or generate key
-	  if (!props.key) {
+	  if ((0, _isNil3.default)(props.key)) {
 	    var childKey = props.childKey;
 
 
-	    if (childKey) {
+	    if (!(0, _isNil3.default)(childKey)) {
 	      // apply and consume the childKey
 	      props.key = typeof childKey === 'function' ? childKey(props) : childKey;
 	      delete props.childKey;
@@ -53646,10 +53646,6 @@
 
 	var _map3 = _interopRequireDefault(_map2);
 
-	var _isNil2 = __webpack_require__(570);
-
-	var _isNil3 = _interopRequireDefault(_isNil2);
-
 	var _every2 = __webpack_require__(758);
 
 	var _every3 = _interopRequireDefault(_every2);
@@ -53718,6 +53714,10 @@
 
 	var _isEqual3 = _interopRequireDefault(_isEqual2);
 
+	var _isNil2 = __webpack_require__(570);
+
+	var _isNil3 = _interopRequireDefault(_isNil2);
+
 	var _classnames = __webpack_require__(571);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -53759,6 +53759,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var debug = (0, _lib.makeDebugger)('dropdown');
+
+	var getKeyOrValue = function getKeyOrValue(key, value) {
+	  return (0, _isNil3.default)(key) ? value : key;
+	};
 
 	/**
 	 * A dropdown allows a user to select a value from a series of options.
@@ -54043,14 +54047,15 @@
 
 	      // insert the "add" item
 	      if (allowAdditions && search && searchQuery && !(0, _some3.default)(filteredOptions, { text: searchQuery })) {
-	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'label' }) : additionLabel || '';
+	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'addition-label' }) : additionLabel || '';
 
 	        var addItem = {
+	          key: 'addition',
 	          // by using an array, we can pass multiple elements, but when doing so
 	          // we must specify a `key` for React to know which one is which
 	          text: [additionLabelElement, _react2.default.createElement(
 	            'b',
-	            { key: 'addition' },
+	            { key: 'addition-query' },
 	            searchQuery
 	          )],
 	          value: searchQuery,
@@ -54327,7 +54332,7 @@
 	        (0, _map3.default)(options, function (option, i) {
 	          return _react2.default.createElement(
 	            'option',
-	            { key: option.key || option.value, value: option.value },
+	            { key: getKeyOrValue(option.key, option.value), value: option.value },
 	            option.text
 	          );
 	        })
@@ -54397,7 +54402,7 @@
 	        var defaultProps = {
 	          active: item.value === selectedLabel,
 	          as: 'a',
-	          key: item.key || item.value,
+	          key: getKeyOrValue(item.key, item.value),
 	          onClick: _this.handleLabelClick,
 	          onRemove: _this.handleLabelRemove,
 	          value: item.value
@@ -54436,6 +54441,7 @@
 	          onClick: _this.handleItemClick,
 	          selected: selectedIndex === i
 	        }, opt, {
+	          key: getKeyOrValue(opt.key, opt.value),
 	          // Needed for handling click events on disabled items
 	          style: (0, _extends3.default)({}, opt.style, { pointerEvents: 'all' })
 	        }));
@@ -74152,7 +74158,6 @@
 	            'Hosted Quiz'
 	          )
 	        ),
-	        _react2.default.createElement('br', null),
 	        _react2.default.createElement(_semanticUiReact.Divider, null),
 	        _react2.default.createElement(
 	          _reactRouterDom.Link,
@@ -74182,6 +74187,24 @@
 	              _semanticUiReact.Button,
 	              { secondary: true },
 	              'Hosted Quiz Data'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          _semanticUiReact.Divider,
+	          { horizontal: true },
+	          'Or'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouterDom.Link,
+	          { to: '/leaderboard/' + this.state.userId },
+	          _react2.default.createElement(
+	            'center',
+	            null,
+	            _react2.default.createElement(
+	              _semanticUiReact.Button,
+	              { color: 'red' },
+	              'Leaderboard'
 	            )
 	          )
 	        )
@@ -75531,9 +75554,13 @@
 	            _semanticUiReact.Button.Group,
 	            null,
 	            _react2.default.createElement(
-	              _semanticUiReact.Button,
-	              null,
-	              'Cancel'
+	              _reactRouterDom.Link,
+	              { to: '/dashboard/' + this.props.match.params.uid },
+	              _react2.default.createElement(
+	                _semanticUiReact.Button,
+	                null,
+	                'Cancel'
+	              )
 	            ),
 	            _react2.default.createElement(_semanticUiReact.Button.Or, null),
 	            _react2.default.createElement(
@@ -75663,7 +75690,7 @@
 	    key: 'handleFinalSubmit',
 	    value: function handleFinalSubmit() {
 	      this.setState({ submit: false, timer: 0 });
-	      window.location.assign('http://localhost:3000/#/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + this.state.hostedBy + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid);
+	      window.location.assign('http://10.201.174.205:3001/#/takeQuiz/result/' + this.state.obj.topic + '/' + this.state.obj.subtopic + '/' + this.state.obj.date + '/' + this.state.hostedBy + '/' + JSON.stringify(this.state.selectedAnswer) + '/' + this.state.uid);
 	    }
 	  }, {
 	    key: 'handleSelectAnswer',

@@ -57,7 +57,7 @@ export default class TakeQuiz extends React.Component {
   }
   handleFinalSubmit(){
     this.setState({submit:false, timer:0});
-    window.location.assign('http://localhost:3000/#/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+this.state.hostedBy+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid);
+    window.location.assign('http://10.201.174.205:3001/#/takeQuiz/result/'+this.state.obj.topic+'/'+this.state.obj.subtopic+'/'+this.state.obj.date+'/'+this.state.hostedBy+'/'+JSON.stringify(this.state.selectedAnswer)+'/'+this.state.uid);
   }
   handleSelectAnswer(index,option){
     this.setState({value:option});
