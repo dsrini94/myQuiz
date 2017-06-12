@@ -33284,7 +33284,7 @@
 	              'username / password should not be left blank'
 	            )
 	          ) });
-	      } else if (this.state.userName.length < 8) {
+	      } else if (this.state.userName.length < 5) {
 	        this.setState({ warningMsg: _react2.default.createElement(
 	            _semanticUiReact.Message,
 	            { negative: true },
@@ -42544,11 +42544,11 @@
 	  // ----------------------------------------
 
 	  // Use key, childKey, or generate key
-	  if (!props.key) {
+	  if ((0, _isNil3.default)(props.key)) {
 	    var childKey = props.childKey;
 
 
-	    if (childKey) {
+	    if (!(0, _isNil3.default)(childKey)) {
 	      // apply and consume the childKey
 	      props.key = typeof childKey === 'function' ? childKey(props) : childKey;
 	      delete props.childKey;
@@ -53646,10 +53646,6 @@
 
 	var _map3 = _interopRequireDefault(_map2);
 
-	var _isNil2 = __webpack_require__(570);
-
-	var _isNil3 = _interopRequireDefault(_isNil2);
-
 	var _every2 = __webpack_require__(758);
 
 	var _every3 = _interopRequireDefault(_every2);
@@ -53718,6 +53714,10 @@
 
 	var _isEqual3 = _interopRequireDefault(_isEqual2);
 
+	var _isNil2 = __webpack_require__(570);
+
+	var _isNil3 = _interopRequireDefault(_isNil2);
+
 	var _classnames = __webpack_require__(571);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -53759,6 +53759,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var debug = (0, _lib.makeDebugger)('dropdown');
+
+	var getKeyOrValue = function getKeyOrValue(key, value) {
+	  return (0, _isNil3.default)(key) ? value : key;
+	};
 
 	/**
 	 * A dropdown allows a user to select a value from a series of options.
@@ -54043,14 +54047,15 @@
 
 	      // insert the "add" item
 	      if (allowAdditions && search && searchQuery && !(0, _some3.default)(filteredOptions, { text: searchQuery })) {
-	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'label' }) : additionLabel || '';
+	        var additionLabelElement = _react2.default.isValidElement(additionLabel) ? _react2.default.cloneElement(additionLabel, { key: 'addition-label' }) : additionLabel || '';
 
 	        var addItem = {
+	          key: 'addition',
 	          // by using an array, we can pass multiple elements, but when doing so
 	          // we must specify a `key` for React to know which one is which
 	          text: [additionLabelElement, _react2.default.createElement(
 	            'b',
-	            { key: 'addition' },
+	            { key: 'addition-query' },
 	            searchQuery
 	          )],
 	          value: searchQuery,
@@ -54327,7 +54332,7 @@
 	        (0, _map3.default)(options, function (option, i) {
 	          return _react2.default.createElement(
 	            'option',
-	            { key: option.key || option.value, value: option.value },
+	            { key: getKeyOrValue(option.key, option.value), value: option.value },
 	            option.text
 	          );
 	        })
@@ -54397,7 +54402,7 @@
 	        var defaultProps = {
 	          active: item.value === selectedLabel,
 	          as: 'a',
-	          key: item.key || item.value,
+	          key: getKeyOrValue(item.key, item.value),
 	          onClick: _this.handleLabelClick,
 	          onRemove: _this.handleLabelRemove,
 	          value: item.value
@@ -54436,6 +54441,7 @@
 	          onClick: _this.handleItemClick,
 	          selected: selectedIndex === i
 	        }, opt, {
+	          key: getKeyOrValue(opt.key, opt.value),
 	          // Needed for handling click events on disabled items
 	          style: (0, _extends3.default)({}, opt.style, { pointerEvents: 'all' })
 	        }));
@@ -74085,7 +74091,6 @@
 	      var resobj;
 	      _superagent2.default.post('/profileStats').send({ uid: this.props.uid }).end(function (err, res) {
 	        if (err) console.log(err);else {
-	          console.log(JSON.parse(res.text).id.properties.totalScore);
 	          resobj = JSON.parse(res.text);
 	          _this2.setState({ aQuiz: resobj.id.properties.attendedQuiz, tScore: resobj.id.properties.totalScore,
 	            rank: resobj.id.properties.rank, hQuiz: resobj.id.properties.hostedQuiz, userId: resobj.id.properties.userId });
@@ -74244,7 +74249,6 @@
 	  _createClass(Events, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      console.log('inside events', this.props);
 	      var that = this;
 	      _superagent2.default.get('/events').end(function (err, res) {
 	        that.setState({ eventsArr: JSON.parse(res.text).eventsArr });
@@ -74265,7 +74269,6 @@
 	            mmm = dd.getMonth() + 1,
 	            currentDate = dd.getDate() + '/' + mmm + '/' + dd.getFullYear(),
 	            live = '';
-	        console.log('st : ', st, dd, et);
 	        if (st <= dd && et >= dd) {
 	          live = _react2.default.createElement(
 	            'span',
@@ -74763,7 +74766,6 @@
 	  _createClass(MbileEvents, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      console.log('inside events', this.props);
 	      var that = this;
 	      _superagent2.default.get('/events').end(function (err, res) {
 	        that.setState({ eventsArr: JSON.parse(res.text).eventsArr });
@@ -75146,7 +75148,6 @@
 	        if (err || res.status != 200) {
 	          console.log('Err in eventMenu Did Mount : ', err);
 	        } else {
-	          console.log('eMenu : ', res.text);
 	          _this2.setState({ topics: JSON.parse(res.text).topics });
 	        }
 	      });
@@ -75364,7 +75365,6 @@
 	    value: function render() {
 	      var _this3 = this;
 
-	      console.log(this.state.sbtList.length);
 	      var sbt = this.state.sbtList.map(function (item, i) {
 	        var d = new Date(item.date);
 	        var month = d.getMonth() + 1;
@@ -75488,11 +75488,6 @@
 	  }
 
 	  _createClass(confirmTakeQuiz, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      console.log('inside confirmTakeQuiz', this.props);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -75631,7 +75626,6 @@
 	    value: function componentDidMount() {
 	      var _this2 = this;
 
-	      console.log('inside takeQuiz', this.props.match.params.uid);
 	      setInterval(function () {
 	        return _this2.timer();
 	      }, 1000);
@@ -75678,7 +75672,6 @@
 	      var a = this.state.selectedAnswer;
 	      a[index] = option;
 	      this.setState({ selectedAnswer: a });
-	      console.log('selected answer : ', this.state.selectedAnswer);
 	    }
 	  }, {
 	    key: 'render',
@@ -75888,11 +75881,6 @@
 	  }
 
 	  _createClass(Feedback, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      console.log('inside feedback', this.props);
-	    }
-	  }, {
 	    key: 'handleChange',
 	    value: function handleChange(e, value) {
 	      this.setState({ value: value });
@@ -76208,7 +76196,7 @@
 	    key: 'handleLaunch',
 	    value: function handleLaunch() {
 	      _superagent2.default.post('/saveLaunchQuiz').send({ topic: this.state.topic, subtopic: this.state.subtopic, hostedBy: this.props.match.params.uid, questions: this.state.questions, startDate: this.state.startDate, startTime: this.state.startTime, endTime: this.state.endTime }).end(function (err, res) {
-	        console.log(res.text);
+	        console.log('Error in launching - > ', err);
 	      });
 	    }
 	  }, {
@@ -94055,7 +94043,6 @@
 	      var _this2 = this;
 
 	      this.setState({ uid: this.props.match.params.uid });
-	      console.log('inside Quiz result' + this.props.match.params.uid);
 	      _superagent2.default.post('/validate').send({ topic: this.props.match.params.topic,
 	        subtopic: this.props.match.params.subtopic,
 	        date: this.props.match.params.date,
@@ -94063,7 +94050,6 @@
 	        uid: this.props.match.params.uid
 	      }).end(function (err, res) {
 	        _this2.setState({ result: JSON.parse(res.text) });
-	        console.log('QRes - > ', _this2.state.result);
 	      });
 	    }
 	  }, {

@@ -67,7 +67,6 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
              if(err)
                console.log(err);
              else{
-               console.log('----rank---',result[0].id.properties.rank);
                neodb.cypher({
                  query:"match (id:users {userId:{adid}}) set id.hostedQuiz = {hQuiz} return id",
                  params:{
@@ -78,25 +77,10 @@ launchQuiz.post('/saveLaunchQuiz', function(req, res){
                  if(err)
                     console.log('error in updating hQuiz',err);
                   else {
-                    neodb.cypher({
-                      query:"match (node1:users {userId:{adid}}) return node1",
-
-                      params:{
-                        adid:req.body.hostedBy,
-                        topic:req.body.topic,
-                        subtopic:req.body.subtopic,
-                      }
-                    },function(err,result){
-                        if(err)
-                          console.log('error in creating relationship' , err);
-                        else {
-                          console.log(result);
-                          res.send('success');
-                        }
-                    })
+                      res.send('success');
                   }
                })
-                  }
+            }
          })
        }
      });
